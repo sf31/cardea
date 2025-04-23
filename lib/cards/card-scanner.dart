@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-import 'add-card-details.dart';
+import 'add-card.dart';
 
 class CardScanner extends StatelessWidget {
   final MobileScannerController _controller = MobileScannerController();
@@ -15,9 +15,7 @@ class CardScanner extends StatelessWidget {
     if (value != null) {
       _controller.dispose();
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => AddCardDetails(barcodeValue: value),
-        ),
+        MaterialPageRoute(builder: (context) => AddCard(barcodeValue: value)),
       );
     }
   }

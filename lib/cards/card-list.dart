@@ -1,55 +1,57 @@
-import 'package:cardea/cards/add-card-details.dart';
-import 'package:cardea/cards/loyaltyCard.model.dart';
+import 'package:cardea/cards/card.repo.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'cardItem.dart';
+import 'card-item.dart';
+import 'card-scanner.dart';
 
 class CardList extends StatelessWidget {
-  CardList({super.key});
-
-  final List<LoyaltyCard> cards = [
-    LoyaltyCard(
-      id: '1',
-      name: 'Card 1',
-      barcode: '1234567890',
-      color: 0xffE5E5E5,
-      imageUrl: 'https://via.placeholder.com/150',
-    ),
-    LoyaltyCard(
-      id: '2',
-      name: 'Card 2',
-      barcode: '1234567890',
-      color: 0xA93EF000,
-      imageUrl: 'https://via.placeholder.com/150',
-    ),
-    LoyaltyCard(
-      id: '3',
-      name: 'Card 3',
-      barcode: '1234567890',
-      color: 0x626262,
-      imageUrl: 'https://via.placeholder.com/150',
-    ),
-  ];
+  const CardList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GridView.count(
-        crossAxisCount: 2,
-        padding: const EdgeInsets.all(10),
-        crossAxisSpacing: 10,
-        children: cards.map((card) => CardItem(card: card)).toList(),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            // MaterialPageRoute(builder: (context) => CardScanner()),
-            MaterialPageRoute(
-              builder: (context) => AddCardDetails(barcodeValue: 'aaaa'),
-            ),
-          );
-        },
-      ),
+    return Consumer<CardRepo>(
+      builder: (context, repo, child) {
+        final cardList = GridView.count(
+          crossAxisCount: 2,
+          padding: const EdgeInsets.all(10),
+          crossAxisSpacing: 10,
+          children: repo.cardList.map((card) => CardItem(card: card)).toList(),
+        );
+
+        final emptyCardList = Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'No Card added yet',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 15,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ],
+          ),
+        );
+
+        return Scaffold(
+          body: repo.cardList.isEmpty ? emptyCardList : cardList,
+          floatingActionButton: FloatingActionButton.extended(
+            icon: Icon(Icons.add),
+            label: Text('Add Card'),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => CardScanner()),
+                // MaterialPageRoute(
+                //   builder: (context) => AddCardDetails(barcodeValue: 'aaaa'),
+                // ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import 'card-details.dart';
-import 'loyaltyCard.model.dart';
+import 'card.repo.dart';
 
 class CardItem extends StatelessWidget {
   final LoyaltyCard card;
+
   const CardItem({super.key, required this.card});
 
   @override
@@ -19,7 +19,7 @@ class CardItem extends StatelessWidget {
       }, // Handle your callback
       child: Container(
         decoration: BoxDecoration(
-          color: Color(card.color),
+          color: card.color,
           borderRadius: BorderRadius.circular(5),
         ),
         child: Column(
@@ -27,10 +27,7 @@ class CardItem extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               card.name,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -38,4 +35,3 @@ class CardItem extends StatelessWidget {
     );
   }
 }
-
