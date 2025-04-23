@@ -1,15 +1,24 @@
 import 'package:cardea/shopping/shopping-list.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
+import 'package:sqflite/sqflite.dart';
 
 import 'cards/card-list.dart';
 import 'cards/card.repo.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final database = await openDatabase(
+    join(await getDatabasesPath(), 'cardea.db'),
+    onCreate: (db, version) {
+      LoyaltyCard.createTable(db);
+    },
+    version: 1,
+  );
   runApp(
     ChangeNotifierProvider(
-      create: (context) => CardRepo(),
+      create: (context) => CardRepo(database: database),
       child: const MyApp(),
     ),
   );

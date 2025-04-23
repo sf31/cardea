@@ -14,6 +14,7 @@ class CardList extends StatelessWidget {
       builder: (context, repo, child) {
         final cardList = GridView.count(
           crossAxisCount: 2,
+          childAspectRatio: 2,
           padding: const EdgeInsets.all(10),
           crossAxisSpacing: 10,
           children: repo.cardList.map((card) => CardItem(card: card)).toList(),
@@ -45,7 +46,7 @@ class CardList extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => CardScanner()),
                 // MaterialPageRoute(
-                //   builder: (context) => AddCardDetails(barcodeValue: 'aaaa'),
+                //   builder: (context) => AddCard(barcodeValue: 'aaaa'),
                 // ),
               );
             },

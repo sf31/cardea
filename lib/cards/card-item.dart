@@ -16,20 +16,21 @@ class CardItem extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => CardDetails(card: card)),
         );
-      }, // Handle your callback
+      },
       child: Container(
         decoration: BoxDecoration(
           color: card.color,
           borderRadius: BorderRadius.circular(5),
         ),
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-            Text(
-              card.name,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        child: Center(
+          child: Text(
+            card.name,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
-          ],
+          ),
         ),
       ),
     );
