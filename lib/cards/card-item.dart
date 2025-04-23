@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'card-details.dart';
 import 'card.repo.dart';
+import 'manage-card.dart';
 
 class CardItem extends StatelessWidget {
   final LoyaltyCard card;
@@ -13,9 +14,23 @@ class CardItem extends StatelessWidget {
     // make a rounded box
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => CardDetails(card: card)),
+        // Navigator.of(context).push(
+        //   MaterialPageRoute(builder: (context) => CardDetails(card: card)),
+        // );
+        showModalBottomSheet(
+          showDragHandle: true,
+          // isScrollControlled: true,
+          context: context,
+          backgroundColor: Colors.white,
+          builder: (BuildContext context) {
+            return CardDetails(card: card);
+          },
         );
+      },
+      onLongPress: () {
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (context) => ManageCard(card: card)));
       },
       child: Container(
         decoration: BoxDecoration(

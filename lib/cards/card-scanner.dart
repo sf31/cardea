@@ -1,7 +1,8 @@
+import 'package:cardea/cards/card.repo.dart';
+import 'package:cardea/cards/manage-card.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-
-import 'add-card.dart';
+import 'package:uuid/uuid.dart';
 
 class CardScanner extends StatelessWidget {
   final MobileScannerController _controller = MobileScannerController();
@@ -14,8 +15,15 @@ class CardScanner extends StatelessWidget {
 
     if (value != null) {
       _controller.dispose();
+      LoyaltyCard card = LoyaltyCard(
+        id: const Uuid().v4(),
+        name: 'New Card',
+        barcode: value,
+        color: Colors.blue,
+        imageUrl: '',
+      );
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => AddCard(barcodeValue: value)),
+        MaterialPageRoute(builder: (context) => ManageCard(card: card)),
       );
     }
   }

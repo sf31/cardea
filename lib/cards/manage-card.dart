@@ -2,18 +2,18 @@ import 'package:cardea/cards/card.repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
-class AddCard extends StatefulWidget {
-  final String barcodeValue;
+class ManageCard extends StatefulWidget {
+  final LoyaltyCard card;
+  final bool isNewCard;
 
-  const AddCard({super.key, required this.barcodeValue});
+  const ManageCard({super.key, required this.card, this.isNewCard = false});
 
   @override
-  State<AddCard> createState() => _AddCardState();
+  State<ManageCard> createState() => _ManageCardState();
 }
 
-class _AddCardState extends State<AddCard> {
+class _ManageCardState extends State<ManageCard> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _barcodeController = TextEditingController();
@@ -28,7 +28,9 @@ class _AddCardState extends State<AddCard> {
   @override
   void initState() {
     super.initState();
-    _barcodeController.text = widget.barcodeValue;
+    currentColor = widget.card.color;
+    _nameController.text = widget.card.name;
+    _barcodeController.text = widget.card.barcode;
   }
 
   @override
@@ -76,7 +78,7 @@ class _AddCardState extends State<AddCard> {
 
       Provider.of<CardRepo>(context, listen: false).add(
         LoyaltyCard(
-          id: Uuid().v4(),
+          id: widget.card.id,
           name: name,
           barcode: barcode,
           color: currentColor,
@@ -87,10 +89,17 @@ class _AddCardState extends State<AddCard> {
     }
   }
 
+  void _onDelete() {
+    Provider.of<CardRepo>(context, listen: false).removeById(widget.card.id);
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Card')),
+      appBar: AppBar(
+        title: widget.isNewCard ? Text('Add Card') : Text('Edit Card'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -133,7 +142,13 @@ class _AddCardState extends State<AddCard> {
                   ],
                 ),
               ),
-              ElevatedButton(onPressed: _onSave, child: const Text('Save')),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TextButton(onPressed: _onDelete, child: const Text('Delete')),
+                  ElevatedButton(onPressed: _onSave, child: const Text('Save')),
+                ],
+              ),
             ],
           ),
         ),

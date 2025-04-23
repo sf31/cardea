@@ -69,8 +69,14 @@ class CardRepo extends ChangeNotifier {
       UnmodifiableListView(_cardList);
 
   void add(LoyaltyCard card) {
-    _cardList.add(card);
-    _insert(card);
+    int currentIndex = _cardList.indexWhere((c) => c.id == card.id);
+    if (currentIndex != -1) {
+      _cardList[currentIndex] = card;
+      _update(card);
+    } else {
+      _cardList.add(card);
+      _insert(card);
+    }
     notifyListeners();
   }
 
