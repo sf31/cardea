@@ -108,8 +108,19 @@ class _ManageCardState extends State<ManageCard> {
             children: [
               PaddedItem(
                 child: TextFormField(
+                  onTapOutside: (evt) {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  },
                   controller: _nameController,
-                  decoration: const InputDecoration(labelText: 'Name'),
+                  decoration: const InputDecoration(
+                    labelText: 'Name',
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue),
+                    ),
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter a name';
@@ -120,8 +131,19 @@ class _ManageCardState extends State<ManageCard> {
               ),
               PaddedItem(
                 child: TextFormField(
+                  onTapOutside: (evt) {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  },
                   controller: _barcodeController,
-                  decoration: const InputDecoration(labelText: 'Barcode'),
+                  decoration: const InputDecoration(
+                    labelText: 'Barcode',
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue),
+                    ),
+                  ),
                 ),
               ),
               PaddedItem(
