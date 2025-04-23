@@ -34,7 +34,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
       ),
-      home: SafeArea(child: const MyHomePage(title: 'Flutter Demo Home Page')),
+      // home: SafeArea(child: const MyHomePage(title: 'Flutter Demo Home Page')),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
