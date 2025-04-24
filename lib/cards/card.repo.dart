@@ -9,14 +9,14 @@ class LoyaltyCard {
   String name;
   String barcode;
   Color color;
-  String imageUrl;
+  int usageCount;
 
   LoyaltyCard({
     required this.id,
     required this.name,
     required this.barcode,
     required this.color,
-    required this.imageUrl,
+    this.usageCount = 0,
   });
 
   static createTable(Database db) {
@@ -26,7 +26,7 @@ class LoyaltyCard {
         name TEXT,
         barcode TEXT,
         color NUMBER,
-        imageUrl TEXT
+        usageCount INTEGER
       )
     ''';
     return db.execute(sql);
@@ -38,7 +38,7 @@ class LoyaltyCard {
       'name': name,
       'barcode': barcode,
       'color': color.toARGB32(),
-      'imageUrl': imageUrl,
+      'usageCount': usageCount,
     };
   }
 
@@ -48,13 +48,13 @@ class LoyaltyCard {
       name: map['name'],
       barcode: map['barcode'],
       color: Color(map['color']),
-      imageUrl: map['imageUrl'],
+      usageCount: map['usageCount'],
     );
   }
 
   @override
   String toString() {
-    return 'Card{id: $id, name: $name, barcode: $barcode, color: $color, imageUrl: $imageUrl}';
+    return 'Card{id: $id, name: $name, barcode: $barcode, color: $color, usageCount: $usageCount}';
   }
 }
 
@@ -97,12 +97,22 @@ class CardRepo extends ChangeNotifier {
     notifyListeners();
   }
 
+  void incrementUsageCount(LoyaltyCard card) {
+    int index = _cardList.indexWhere((c) => c.id == card.id);
+    if (index != -1) {
+      _cardList[index].usageCount++;
+      _update(_cardList[index]);
+      notifyListeners();
+    }
+  }
+
   void _sortCards() {
     if (_sortBy == 'alphabetical') {
-      _cardList.sort((a, b) => a.name.compareTo(b.name));
+      _cardList.sort(
+        (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
+      );
     } else if (_sortBy == 'most-used') {
-      _cardList.sort((a, b) => b.name.compareTo(a.name));
-      // Add logic for "most-used" sorting if applicable
+      _cardList.sort((a, b) => b.usageCount.compareTo(a.usageCount));
     }
   }
 

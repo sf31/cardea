@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'card-details.dart';
 import 'card.repo.dart';
@@ -17,6 +18,7 @@ class CardItem extends StatelessWidget {
         // Navigator.of(context).push(
         //   MaterialPageRoute(builder: (context) => CardDetails(card: card)),
         // );
+        Provider.of<CardRepo>(context, listen: false).incrementUsageCount(card);
         showModalBottomSheet(
           showDragHandle: true,
           // isScrollControlled: true,
@@ -39,7 +41,7 @@ class CardItem extends StatelessWidget {
         ),
         child: Center(
           child: Text(
-            card.name,
+            '${card.name} (${card.usageCount})',
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

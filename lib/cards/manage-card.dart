@@ -82,7 +82,7 @@ class _ManageCardState extends State<ManageCard> {
           name: name,
           barcode: barcode,
           color: currentColor,
-          imageUrl: '',
+          usageCount: widget.card.usageCount,
         ),
       );
       Navigator.of(context).pop();

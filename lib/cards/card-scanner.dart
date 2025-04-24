@@ -20,7 +20,7 @@ class CardScanner extends StatelessWidget {
         name: 'New Card',
         barcode: value,
         color: Colors.blue,
-        imageUrl: '',
+        usageCount: 0,
       );
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => ManageCard(card: card)),

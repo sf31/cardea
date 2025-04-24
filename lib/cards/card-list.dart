@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 import 'card-item.dart';
-import 'card-scanner.dart';
+import 'manage-card.dart';
 
 class CardList extends StatelessWidget {
   const CardList({super.key});
@@ -98,10 +98,10 @@ class CardList extends StatelessWidget {
               label: Text('Add Card'),
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => CardScanner()),
-                  // MaterialPageRoute(
-                  //   builder: (context) => ManageCard(card: debugCard()),
-                  // ),
+                  // MaterialPageRoute(builder: (context) => CardScanner()),
+                  MaterialPageRoute(
+                    builder: (context) => ManageCard(card: debugCard()),
+                  ),
                 );
               },
             ),
@@ -118,6 +118,6 @@ LoyaltyCard debugCard() {
     name: 'Card ${Random(100)}',
     barcode: '123',
     color: Colors.red,
-    imageUrl: '',
+    usageCount: 0,
   );
 }
