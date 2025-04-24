@@ -40,12 +40,16 @@ class CardItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(5),
         ),
         child: Center(
-          child: Text(
-            '${card.name} (${card.usageCount})',
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: Text(
+              '${card.name} (${card.usageCount})',
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
           ),
         ),

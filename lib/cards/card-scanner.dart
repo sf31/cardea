@@ -13,19 +13,19 @@ class CardScanner extends StatelessWidget {
     Barcode? barcode = barcodes.barcodes.firstOrNull;
     String? value = barcode?.displayValue;
 
-    if (value != null) {
-      _controller.dispose();
-      LoyaltyCard card = LoyaltyCard(
-        id: const Uuid().v4(),
-        name: 'New Card',
-        barcode: value,
-        color: Colors.blue,
-        usageCount: 0,
-      );
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => ManageCard(card: card)),
-      );
-    }
+    if (value == null) return;
+
+    _controller.dispose();
+    LoyaltyCard card = LoyaltyCard(
+      id: const Uuid().v4(),
+      name: 'New Card',
+      barcode: value,
+      color: Colors.blue,
+      usageCount: 0,
+    );
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => ManageCard(card: card)),
+    );
   }
 
   @override

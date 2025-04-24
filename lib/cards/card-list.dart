@@ -1,13 +1,14 @@
 import 'dart:math';
 
 import 'package:cardea/cards/card.repo.dart';
+import 'package:cardea/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 import 'card-item.dart';
-import 'manage-card.dart';
+import 'card-scanner.dart';
 
 class CardList extends StatelessWidget {
   const CardList({super.key});
@@ -60,6 +61,14 @@ class CardList extends StatelessWidget {
             },
             icon: Icon(Icons.filter_list),
           ),
+          IconButton(
+            onPressed: () {
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (context) => Settings()));
+            },
+            icon: Icon(Icons.settings),
+          ),
         ],
       ),
       body: Consumer<CardRepo>(
@@ -98,10 +107,10 @@ class CardList extends StatelessWidget {
               label: Text('Add Card'),
               onPressed: () {
                 Navigator.of(context).push(
-                  // MaterialPageRoute(builder: (context) => CardScanner()),
-                  MaterialPageRoute(
-                    builder: (context) => ManageCard(card: debugCard()),
-                  ),
+                  MaterialPageRoute(builder: (context) => CardScanner()),
+                  // MaterialPageRoute(
+                  //   builder: (context) => ManageCard(card: debugCard()),
+                  // ),
                 );
               },
             ),

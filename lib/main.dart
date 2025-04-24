@@ -1,4 +1,5 @@
 import 'package:cardea/shopping/shopping-list.dart';
+import 'package:cardea/utils/shared-prefs.utils.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
@@ -16,23 +17,30 @@ Future<void> main() async {
     },
     version: 1,
   );
+  final brightness = await getBrightness();
   runApp(
     ChangeNotifierProvider(
       create: (context) => CardRepo(database: database),
-      child: const MyApp(),
+      child: MyApp(brightness: brightness),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Brightness brightness;
+
+  const MyApp({super.key, this.brightness = Brightness.light});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        // colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.green,
+          brightness: brightness,
+        ),
       ),
       // home: SafeArea(child: const MyHomePage(title: 'Flutter Demo Home Page')),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
