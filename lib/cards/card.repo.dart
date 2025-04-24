@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 class LoyaltyCard {
@@ -60,6 +61,7 @@ class LoyaltyCard {
 class CardRepo extends ChangeNotifier {
   final List<LoyaltyCard> _cardList = [];
   final Database database;
+  String _sortBy = 'alphabetical';
 
   CardRepo({required this.database}) {
     _loadCards();
@@ -77,6 +79,7 @@ class CardRepo extends ChangeNotifier {
       _cardList.add(card);
       _insert(card);
     }
+    _sortCards();
     notifyListeners();
   }
 
@@ -84,6 +87,23 @@ class CardRepo extends ChangeNotifier {
     _cardList.removeWhere((card) => card.id == id);
     _delete(id);
     notifyListeners();
+  }
+
+  void setSortPreference(String sortBy) async {
+    _sortBy = sortBy;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('sortBy', sortBy);
+    _sortCards();
+    notifyListeners();
+  }
+
+  void _sortCards() {
+    if (_sortBy == 'alphabetical') {
+      _cardList.sort((a, b) => a.name.compareTo(b.name));
+    } else if (_sortBy == 'most-used') {
+      _cardList.sort((a, b) => b.name.compareTo(a.name));
+      // Add logic for "most-used" sorting if applicable
+    }
   }
 
   Future<void> _insert(LoyaltyCard card) async {
@@ -113,6 +133,9 @@ class CardRepo extends ChangeNotifier {
     for (var map in maps) {
       _cardList.add(LoyaltyCard.toLoyaltyCard(map));
     }
+    final prefs = await SharedPreferences.getInstance();
+    _sortBy = prefs.getString('sortBy') ?? 'alphabetical';
+    _sortCards();
     notifyListeners();
   }
 }

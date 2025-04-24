@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:cardea/cards/card.repo.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 import 'card-item.dart';
 import 'card-scanner.dart';
@@ -9,46 +12,39 @@ import 'card-scanner.dart';
 class CardList extends StatelessWidget {
   const CardList({super.key});
 
-  Future<void> _sortBy(BuildContext context) async {
+  void _sortBy(BuildContext context) async {
+    final repo = Provider.of<CardRepo>(context, listen: false);
+    final List<String> options = ['alphabetical', 'most-used'];
     final prefs = await SharedPreferences.getInstance();
     final sortBy = prefs.getString('sortBy') ?? 'alphabetical';
-    final List<String> options = ['alphabetical', 'most-used'];
 
-    switch (await showDialog<String>(
+    final selectedOption = await showDialog<String>(
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
           title: const Text('Sort by'),
-          children: [
-            for (String option in options)
-              SimpleDialogOption(
-                onPressed: () {
-                  Navigator.pop(context, option);
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(option),
-                    if (sortBy == option)
-                      const Icon(Icons.check, color: Colors.green),
-                  ],
-                ),
-              ),
-          ],
+          children:
+              options.map((option) {
+                return SimpleDialogOption(
+                  onPressed: () {
+                    Navigator.pop(context, option);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(option),
+                      if (sortBy == option)
+                        const Icon(Icons.check, color: Colors.green),
+                    ],
+                  ),
+                );
+              }).toList(),
         );
       },
-    )) {
-      case 'alphabetical':
-        // Sort by alphabetical order
-        prefs.setString('sortBy', 'alphabetical');
-        break;
-      case 'most-used':
-        // Sort by most used
-        prefs.setString('sortBy', 'most-used');
-        break;
-      case null:
-        // User canceled the dialog
-        break;
+    );
+
+    if (selectedOption != null) {
+      repo.setSortPreference(selectedOption);
     }
   }
 
@@ -73,6 +69,7 @@ class CardList extends StatelessWidget {
             childAspectRatio: 2,
             padding: const EdgeInsets.all(10),
             crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
             children:
                 repo.cardList.map((card) => CardItem(card: card)).toList(),
           );
@@ -103,7 +100,7 @@ class CardList extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => CardScanner()),
                   // MaterialPageRoute(
-                  //   builder: (context) => AddCard(barcodeValue: 'aaaa'),
+                  //   builder: (context) => ManageCard(card: debugCard()),
                   // ),
                 );
               },
@@ -113,4 +110,14 @@ class CardList extends StatelessWidget {
       ),
     );
   }
+}
+
+LoyaltyCard debugCard() {
+  return LoyaltyCard(
+    id: Uuid().v4(),
+    name: 'Card ${Random(100)}',
+    barcode: '123',
+    color: Colors.red,
+    imageUrl: '',
+  );
 }
