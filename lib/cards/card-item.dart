@@ -37,7 +37,7 @@ class CardItem extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: card.color,
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(15),
         ),
         child: Center(
           child: Padding(

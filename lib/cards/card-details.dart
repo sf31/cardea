@@ -12,16 +12,20 @@ class CardDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(card.name, style: TextStyle(fontSize: 30, color: Colors.black)),
-        SizedBox(height: 20),
         Padding(
-          padding: EdgeInsets.all(16),
-          child: Center(
-            child: BarcodeWidget(
-              barcode: Barcode.code128(),
-              data: card.barcode,
-            ),
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            card.name,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: 30, color: Colors.black),
           ),
+        ),
+        BarcodeWidget(
+          barcode: Barcode.code128(),
+          data: card.barcode,
+          padding: EdgeInsets.all(35),
+          textPadding: 20,
+          style: TextStyle(fontSize: 15, color: Colors.black),
         ),
       ],
     );

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
+import 'add-card-btn.dart';
 import 'card-item.dart';
 import 'card-scanner.dart';
 
@@ -79,8 +80,10 @@ class CardList extends StatelessWidget {
             padding: const EdgeInsets.all(10),
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
-            children:
-                repo.cardList.map((card) => CardItem(card: card)).toList(),
+            children: [
+              ...repo.cardList.map((card) => CardItem(card: card)).toList(),
+              AddCardBtn(),
+            ],
           );
 
           final emptyCardList = Center(
