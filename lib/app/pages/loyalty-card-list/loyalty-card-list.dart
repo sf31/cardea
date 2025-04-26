@@ -1,21 +1,22 @@
 import 'dart:math';
 
-import 'package:cardea/cards/card.repo.dart';
-import 'package:cardea/settings/settings.dart';
+import 'package:cardea/app/pages/loyalty-card-list/loyalty-card-item.dart';
+import 'package:cardea/app/pages/loyalty-card-list/loyalty-card-scanner.dart';
+import 'package:cardea/app/pages/loyalty-card-list/loyalty=card-add-btn.dart';
+import 'package:cardea/app/state/loyaly-card.provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
-import 'add-card-btn.dart';
-import 'card-item.dart';
-import 'card-scanner.dart';
+import '../../../data/loyalty-card.entity.dart';
+import '../settings/settings.dart';
 
-class CardList extends StatelessWidget {
-  const CardList({super.key});
+class LoyaltyCardList extends StatelessWidget {
+  const LoyaltyCardList({super.key});
 
   void _sortBy(BuildContext context) async {
-    final repo = Provider.of<CardRepo>(context, listen: false);
+    final repo = Provider.of<LoyaltyCardProvider>(context, listen: false);
     final List<String> options = ['alphabetical', 'most-used'];
     final prefs = await SharedPreferences.getInstance();
     final sortBy = prefs.getString('sortBy') ?? 'alphabetical';
@@ -46,7 +47,7 @@ class CardList extends StatelessWidget {
     );
 
     if (selectedOption != null) {
-      repo.setSortPreference(selectedOption);
+      // repo.setSortPreference(selectedOption);
     }
   }
 
@@ -72,7 +73,7 @@ class CardList extends StatelessWidget {
           ),
         ],
       ),
-      body: Consumer<CardRepo>(
+      body: Consumer<LoyaltyCardProvider>(
         builder: (context, repo, child) {
           final cardList = GridView.count(
             crossAxisCount: 2,
@@ -81,8 +82,8 @@ class CardList extends StatelessWidget {
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
             children: [
-              ...repo.cardList.map((card) => CardItem(card: card)).toList(),
-              AddCardBtn(),
+              ...repo.cardList.map((card) => LoyaltyCardItem(card: card)),
+              LoyaltyCardAddBtn(),
             ],
           );
 
@@ -110,7 +111,7 @@ class CardList extends StatelessWidget {
               label: Text('Add Card'),
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => CardScanner()),
+                  MaterialPageRoute(builder: (context) => LoyaltyCardScanner()),
                   // MaterialPageRoute(
                   //   builder: (context) => ManageCard(card: debugCard()),
                   // ),
@@ -127,7 +128,7 @@ class CardList extends StatelessWidget {
 LoyaltyCard debugCard() {
   return LoyaltyCard(
     id: Uuid().v4(),
-    name: 'Card ${Random(100)}',
+    name: 'Card ${Random(100).toString()}',
     barcode: '123',
     color: Colors.red,
     usageCount: 0,

@@ -1,12 +1,12 @@
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 
-import 'card.repo.dart';
+import '../../../data/loyalty-card.entity.dart';
 
-class CardDetails extends StatelessWidget {
+class LoyaltyCardDetails extends StatelessWidget {
   final LoyaltyCard card;
 
-  const CardDetails({super.key, required this.card});
+  const LoyaltyCardDetails({super.key, required this.card});
 
   @override
   Widget build(BuildContext context) {

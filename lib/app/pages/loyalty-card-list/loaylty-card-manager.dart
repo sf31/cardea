@@ -1,19 +1,25 @@
-import 'package:cardea/cards/card.repo.dart';
+import 'package:cardea/app/state/loyaly-card.provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:provider/provider.dart';
 
-class ManageCard extends StatefulWidget {
+import '../../../data/loyalty-card.entity.dart' show LoyaltyCard;
+
+class LoyaltyCardManager extends StatefulWidget {
   final LoyaltyCard card;
   final bool isNewCard;
 
-  const ManageCard({super.key, required this.card, this.isNewCard = false});
+  const LoyaltyCardManager({
+    super.key,
+    required this.card,
+    this.isNewCard = false,
+  });
 
   @override
-  State<ManageCard> createState() => _ManageCardState();
+  State<LoyaltyCardManager> createState() => _LoyaltyCardManagerState();
 }
 
-class _ManageCardState extends State<ManageCard> {
+class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _barcodeController = TextEditingController();
@@ -76,7 +82,7 @@ class _ManageCardState extends State<ManageCard> {
       final name = _nameController.text;
       final barcode = _barcodeController.text;
 
-      Provider.of<CardRepo>(context, listen: false).add(
+      Provider.of<LoyaltyCardProvider>(context, listen: false).upsert(
         LoyaltyCard(
           id: widget.card.id,
           name: name,
@@ -90,7 +96,10 @@ class _ManageCardState extends State<ManageCard> {
   }
 
   void _onDelete() {
-    Provider.of<CardRepo>(context, listen: false).removeById(widget.card.id);
+    Provider.of<LoyaltyCardProvider>(
+      context,
+      listen: false,
+    ).removeById(widget.card.id);
     Navigator.of(context).pop();
   }
 

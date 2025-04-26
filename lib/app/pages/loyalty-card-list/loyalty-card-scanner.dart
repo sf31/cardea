@@ -1,13 +1,14 @@
-import 'package:cardea/cards/card.repo.dart';
-import 'package:cardea/cards/manage-card.dart';
+import 'package:cardea/app/pages/loyalty-card-list/loaylty-card-manager.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:uuid/uuid.dart';
 
-class CardScanner extends StatelessWidget {
+import '../../../data/loyalty-card.entity.dart';
+
+class LoyaltyCardScanner extends StatelessWidget {
   final MobileScannerController _controller = MobileScannerController();
 
-  CardScanner({super.key});
+  LoyaltyCardScanner({super.key});
 
   void _handleBarcode(BarcodeCapture barcodes, BuildContext context) {
     Barcode? barcode = barcodes.barcodes.firstOrNull;
@@ -24,7 +25,7 @@ class CardScanner extends StatelessWidget {
       usageCount: 0,
     );
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => ManageCard(card: card)),
+      MaterialPageRoute(builder: (context) => LoyaltyCardManager(card: card)),
     );
   }
 

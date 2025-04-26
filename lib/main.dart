@@ -1,26 +1,24 @@
-import 'package:cardea/shopping/shopping-list.dart';
-import 'package:cardea/utils/shared-prefs.utils.dart';
+import 'package:cardea/core/utils/shared-prefs.utils.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
-import 'package:sqflite/sqflite.dart';
 
-import 'cards/card-list.dart';
-import 'cards/card.repo.dart';
+import 'app/pages/loyalty-card-list/loyalty-card-list.dart';
+import 'app/pages/shopping/shopping-list.dart';
+import 'app/state/loyaly-card.provider.dart';
+import 'core/database/database.service.dart';
+import 'core/repositories/loyalty-card.repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final database = await openDatabase(
-    join(await getDatabasesPath(), 'cardea.db'),
-    onCreate: (db, version) {
-      LoyaltyCard.createTable(db);
-    },
-    version: 1,
-  );
+  await DatabaseService().init();
+
   final brightness = await getBrightness();
   runApp(
     ChangeNotifierProvider(
-      create: (context) => CardRepo(database: database),
+      create:
+          (context) => LoyaltyCardProvider(
+            repository: LoyaltyCardRepository(db: DatabaseService().database),
+          ),
       child: MyApp(brightness: brightness),
     ),
   );
@@ -63,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: <Widget>[CardList(), ShoppingList()][currentPageIndex],
+      body: <Widget>[LoyaltyCardList(), ShoppingList()][currentPageIndex],
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {

@@ -1,13 +1,13 @@
 import 'dart:math';
 
-import 'package:cardea/cards/card.repo.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-import 'manage-card.dart';
+import '../../../data/loyalty-card.entity.dart';
+import 'loaylty-card-manager.dart';
 
-class AddCardBtn extends StatelessWidget {
-  const AddCardBtn({super.key});
+class LoyaltyCardAddBtn extends StatelessWidget {
+  const LoyaltyCardAddBtn({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class AddCardBtn extends StatelessWidget {
         Navigator.of(context).push(
           // MaterialPageRoute(builder: (context) => CardScanner()),
           MaterialPageRoute(
-            builder: (context) => ManageCard(card: debugCard()),
+            builder: (context) => LoyaltyCardManager(card: debugCard()),
           ),
         );
       },
