@@ -5,20 +5,45 @@ import 'package:provider/provider.dart';
 import 'app/pages/loyalty-card-list/loyalty-card-list.dart';
 import 'app/pages/shopping/shopping-list.dart';
 import 'app/state/loyaly-card.provider.dart';
+import 'app/state/shopping-item.provider.dart';
 import 'core/database/database.service.dart';
 import 'core/repositories/loyalty-card.repository.dart';
+import 'core/repositories/shopping-item.repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DatabaseService().init();
 
   final brightness = await getBrightness();
+  // runApp(
+  //   ChangeNotifierProvider(
+  //     create:
+  //         (context) => LoyaltyCardProvider(
+  //           repository: LoyaltyCardRepository(db: DatabaseService().database),
+  //         ),
+  //     child: MyApp(brightness: brightness),
+  //   ),
+  // );
   runApp(
-    ChangeNotifierProvider(
-      create:
-          (context) => LoyaltyCardProvider(
-            repository: LoyaltyCardRepository(db: DatabaseService().database),
-          ),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create:
+              (context) => LoyaltyCardProvider(
+                repository: LoyaltyCardRepository(
+                  db: DatabaseService().database,
+                ),
+              ),
+        ),
+        ChangeNotifierProvider(
+          create:
+              (context) => ShoppingItemProvider(
+                repository: ShoppingItemRepository(
+                  db: DatabaseService().database,
+                ),
+              ),
+        ),
+      ],
       child: MyApp(brightness: brightness),
     ),
   );

@@ -20,7 +20,7 @@ class DatabaseService {
           'CREATE TABLE loyalty_cards(id TEXT PRIMARY KEY, name TEXT, barcode TEXT, color NUMBER, usageCount INTEGER)',
         );
         await db.execute(
-          'CREATE TABLE shopping_items (id TEXT PRIMARY KEY, productName TEXT)',
+          'CREATE TABLE shopping_items (id TEXT PRIMARY KEY, name TEXT)',
         );
       },
     );

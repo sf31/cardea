@@ -3,7 +3,7 @@ import 'package:cardea/data/shopping-item.entity.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ShoppingItemRepository extends GenericRepository<ShoppingItem> {
-  ShoppingItemRepository({required Database db}) : super(db, 'shipping_items');
+  ShoppingItemRepository({required Database db}) : super(db, 'shopping_items');
 
   @override
   ShoppingItem fromMap(Map<String, dynamic> map) {
