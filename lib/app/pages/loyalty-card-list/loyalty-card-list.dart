@@ -132,5 +132,6 @@ LoyaltyCard debugCard() {
     barcode: '123',
     color: Colors.red,
     usageCount: 0,
+    updatedAt: DateTime.now(),
   );
 }

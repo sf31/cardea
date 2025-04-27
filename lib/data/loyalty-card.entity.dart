@@ -6,13 +6,15 @@ class LoyaltyCard {
   String barcode;
   Color color;
   int usageCount;
+  DateTime updatedAt;
 
   LoyaltyCard({
     required this.id,
     required this.name,
     required this.barcode,
     required this.color,
-    this.usageCount = 0,
+    required this.usageCount,
+    required this.updatedAt,
   });
 
   Map<String, Object?> toMap() {
@@ -22,6 +24,7 @@ class LoyaltyCard {
       'barcode': barcode,
       'color': color.toARGB32(),
       'usageCount': usageCount,
+      'updatedAt': updatedAt.millisecondsSinceEpoch,
     };
   }
 
@@ -31,7 +34,11 @@ class LoyaltyCard {
       name: map['name'],
       barcode: map['barcode'],
       color: Color(map['color']),
-      usageCount: map['usageCount'],
+      usageCount: map['usageCount'] ?? 0,
+      updatedAt:
+          map['updatedAt'] != null
+              ? DateTime.fromMillisecondsSinceEpoch(map['updatedAt'])
+              : DateTime.now(),
     );
   }
 }

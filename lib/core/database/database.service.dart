@@ -10,7 +10,7 @@ class DatabaseService {
   Database? _db;
 
   Future<void> init() async {
-    if (_db != null) return; // Already initialized
+    if (_db != null) return;
 
     _db = await openDatabase(
       'myapp.db',
@@ -33,5 +33,16 @@ class DatabaseService {
     return _db!;
   }
 
-  // Other methods like insert/update/delete...
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute(
+        '''ALTER TABLE loyalty_cards ADD COLUMN updated_at INTEGER NOT NULL DEFAULT (strftime('%s','now') * 1000)''',
+      );
+      await db.execute(
+        '''ALTER TABLE shopping_items ADD COLUMN updated_at INTEGER NOT NULL DEFAULT (strftime('%s','now') * 1000)''',
+      );
+    }
+
+    // Future: if (oldVersion < 3) { migrate more... }
+  }
 }
