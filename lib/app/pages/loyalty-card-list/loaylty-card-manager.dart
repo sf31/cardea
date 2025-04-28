@@ -89,7 +89,6 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
           barcode: barcode,
           color: currentColor,
           usageCount: widget.card.usageCount,
-          updatedAt: DateTime.now(),
         ),
       );
       Navigator.of(context).pop();

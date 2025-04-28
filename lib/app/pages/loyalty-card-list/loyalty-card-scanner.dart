@@ -23,7 +23,6 @@ class LoyaltyCardScanner extends StatelessWidget {
       barcode: value,
       color: Colors.blue,
       usageCount: 0,
-      updatedAt: DateTime.now(),
     );
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => LoyaltyCardManager(card: card)),

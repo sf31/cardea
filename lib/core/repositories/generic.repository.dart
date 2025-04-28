@@ -1,6 +1,7 @@
+import 'package:cardea/data/base.entity.dart';
 import 'package:sqflite/sqflite.dart';
 
-abstract class GenericRepository<T> {
+abstract class GenericRepository<T extends BaseEntity> {
   final Database db;
   final String tableName;
 
@@ -35,7 +36,7 @@ abstract class GenericRepository<T> {
   Future<void> create(T entity) async {
     await db.insert(
       tableName,
-      toMap(entity),
+      toMap(_getEntityWithUpdatedAt(entity)),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
@@ -43,7 +44,7 @@ abstract class GenericRepository<T> {
   Future<void> update(T entity) async {
     await db.update(
       tableName,
-      toMap(entity),
+      toMap(_getEntityWithUpdatedAt(entity)),
       where: 'id = ?',
       whereArgs: [getId(entity)],
     );
@@ -51,5 +52,10 @@ abstract class GenericRepository<T> {
 
   Future<void> delete(String id) async {
     await db.delete(tableName, where: 'id = ?', whereArgs: [id]);
+  }
+
+  _getEntityWithUpdatedAt(T entity) {
+    final now = DateTime.now();
+    return entity.copyWith(updatedAt: now) as T;
   }
 }
