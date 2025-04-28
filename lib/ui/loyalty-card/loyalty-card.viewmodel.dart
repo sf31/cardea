@@ -1,17 +1,16 @@
 import 'dart:collection';
 
-import 'package:cardea/core/repositories/loyalty-card.repository.dart';
+import 'package:cardea/data/models/loyalty-card.model.dart';
+import 'package:cardea/data/repositories/loyalty-card.repository.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../data/loyalty-card.entity.dart';
-
-class LoyaltyCardProvider with ChangeNotifier {
+class LoyaltyCardViewModel with ChangeNotifier {
   final LoyaltyCardRepository repository;
   List<LoyaltyCard> _cardList = [];
   String _sortBy = 'alphabetical';
 
-  LoyaltyCardProvider({required this.repository}) : super() {
+  LoyaltyCardViewModel({required this.repository}) : super() {
     loadCards();
   }
 

@@ -1,6 +1,6 @@
-import 'base.entity.dart';
+import 'base.model.dart';
 
-class ShoppingItem extends BaseEntity {
+class ShoppingItem extends BaseModel {
   String id;
   String name;
   @override
@@ -31,7 +31,7 @@ class ShoppingItem extends BaseEntity {
   }
 
   @override
-  BaseEntity copyWith({DateTime? updatedAt}) {
+  BaseModel copyWith({DateTime? updatedAt}) {
     return ShoppingItem(
       id: id,
       name: name,

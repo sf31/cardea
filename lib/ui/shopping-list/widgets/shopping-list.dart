@@ -1,10 +1,10 @@
-import 'package:cardea/app/pages/shopping/shopping-list-item.dart';
-import 'package:cardea/data/shopping-item.entity.dart';
+import 'package:cardea/data/models/shopping-item.model.dart';
+import 'package:cardea/ui/shopping-list/widgets/shopping-list-item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../state/shopping-item.provider.dart';
+import '../shopping-item.viewmodel.dart';
 
 class ShoppingList extends StatefulWidget {
   const ShoppingList({super.key});
@@ -21,7 +21,7 @@ class _ShoppingListState extends State<ShoppingList> {
   void _submit() {
     final userInput = _controller.text;
     if (userInput.isEmpty) return;
-    Provider.of<ShoppingItemProvider>(
+    Provider.of<ShoppingItemViewModel>(
       context,
       listen: false,
     ).upsert(ShoppingItem(id: const Uuid().v4(), name: userInput));
@@ -42,7 +42,7 @@ class _ShoppingListState extends State<ShoppingList> {
     final userInput = _controller.text;
     if (userInput.isEmpty) return;
 
-    Provider.of<ShoppingItemProvider>(
+    Provider.of<ShoppingItemViewModel>(
       context,
       listen: false,
     ).upsert(ShoppingItem(id: const Uuid().v4(), name: userInput));
@@ -75,7 +75,7 @@ class _ShoppingListState extends State<ShoppingList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Shopping List')),
-      body: Consumer<ShoppingItemProvider>(
+      body: Consumer<ShoppingItemViewModel>(
         builder: (context, provider, child) {
           if (provider.itemList.isEmpty && !showNewItem) {
             return const Center(

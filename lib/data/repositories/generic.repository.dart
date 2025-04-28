@@ -1,7 +1,8 @@
-import 'package:cardea/data/base.entity.dart';
 import 'package:sqflite/sqflite.dart';
 
-abstract class GenericRepository<T extends BaseEntity> {
+import '../models/base.model.dart';
+
+abstract class GenericRepository<T extends BaseModel> {
   final Database db;
   final String tableName;
 

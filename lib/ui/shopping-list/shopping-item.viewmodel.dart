@@ -1,14 +1,14 @@
 import 'dart:collection';
 
-import 'package:cardea/core/repositories/shopping-item.repository.dart';
-import 'package:cardea/data/shopping-item.entity.dart';
+import 'package:cardea/data/models/shopping-item.model.dart';
+import 'package:cardea/data/repositories/shopping-item.repository.dart';
 import 'package:flutter/material.dart';
 
-class ShoppingItemProvider with ChangeNotifier {
+class ShoppingItemViewModel with ChangeNotifier {
   final ShoppingItemRepository repository;
   List<ShoppingItem> _itemList = [];
 
-  ShoppingItemProvider({required this.repository}) : super() {
+  ShoppingItemViewModel({required this.repository}) : super() {
     loadItems();
   }
 

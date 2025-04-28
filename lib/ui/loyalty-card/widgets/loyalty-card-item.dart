@@ -1,8 +1,8 @@
-import 'package:cardea/app/state/loyaly-card.provider.dart';
+import 'package:cardea/data/models/loyalty-card.model.dart';
+import 'package:cardea/ui/loyalty-card/loyalty-card.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../data/loyalty-card.entity.dart';
 import 'loaylty-card-manager.dart';
 import 'loyalty-card-details.dart';
 
@@ -19,7 +19,7 @@ class LoyaltyCardItem extends StatelessWidget {
         // Navigator.of(context).push(
         //   MaterialPageRoute(builder: (context) => CardDetails(card: card)),
         // );
-        Provider.of<LoyaltyCardProvider>(
+        Provider.of<LoyaltyCardViewModel>(
           context,
           listen: false,
         ).incrementUsageCount(card);

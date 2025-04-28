@@ -1,9 +1,9 @@
 import 'dart:math';
 
+import 'package:cardea/data/models/loyalty-card.model.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../data/loyalty-card.entity.dart';
 import 'loaylty-card-manager.dart';
 
 class LoyaltyCardAddBtn extends StatelessWidget {

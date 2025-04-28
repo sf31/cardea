@@ -1,22 +1,21 @@
 import 'dart:math';
 
-import 'package:cardea/app/pages/loyalty-card-list/loyalty-card-item.dart';
-import 'package:cardea/app/pages/loyalty-card-list/loyalty-card-scanner.dart';
-import 'package:cardea/app/pages/loyalty-card-list/loyalty=card-add-btn.dart';
-import 'package:cardea/app/state/loyaly-card.provider.dart';
+import 'package:cardea/data/models/loyalty-card.model.dart';
+import 'package:cardea/ui/loyalty-card/loyalty-card.viewmodel.dart';
+import 'package:cardea/ui/loyalty-card/widgets/loyalty-card-item.dart';
+import 'package:cardea/ui/loyalty-card/widgets/loyalty-card-scanner.dart';
+import 'package:cardea/ui/loyalty-card/widgets/loyalty=card-add-btn.dart';
+import 'package:cardea/ui/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../data/loyalty-card.entity.dart';
-import '../settings/settings.dart';
-
 class LoyaltyCardList extends StatelessWidget {
   const LoyaltyCardList({super.key});
 
   void _sortBy(BuildContext context) async {
-    final repo = Provider.of<LoyaltyCardProvider>(context, listen: false);
+    final repo = Provider.of<LoyaltyCardViewModel>(context, listen: false);
     final List<String> options = ['alphabetical', 'most-used'];
     final prefs = await SharedPreferences.getInstance();
     final sortBy = prefs.getString('sortBy') ?? 'alphabetical';
@@ -73,7 +72,7 @@ class LoyaltyCardList extends StatelessWidget {
           ),
         ],
       ),
-      body: Consumer<LoyaltyCardProvider>(
+      body: Consumer<LoyaltyCardViewModel>(
         builder: (context, repo, child) {
           final cardList = GridView.count(
             crossAxisCount: 2,

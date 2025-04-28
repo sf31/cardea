@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-import 'package:cardea/data/base.entity.dart';
+import 'base.model.dart';
 
-class LoyaltyCard extends BaseEntity {
+class LoyaltyCard extends BaseModel {
   @override
   String id;
   String name;
@@ -47,7 +47,7 @@ class LoyaltyCard extends BaseEntity {
   }
 
   @override
-  BaseEntity copyWith({DateTime? updatedAt}) {
+  BaseModel copyWith({DateTime? updatedAt}) {
     return LoyaltyCard(
       id: id,
       name: name,

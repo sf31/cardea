@@ -1,9 +1,8 @@
-import 'package:cardea/app/state/loyaly-card.provider.dart';
+import 'package:cardea/data/models/loyalty-card.model.dart';
+import 'package:cardea/ui/loyalty-card/loyalty-card.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:provider/provider.dart';
-
-import '../../../data/loyalty-card.entity.dart' show LoyaltyCard;
 
 class LoyaltyCardManager extends StatefulWidget {
   final LoyaltyCard card;
@@ -82,7 +81,7 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
       final name = _nameController.text;
       final barcode = _barcodeController.text;
 
-      Provider.of<LoyaltyCardProvider>(context, listen: false).upsert(
+      Provider.of<LoyaltyCardViewModel>(context, listen: false).upsert(
         LoyaltyCard(
           id: widget.card.id,
           name: name,
@@ -96,7 +95,7 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
   }
 
   void _onDelete() {
-    Provider.of<LoyaltyCardProvider>(
+    Provider.of<LoyaltyCardViewModel>(
       context,
       listen: false,
     ).removeById(widget.card.id);

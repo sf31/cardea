@@ -1,20 +1,17 @@
-import 'package:cardea/core/utils/shared-prefs.utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'app/pages/loyalty-card-list/loyalty-card-list.dart';
-import 'app/pages/shopping/shopping-list.dart';
-import 'app/state/loyaly-card.provider.dart';
-import 'app/state/shopping-item.provider.dart';
-import 'core/database/database.service.dart';
-import 'core/repositories/loyalty-card.repository.dart';
-import 'core/repositories/shopping-item.repository.dart';
+import 'data/repositories/loyalty-card.repository.dart';
+import 'data/repositories/shopping-item.repository.dart';
+import 'data/services/database.service.dart';
+import 'ui/loyalty-card/loyalty-card.viewmodel.dart';
+import 'ui/loyalty-card/widgets/loyalty-card-list.dart';
+import 'ui/shopping-list/shopping-item.viewmodel.dart';
+import 'ui/shopping-list/widgets/shopping-list.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DatabaseService().init();
-
-  final brightness = await getBrightness();
   // runApp(
   //   ChangeNotifierProvider(
   //     create:
@@ -29,7 +26,7 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(
           create:
-              (context) => LoyaltyCardProvider(
+              (context) => LoyaltyCardViewModel(
                 repository: LoyaltyCardRepository(
                   db: DatabaseService().database,
                 ),
@@ -37,14 +34,14 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider(
           create:
-              (context) => ShoppingItemProvider(
+              (context) => ShoppingItemViewModel(
                 repository: ShoppingItemRepository(
                   db: DatabaseService().database,
                 ),
               ),
         ),
       ],
-      child: MyApp(brightness: brightness),
+      child: MyApp(),
     ),
   );
 }

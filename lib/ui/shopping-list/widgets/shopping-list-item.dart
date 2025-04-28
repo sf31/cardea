@@ -1,4 +1,4 @@
-import 'package:cardea/data/shopping-item.entity.dart';
+import 'package:cardea/data/models/shopping-item.model.dart';
 import 'package:flutter/material.dart';
 
 class ShoppingListItem extends StatelessWidget {

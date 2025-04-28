@@ -1,9 +1,8 @@
-import 'package:cardea/app/pages/loyalty-card-list/loaylty-card-manager.dart';
+import 'package:cardea/data/models/loyalty-card.model.dart';
+import 'package:cardea/ui/loyalty-card/widgets/loaylty-card-manager.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:uuid/uuid.dart';
-
-import '../../../data/loyalty-card.entity.dart';
 
 class LoyaltyCardScanner extends StatelessWidget {
   final MobileScannerController _controller = MobileScannerController();
