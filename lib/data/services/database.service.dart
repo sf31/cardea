@@ -35,29 +35,19 @@ class DatabaseService {
       'CREATE TABLE $_LOYALTY_CARDS_TABLE (id TEXT PRIMARY KEY, name TEXT, barcode TEXT, color NUMBER, usage_count INTEGER, updated_at INTEGER)',
     );
     await db.execute(
-      'CREATE TABLE $_SHOPPING_ITEMS_TABLE (id TEXT PRIMARY KEY, name TEXT, updated_at INTEGER)',
+      'CREATE TABLE $_SHOPPING_ITEMS_TABLE (id TEXT PRIMARY KEY, name TEXT, updated_at INTEGER, completed_at INTEGER)',
     );
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    if (oldVersion < 2) {
-      // int now = DateTime.now().millisecondsSinceEpoch;
-      //
-      // await db.execute(
-      //   '''ALTER TABLE $_LOYALTY_CARDS_TABLE ADD COLUMN updated_at INTEGER''',
-      // );
-      // await db.execute(
-      //   '''ALTER TABLE $_SHOPPING_ITEMS_TABLE ADD COLUMN updated_at INTEGER''',
-      // );
-      //
-      // await db.execute(
-      //   ''' UPDATE $_LOYALTY_CARDS_TABLE SET updated_at = $now WHERE updated_at IS NULL''',
-      // );
-      //
-      // await db.execute(
-      //   ''' UPDATE $_SHOPPING_ITEMS_TABLE SET updated_at = $now WHERE updated_at IS NULL''',
-      // );
-    }
+    // if (oldVersion < 2) {
+    //   await db.execute(
+    //     '''ALTER TABLE $_SHOPPING_ITEMS_TABLE ADD COLUMN completed_at INTEGER''',
+    //   );
+    //   await db.execute(
+    //     ''' UPDATE $_SHOPPING_ITEMS_TABLE SET completed_at = NULL WHERE completed_at IS NULL''',
+    //   );
+    // }
 
     // Future: if (oldVersion < 3) { migrate more... }
   }

@@ -1,10 +1,10 @@
-import 'package:cardea/data/models/shopping-item.model.dart';
-import 'package:cardea/ui/shopping-list/widgets/shopping-list-item.dart';
+import 'package:cardea/ui/shopping-list/widgets/shopping-list-todo.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 import '../shopping-item.viewmodel.dart';
+import 'empty-shopping-list.dart';
+import 'input-shopping-item.dart';
 
 class ShoppingList extends StatefulWidget {
   const ShoppingList({super.key});
@@ -15,47 +15,10 @@ class ShoppingList extends StatefulWidget {
 
 class _ShoppingListState extends State<ShoppingList> {
   bool showNewItem = false;
-  final TextEditingController _controller = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
 
-  void _submit() {
-    final userInput = _controller.text;
-    if (userInput.isEmpty) return;
-    Provider.of<ShoppingItemViewModel>(
-      context,
-      listen: false,
-    ).upsert(ShoppingItem(id: const Uuid().v4(), name: userInput));
-    _controller.clear();
+  void dismissOnSubmit() {
     setState(() {
       showNewItem = false;
-    });
-  }
-
-  void _onNewItem() {
-    setState(() {
-      showNewItem = true;
-      _focusNode.requestFocus();
-    });
-  }
-
-  void _onSaveItem() {
-    final userInput = _controller.text;
-    if (userInput.isEmpty) return;
-
-    Provider.of<ShoppingItemViewModel>(
-      context,
-      listen: false,
-    ).upsert(ShoppingItem(id: const Uuid().v4(), name: userInput));
-    _controller.clear();
-    setState(() {
-      showNewItem = false;
-    });
-  }
-
-  void _dismissNewItem() {
-    _controller.clear();
-    setState(() {
-      showNewItem = !showNewItem;
     });
   }
 
@@ -66,9 +29,8 @@ class _ShoppingListState extends State<ShoppingList> {
 
   @override
   void dispose() {
-    _controller.dispose();
-    _focusNode.dispose();
     super.dispose();
+    showNewItem = false;
   }
 
   @override
@@ -78,82 +40,59 @@ class _ShoppingListState extends State<ShoppingList> {
       body: Consumer<ShoppingItemViewModel>(
         builder: (context, provider, child) {
           if (provider.itemList.isEmpty && !showNewItem) {
-            return const Center(
-              child: Text(
-                'No items added yet',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 16,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            );
+            return EmptyShoppingList();
           }
 
-          return ListView.builder(
-            itemCount: provider.itemList.length + (showNewItem ? 1 : 0),
-            itemBuilder: (context, index) {
-              if (index < provider.itemList.length) {
-                final item = provider.itemList[index];
-                return ShoppingListItem(
-                  item: item,
-                  removeCallback: (id) {
-                    provider.removeById(id);
-                  },
-                );
-              }
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                child: TextField(
-                  focusNode: _focusNode,
-                  controller: _controller,
-                  onSubmitted: (_) => _submit(),
-                  decoration: InputDecoration(
-                    labelText: 'New Item',
-                    border: const OutlineInputBorder(),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.check),
-                      onPressed: _submit,
-                    ),
-                  ),
-                ),
-              );
-            },
+          return Column(
+            children: [
+              ShoppingListTodo(itemList: provider.itemList),
+              showNewItem
+                  ? InputShoppingItem(dismissOnSubmit: dismissOnSubmit)
+                  : SizedBox(),
+            ],
           );
         },
       ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children:
-            showNewItem
-                ? [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16.0),
-                    child: FloatingActionButton(
-                      onPressed: _dismissNewItem,
-                      backgroundColor: Colors.grey[200],
-                      child: const Icon(Icons.close),
-                    ),
-                  ),
-                  FloatingActionButton.extended(
-                    onPressed: _onSaveItem,
-                    label: const Text('Save'),
-                    icon: const Icon(Icons.check),
-                    // backgroundColor: showNewItem ? Colors.grey[200] : null,
-                  ),
-                ]
-                : [
-                  FloatingActionButton.extended(
-                    onPressed: _onNewItem,
-                    label: const Text('New Item'),
-                    icon: const Icon(Icons.add),
-                    // backgroundColor: showNewItem ? Colors.grey[200] : null,
-                  ),
-                ],
-      ),
+      floatingActionButton:
+          showNewItem
+              ? SizedBox()
+              : FloatingActionButton.extended(
+                onPressed: () => setState(() => showNewItem = !showNewItem),
+                label: const Text('New Item'),
+                icon: const Icon(Icons.add),
+              ),
     );
   }
 }
+
+// floatingActionButton: Row(
+//   mainAxisAlignment: MainAxisAlignment.end,
+//   children:
+//       showNewItem
+//           ? [
+//             Padding(
+//               padding: const EdgeInsets.only(right: 16.0),
+//               child: FloatingActionButton(
+//                 onPressed: () => setState(() {
+//                   showNewItem = false;
+//                 }),
+//                 backgroundColor: Colors.grey[200],
+//                 child: const Icon(Icons.close),
+//               ),
+//             ),
+//             FloatingActionButton.extended(
+//               onPressed: (),
+//               label: const Text('Save'),
+//               icon: const Icon(Icons.check),
+//               // backgroundColor: showNewItem ? Colors.grey[200] : null,
+//             ),
+//           ]
+//           : [
+//             FloatingActionButton.extended(
+//               onPressed: _onNewItem,
+//               label: const Text('New Item'),
+//               icon: const Icon(Icons.add),
+//               // backgroundColor: showNewItem ? Colors.grey[200] : null,
+//             ),
+//           ],
+// ),

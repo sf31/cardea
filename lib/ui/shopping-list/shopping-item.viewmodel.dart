@@ -9,13 +9,13 @@ class ShoppingItemViewModel with ChangeNotifier {
   List<ShoppingItem> _itemList = [];
 
   ShoppingItemViewModel({required this.repository}) : super() {
-    loadItems();
+    _loadItems();
   }
 
   UnmodifiableListView<ShoppingItem> get itemList =>
       UnmodifiableListView(_itemList);
 
-  Future<void> loadItems() async {
+  Future<void> _loadItems() async {
     _itemList = await repository.getAll();
     notifyListeners();
   }
@@ -30,6 +30,16 @@ class ShoppingItemViewModel with ChangeNotifier {
       repository.create(item);
     }
     notifyListeners();
+  }
+
+  void setCompleted(String id) {
+    int currentIndex = _itemList.indexWhere((c) => c.id == id);
+    if (currentIndex != -1) {
+      bool completed = _itemList[currentIndex].completedAt != null;
+      _itemList[currentIndex].completedAt = completed ? null : DateTime.now();
+      repository.update(_itemList[currentIndex]);
+      notifyListeners();
+    }
   }
 
   void removeById(String id) {
