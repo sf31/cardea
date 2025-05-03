@@ -1,13 +1,10 @@
-import 'package:cardea/data/models/shopping-item.model.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../shopping-item.viewmodel.dart';
 
 class InputShoppingItem extends StatefulWidget {
-  final VoidCallback dismissOnSubmit;
+  final String? name;
+  final void Function(String text, bool isChecked) onNameConfirm;
 
-  const InputShoppingItem({super.key, required this.dismissOnSubmit});
+  const InputShoppingItem({super.key, required this.onNameConfirm, this.name});
 
   @override
   State<InputShoppingItem> createState() => _InputShoppingItemState();
@@ -18,19 +15,14 @@ class _InputShoppingItemState extends State<InputShoppingItem> {
   final FocusNode _focusNode = FocusNode();
 
   void _submit(bool dismiss) {
-    final userInput = _controller.text;
-    if (dismiss) widget.dismissOnSubmit();
-    if (userInput.isEmpty) return;
-    Provider.of<ShoppingItemViewModel>(
-      context,
-      listen: false,
-    ).upsert(ShoppingItem.fromName(userInput));
+    widget.onNameConfirm(_controller.text, dismiss);
     _controller.clear();
   }
 
   @override
   void initState() {
     super.initState();
+    _controller.text = widget.name ?? '';
     _focusNode.requestFocus();
   }
 

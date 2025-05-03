@@ -1,3 +1,4 @@
+import 'package:cardea/data/models/shopping-item.model.dart';
 import 'package:cardea/ui/shopping-list/widgets/shopping-list-todo.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,11 +16,39 @@ class ShoppingList extends StatefulWidget {
 
 class _ShoppingListState extends State<ShoppingList> {
   bool showNewItem = false;
+  ShoppingItem? itemToEdit;
 
-  void dismissOnSubmit() {
-    setState(() {
-      showNewItem = false;
-    });
+  _getViewModel() {
+    return Provider.of<ShoppingItemViewModel>(context, listen: false);
+  }
+
+  void onNameChanged(String name, bool dismiss) {
+    final itemToEdit = this.itemToEdit;
+
+    if (name.isNotEmpty) {
+      if (itemToEdit == null) {
+        _getViewModel().upsert(ShoppingItem.fromName(name));
+      } else {
+        final newItem = itemToEdit.copyWith(name: name);
+        _getViewModel().upsert(newItem);
+        setState(() {
+          this.itemToEdit = null;
+          showNewItem = false;
+        });
+      }
+    }
+
+    if (dismiss) setState(() => showNewItem = false);
+  }
+
+  void onItemComplete(ShoppingItem item) {
+    _getViewModel().removeById(item.id);
+  }
+
+  void onItemEdit(ShoppingItem item) {
+    if (itemToEdit != null) return;
+    setState(() => showNewItem = true);
+    setState(() => itemToEdit = item);
   }
 
   @override
@@ -30,7 +59,6 @@ class _ShoppingListState extends State<ShoppingList> {
   @override
   void dispose() {
     super.dispose();
-    showNewItem = false;
   }
 
   @override
@@ -45,9 +73,16 @@ class _ShoppingListState extends State<ShoppingList> {
 
           return Column(
             children: [
-              ShoppingListTodo(itemList: provider.itemList),
+              ShoppingListTodo(
+                itemList: provider.itemList,
+                onItemComplete: onItemComplete,
+                onItemEdit: onItemEdit,
+              ),
               showNewItem
-                  ? InputShoppingItem(dismissOnSubmit: dismissOnSubmit)
+                  ? InputShoppingItem(
+                    onNameConfirm: onNameChanged,
+                    name: itemToEdit?.name,
+                  )
                   : SizedBox(),
             ],
           );
@@ -64,35 +99,3 @@ class _ShoppingListState extends State<ShoppingList> {
     );
   }
 }
-
-// floatingActionButton: Row(
-//   mainAxisAlignment: MainAxisAlignment.end,
-//   children:
-//       showNewItem
-//           ? [
-//             Padding(
-//               padding: const EdgeInsets.only(right: 16.0),
-//               child: FloatingActionButton(
-//                 onPressed: () => setState(() {
-//                   showNewItem = false;
-//                 }),
-//                 backgroundColor: Colors.grey[200],
-//                 child: const Icon(Icons.close),
-//               ),
-//             ),
-//             FloatingActionButton.extended(
-//               onPressed: (),
-//               label: const Text('Save'),
-//               icon: const Icon(Icons.check),
-//               // backgroundColor: showNewItem ? Colors.grey[200] : null,
-//             ),
-//           ]
-//           : [
-//             FloatingActionButton.extended(
-//               onPressed: _onNewItem,
-//               label: const Text('New Item'),
-//               icon: const Icon(Icons.add),
-//               // backgroundColor: showNewItem ? Colors.grey[200] : null,
-//             ),
-//           ],
-// ),

@@ -10,8 +10,12 @@ class ShoppingItem extends BaseModel {
   DateTime updatedAt = DateTime.now();
   DateTime? completedAt;
 
-  ShoppingItem({required this.id, required this.name, DateTime? updatedAt, this.completedAt})
-    : super() {
+  ShoppingItem({
+    required this.id,
+    required this.name,
+    DateTime? updatedAt,
+    this.completedAt,
+  }) : super() {
     this.updatedAt = updatedAt ?? DateTime.now();
   }
 
@@ -32,9 +36,10 @@ class ShoppingItem extends BaseModel {
           map['updated_at'] != null
               ? DateTime.fromMillisecondsSinceEpoch(map['updated_at'])
               : DateTime.now(),
-      completedAt: map['completed_at'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['completed_at'])
-          : null,
+      completedAt:
+          map['completed_at'] != null
+              ? DateTime.fromMillisecondsSinceEpoch(map['completed_at'])
+              : null,
     );
   }
 
@@ -48,10 +53,10 @@ class ShoppingItem extends BaseModel {
   }
 
   @override
-  BaseModel copyWith({DateTime? updatedAt}) {
+  BaseModel copyWith({DateTime? updatedAt, String? name}) {
     return ShoppingItem(
       id: id,
-      name: name,
+      name: name ?? this.name,
       updatedAt: updatedAt ?? this.updatedAt,
       completedAt: completedAt,
     );
