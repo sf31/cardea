@@ -18,8 +18,21 @@ class LoyaltyCardScanner extends StatelessWidget {
     _controller.dispose();
     LoyaltyCard card = LoyaltyCard(
       id: const Uuid().v4(),
-      name: 'New Card',
+      name: '',
       barcode: value,
+      color: Colors.blue,
+      usageCount: 0,
+    );
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => LoyaltyCardManager(card: card)),
+    );
+  }
+
+  void _manualAdd(BuildContext context) {
+    LoyaltyCard card = LoyaltyCard(
+      id: const Uuid().v4(),
+      name: '',
+      barcode: '',
       color: Colors.blue,
       usageCount: 0,
     );
@@ -51,16 +64,24 @@ class LoyaltyCardScanner extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Expanded(
-                    child: Center(
-                      child: const Text(
-                        'Scan your card',
-                        overflow: TextOverflow.fade,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Scan your card',
+                          overflow: TextOverflow.fade,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
+                        ElevatedButton(
+                          onPressed: () => _manualAdd(context),
+                          child: Text('Add Manually'),
+                        ),
+                      ],
                     ),
                   ),
                 ],

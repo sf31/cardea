@@ -13,19 +13,14 @@ class LoyaltyCardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // make a rounded box
     return InkWell(
       onTap: () {
-        // Navigator.of(context).push(
-        //   MaterialPageRoute(builder: (context) => CardDetails(card: card)),
-        // );
         Provider.of<LoyaltyCardViewModel>(
           context,
           listen: false,
         ).incrementUsageCount(card);
         showModalBottomSheet(
           showDragHandle: true,
-          // isScrollControlled: true,
           context: context,
           backgroundColor: Colors.white,
           builder: (BuildContext context) {
@@ -49,8 +44,9 @@ class LoyaltyCardItem extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(16),
             child: Text(
-              '${card.name}',
-              overflow: TextOverflow.ellipsis,
+              card.name,
+              maxLines: 2,
+              textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,

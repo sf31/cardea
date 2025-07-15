@@ -121,7 +121,7 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
                   },
                   controller: _nameController,
                   decoration: const InputDecoration(
-                    labelText: 'Name',
+                    labelText: 'Card Name',
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey),
                     ),

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cardea/data/models/loyalty-card.model.dart';
 import 'package:cardea/ui/loyalty-card/loyalty-card.viewmodel.dart';
 import 'package:cardea/ui/loyalty-card/widgets/loyalty-card-item.dart';
+import 'package:cardea/ui/loyalty-card/widgets/loyalty-card-scanner.dart';
 import 'package:cardea/ui/loyalty-card/widgets/loyalty=card-add-btn.dart';
 import 'package:cardea/ui/settings/settings.dart';
 import 'package:flutter/material.dart';
@@ -95,6 +96,18 @@ class LoyaltyCardList extends StatelessWidget {
                     color: Colors.grey,
                     fontSize: 15,
                     fontStyle: FontStyle.italic,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsetsGeometry.symmetric(vertical: 20),
+                  child: ElevatedButton(
+                    onPressed:
+                        () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => LoyaltyCardScanner(),
+                          ),
+                        ),
+                    child: Text('Add Card now'),
                   ),
                 ),
               ],
