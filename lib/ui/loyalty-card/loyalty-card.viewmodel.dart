@@ -36,6 +36,12 @@ class LoyaltyCardViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  void addMultiple(List<LoyaltyCard> cards) {
+    for (var card in cards) {
+      upsert(card);
+    }
+  }
+
   void removeById(String id) {
     _cardList.removeWhere((card) => card.id == id);
     repository.delete(id);

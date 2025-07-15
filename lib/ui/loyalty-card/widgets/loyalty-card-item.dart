@@ -49,7 +49,7 @@ class LoyaltyCardItem extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(16),
             child: Text(
-              '${card.name} (${card.usageCount})',
+              '${card.name}',
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 fontSize: 20,

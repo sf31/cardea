@@ -1,13 +1,11 @@
 import 'dart:io';
 
 import 'package:cardea/ui/loyalty-card/loyalty-card.viewmodel.dart';
+import 'package:cardea/ui/settings/export-data.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../data/repositories/loyalty-card.repository.dart';
-import '../../data/repositories/shopping-item.repository.dart';
 import '../../data/services/import_export_json_usecase.dart';
 import '../shopping-list/shopping-item.viewmodel.dart';
 
@@ -22,30 +20,6 @@ class Settings extends StatelessWidget {
     return Provider.of<LoyaltyCardViewModel>(context, listen: false);
   }
 
-  Future<void> _exportData(BuildContext context) async {
-    try {
-      final useCase = ImportExportJsonUseCase(
-        loyaltyCardRepository: _getLoyaltyCardViewModel(context).repository,
-        shoppingItemRepository: _getShoppingItemViewModel(context).repository,
-      );
-      final json = await useCase.exportDataToJson();
-
-      final directory = await getDownloadsDirectory();
-      print(directory);
-      final timestamp = DateTime.now().toIso8601String();
-      final filename = 'cardea_export_$timestamp.json';
-      final file = File('${directory?.path}/$filename');
-      await file.writeAsString(json);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Data exported to $filename')));
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Export failed: $e')));
-    }
-  }
-
   Future<void> _importData(BuildContext context) async {
     try {
       final result = await FilePicker.platform.pickFiles(
@@ -55,11 +29,9 @@ class Settings extends StatelessWidget {
       if (result != null && result.files.single.path != null) {
         final file = File(result.files.single.path!);
         final json = await file.readAsString();
-        final loyaltyCardRepository = context.read<LoyaltyCardRepository>();
-        final shoppingItemRepository = context.read<ShoppingItemRepository>();
         final useCase = ImportExportJsonUseCase(
-          loyaltyCardRepository: loyaltyCardRepository,
-          shoppingItemRepository: shoppingItemRepository,
+          loyaltyCardViewModel: _getLoyaltyCardViewModel(context),
+          shoppingItemViewModel: _getShoppingItemViewModel(context),
         );
         await useCase.importDataFromJson(json);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -81,12 +53,30 @@ class Settings extends StatelessWidget {
         children: [
           ListTile(
             leading: const Icon(Icons.file_upload),
-            title: const Text('Export Data to JSON'),
-            onTap: () => _exportData(context),
+            title: const Text('Export Cards'),
+            onTap:
+                () => {
+                  showModalBottomSheet(
+                    context: context,
+                    showDragHandle: true,
+                    backgroundColor: Colors.white,
+                    builder: (BuildContext context) {
+                      return const ExportData();
+                      // return SizedBox(
+                      //   height: 100,
+                      //   child: BarcodeWidget(
+                      //     data: 'AA',
+                      //     barcode: Barcode.qrCode(),
+                      //   ),
+                      // );
+                    },
+                  ),
+                },
+            // onTap: () => _exportData(context),
           ),
           ListTile(
             leading: const Icon(Icons.file_download),
-            title: const Text('Import Data from JSON'),
+            title: const Text('Import Cards'),
             onTap: () => _importData(context),
           ),
         ],
