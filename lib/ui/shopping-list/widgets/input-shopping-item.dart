@@ -42,8 +42,15 @@ class _InputShoppingItemState extends State<InputShoppingItem> {
         controller: _controller,
         onSubmitted: (_) => _submit(true),
         decoration: InputDecoration(
-          labelText: 'New Item',
+          hintText: 'Enter item name',
+          // labelText: 'New Item',
           border: const OutlineInputBorder(),
+          prefixIconColor: Colors.red,
+          prefixIcon: IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () => _submit(true),
+          ),
+          suffixIconColor: Colors.green,
           suffixIcon: IconButton(
             icon: const Icon(Icons.checklist),
             onPressed: () => _submit(false),

@@ -17,6 +17,7 @@ class ShoppingListTodo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: ListView.builder(
+        padding: EdgeInsets.all(8.0),
         itemCount: itemList.length,
         itemBuilder: (context, index) {
           return ListTile(

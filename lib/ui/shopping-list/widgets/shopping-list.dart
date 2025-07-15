@@ -15,15 +15,15 @@ class ShoppingList extends StatefulWidget {
 }
 
 class _ShoppingListState extends State<ShoppingList> {
-  bool showNewItem = false;
-  ShoppingItem? itemToEdit;
+  bool _showNewItem = false;
+  ShoppingItem? _itemToEdit;
 
   _getViewModel() {
     return Provider.of<ShoppingItemViewModel>(context, listen: false);
   }
 
   void onNameChanged(String name, bool dismiss) {
-    final itemToEdit = this.itemToEdit;
+    final itemToEdit = _itemToEdit;
 
     if (name.isNotEmpty) {
       if (itemToEdit == null) {
@@ -32,13 +32,13 @@ class _ShoppingListState extends State<ShoppingList> {
         final newItem = itemToEdit.copyWith(name: name);
         _getViewModel().upsert(newItem);
         setState(() {
-          this.itemToEdit = null;
-          showNewItem = false;
+          _itemToEdit = null;
+          _showNewItem = false;
         });
       }
     }
 
-    if (dismiss) setState(() => showNewItem = false);
+    if (dismiss) setState(() => _showNewItem = false);
   }
 
   void onItemComplete(ShoppingItem item) {
@@ -46,9 +46,9 @@ class _ShoppingListState extends State<ShoppingList> {
   }
 
   void onItemEdit(ShoppingItem item) {
-    if (itemToEdit != null) return;
-    setState(() => showNewItem = true);
-    setState(() => itemToEdit = item);
+    if (_itemToEdit != null) return;
+    setState(() => _showNewItem = true);
+    setState(() => _itemToEdit = item);
   }
 
   @override
@@ -67,10 +67,9 @@ class _ShoppingListState extends State<ShoppingList> {
       appBar: AppBar(title: Text('Shopping List')),
       body: Consumer<ShoppingItemViewModel>(
         builder: (context, provider, child) {
-          if (provider.itemList.isEmpty && !showNewItem) {
+          if (provider.itemList.isEmpty && !_showNewItem) {
             return EmptyShoppingList();
           }
-
           return Column(
             children: [
               ShoppingListTodo(
@@ -78,10 +77,10 @@ class _ShoppingListState extends State<ShoppingList> {
                 onItemComplete: onItemComplete,
                 onItemEdit: onItemEdit,
               ),
-              showNewItem
+              _showNewItem
                   ? InputShoppingItem(
                     onNameConfirm: onNameChanged,
-                    name: itemToEdit?.name,
+                    name: _itemToEdit?.name,
                   )
                   : SizedBox(),
             ],
@@ -89,10 +88,10 @@ class _ShoppingListState extends State<ShoppingList> {
         },
       ),
       floatingActionButton:
-          showNewItem
+          _showNewItem
               ? SizedBox()
               : FloatingActionButton.extended(
-                onPressed: () => setState(() => showNewItem = !showNewItem),
+                onPressed: () => setState(() => _showNewItem = !_showNewItem),
                 label: const Text('New Item'),
                 icon: const Icon(Icons.add),
               ),
