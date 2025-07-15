@@ -53,7 +53,7 @@ class ShoppingItem extends BaseModel {
   }
 
   @override
-  BaseModel copyWith({DateTime? updatedAt, String? name}) {
+  ShoppingItem copyWith({DateTime? updatedAt, String? name}) {
     return ShoppingItem(
       id: id,
       name: name ?? this.name,

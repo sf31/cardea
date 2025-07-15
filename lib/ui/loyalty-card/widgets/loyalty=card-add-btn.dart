@@ -1,10 +1,9 @@
 import 'dart:math';
 
 import 'package:cardea/data/models/loyalty-card.model.dart';
+import 'package:cardea/ui/loyalty-card/widgets/loyalty-card-scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
-
-import 'loaylty-card-manager.dart';
 
 class LoyaltyCardAddBtn extends StatelessWidget {
   const LoyaltyCardAddBtn({super.key});
@@ -13,12 +12,9 @@ class LoyaltyCardAddBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(
-          // MaterialPageRoute(builder: (context) => CardScanner()),
-          MaterialPageRoute(
-            builder: (context) => LoyaltyCardManager(card: debugCard()),
-          ),
-        );
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (context) => LoyaltyCardScanner()));
       },
       child: Container(
         decoration: BoxDecoration(

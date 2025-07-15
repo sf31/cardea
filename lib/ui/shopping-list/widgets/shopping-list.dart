@@ -18,7 +18,7 @@ class _ShoppingListState extends State<ShoppingList> {
   bool _showNewItem = false;
   ShoppingItem? _itemToEdit;
 
-  _getViewModel() {
+  ShoppingItemViewModel _getViewModel() {
     return Provider.of<ShoppingItemViewModel>(context, listen: false);
   }
 

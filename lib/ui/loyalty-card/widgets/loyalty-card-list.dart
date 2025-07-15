@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:cardea/data/models/loyalty-card.model.dart';
 import 'package:cardea/ui/loyalty-card/loyalty-card.viewmodel.dart';
 import 'package:cardea/ui/loyalty-card/widgets/loyalty-card-item.dart';
-import 'package:cardea/ui/loyalty-card/widgets/loyalty-card-scanner.dart';
 import 'package:cardea/ui/loyalty-card/widgets/loyalty=card-add-btn.dart';
 import 'package:cardea/ui/settings/settings.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,6 @@ class LoyaltyCardList extends StatelessWidget {
   const LoyaltyCardList({super.key});
 
   void _sortBy(BuildContext context) async {
-    final repo = Provider.of<LoyaltyCardViewModel>(context, listen: false);
     final List<String> options = ['alphabetical', 'most-used'];
     final prefs = await SharedPreferences.getInstance();
     final sortBy = prefs.getString('sortBy') ?? 'alphabetical';
@@ -105,18 +103,6 @@ class LoyaltyCardList extends StatelessWidget {
 
           return Scaffold(
             body: repo.cardList.isEmpty ? emptyCardList : cardList,
-            floatingActionButton: FloatingActionButton.extended(
-              icon: Icon(Icons.add),
-              label: Text('Add Card'),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => LoyaltyCardScanner()),
-                  // MaterialPageRoute(
-                  //   builder: (context) => ManageCard(card: debugCard()),
-                  // ),
-                );
-              },
-            ),
           );
         },
       ),
