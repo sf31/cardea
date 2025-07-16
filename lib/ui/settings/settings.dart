@@ -62,17 +62,9 @@ class Settings extends StatelessWidget {
                     backgroundColor: Colors.white,
                     builder: (BuildContext context) {
                       return const ExportData();
-                      // return SizedBox(
-                      //   height: 100,
-                      //   child: BarcodeWidget(
-                      //     data: 'AA',
-                      //     barcode: Barcode.qrCode(),
-                      //   ),
-                      // );
                     },
                   ),
                 },
-            // onTap: () => _exportData(context),
           ),
           ListTile(
             leading: const Icon(Icons.file_download),

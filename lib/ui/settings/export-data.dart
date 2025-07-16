@@ -1,16 +1,26 @@
-import 'dart:io';
+import 'dart:convert';
 
-import 'package:barcode_widget/barcode_widget.dart';
-import 'package:cardea/ui/loyalty-card/loyalty-card.viewmodel.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/services/import_export_json_usecase.dart';
+import '../loyalty-card/loyalty-card.viewmodel.dart';
 import '../shopping-list/shopping-item.viewmodel.dart';
 
-class ExportData extends StatelessWidget {
+class ExportData extends StatefulWidget {
   const ExportData({super.key});
+
+  @override
+  State<ExportData> createState() => _ExportDataState();
+}
+
+class _ExportDataState extends State<ExportData> {
+  bool exportCard = true;
+  bool exportShoppingList = true;
+  bool isExporting = false;
+  bool? exportSuccess = false;
+  String? errorMessage;
 
   ShoppingItemViewModel _getShoppingItemViewModel(BuildContext context) {
     return Provider.of<ShoppingItemViewModel>(context, listen: false);
@@ -20,74 +30,115 @@ class ExportData extends StatelessWidget {
     return Provider.of<LoyaltyCardViewModel>(context, listen: false);
   }
 
-  Future toJson(BuildContext context) async {
+  Future saveJsonToFile(BuildContext context) async {
     try {
+      setState(() {
+        errorMessage = null;
+        isExporting = true;
+      });
       final useCase = ImportExportJsonUseCase(
         loyaltyCardViewModel: _getLoyaltyCardViewModel(context),
         shoppingItemViewModel: _getShoppingItemViewModel(context),
       );
-      final json = await useCase.exportDataToJson();
-      return json;
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Export failed: $e')));
-    }
-  }
-
-  Future saveJsonToFile(BuildContext context, String json) async {
-    try {
-      final directory = await getDownloadsDirectory();
+      final json = await useCase.exportDataToJson(
+        exportCard,
+        exportShoppingList,
+      );
       final timestamp = DateTime.now().toIso8601String();
       final filename = 'cardea_export_$timestamp.json';
-      final file = File('${directory?.path}/$filename');
-      await file.writeAsString(json);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Data exported to $filename')));
-      Navigator.pop(context);
+      final jsonBytes = utf8.encode(json);
+      final savePath = await FilePicker.platform.saveFile(
+        dialogTitle: 'Save export file',
+        fileName: filename,
+        type: FileType.custom,
+        allowedExtensions: ['json'],
+        bytes: jsonBytes,
+      );
+      await Future.delayed(const Duration(milliseconds: 500));
+      if (savePath != null) {
+        setState(() {
+          isExporting = false;
+          exportSuccess = true;
+        });
+      } else {
+        setState(() {
+          isExporting = false;
+          exportSuccess = false;
+          errorMessage = 'Export cancelled by user.';
+        });
+      }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Export failed: $e')));
+      setState(() {
+        errorMessage = 'Export failed: $e';
+        isExporting = false;
+        exportSuccess = false;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: toJson(context),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(child: Text('No data to export'));
-        }
-
-        final json = snapshot.data!;
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text('Export Data', style: TextStyle(fontSize: 20)),
+        ),
+        Row(
           children: [
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              height: MediaQuery.of(context).size.height / 2.5,
-              child: BarcodeWidget(
-                barcode: Barcode.qrCode(),
-                data: json,
-                width: double.infinity,
-                height: double.infinity,
-                backgroundColor: Colors.white,
-              ),
+            Checkbox(
+              value: exportCard,
+              onChanged: (value) {
+                setState(() {
+                  exportCard = value ?? true;
+                });
+              },
             ),
-            ElevatedButton(
-              onPressed: () => saveJsonToFile(context, json),
-              child: const Text('Save to File'),
-            ),
+            const Text('Loyalty Cards'),
           ],
-        );
-      },
+        ),
+        Row(
+          children: [
+            Checkbox(
+              value: exportShoppingList,
+              onChanged: (value) {
+                setState(() {
+                  exportShoppingList = value ?? true;
+                });
+              },
+            ),
+            const Text('Shopping List'),
+          ],
+        ),
+        if (isExporting)
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: ElevatedButton(onPressed: null, child: Text('Exporting...')),
+          )
+        else if (exportSuccess == true)
+          Padding(
+            padding: const EdgeInsets.all(26),
+            child: Text(
+              textAlign: TextAlign.center,
+              'Export completed successfully!',
+              style: TextStyle(color: Colors.green),
+            ),
+          )
+        else if (errorMessage != null)
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(errorMessage!, style: TextStyle(color: Colors.red)),
+          )
+        else
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: ElevatedButton(
+              onPressed: () => saveJsonToFile(context),
+              child: const Text('Export'),
+            ),
+          ),
+      ],
     );
   }
 }

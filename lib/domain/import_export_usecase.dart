@@ -1,5 +1,5 @@
 abstract class ImportExportUseCase {
-  Future<String> exportDataToJson();
+  Future<String> exportDataToJson(bool exportCards, bool exportShopping);
 
   Future<void> importDataFromJson(String json);
 

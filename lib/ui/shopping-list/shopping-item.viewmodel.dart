@@ -47,4 +47,10 @@ class ShoppingItemViewModel with ChangeNotifier {
     repository.delete(id);
     notifyListeners();
   }
+
+  void addMultiple(List<ShoppingItem> items) {
+    for (var item in items) {
+      upsert(item);
+    }
+  }
 }

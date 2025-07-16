@@ -116,6 +116,7 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
             children: [
               PaddedItem(
                 child: TextFormField(
+                  textCapitalization: TextCapitalization.sentences,
                   onTapOutside: (evt) {
                     FocusManager.instance.primaryFocus?.unfocus();
                   },
