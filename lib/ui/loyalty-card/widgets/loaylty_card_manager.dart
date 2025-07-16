@@ -1,5 +1,5 @@
-import 'package:cardea/data/models/loyalty-card.model.dart';
-import 'package:cardea/ui/loyalty-card/loyalty-card.viewmodel.dart';
+import 'package:cardea/data/models/loyalty_card.model.dart';
+import 'package:cardea/ui/loyalty-card/loyalty_card.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:provider/provider.dart';

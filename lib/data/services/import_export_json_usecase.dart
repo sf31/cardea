@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:cardea/ui/shopping-list/shopping-item.viewmodel.dart';
+import 'package:cardea/ui/shopping-list/shopping_item.viewmodel.dart';
 
 import '../../domain/import_export_usecase.dart';
-import '../../ui/loyalty-card/loyalty-card.viewmodel.dart';
-import '../models/loyalty-card.model.dart';
-import '../models/shopping-item.model.dart';
+import '../../ui/loyalty-card/loyalty_card.viewmodel.dart';
+import '../models/loyalty_card.model.dart';
+import '../models/shopping_item.model.dart';
 
 class ImportExportJsonUseCase implements ImportExportUseCase {
   final LoyaltyCardViewModel loyaltyCardViewModel;

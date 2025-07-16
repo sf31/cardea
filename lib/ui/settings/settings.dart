@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:cardea/ui/loyalty-card/loyalty-card.viewmodel.dart';
-import 'package:cardea/ui/settings/export-data.dart';
+import 'package:cardea/ui/loyalty-card/loyalty_card.viewmodel.dart';
+import 'package:cardea/ui/settings/export_data.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/services/import_export_json_usecase.dart';
-import '../shopping-list/shopping-item.viewmodel.dart';
+import '../shopping-list/shopping_item.viewmodel.dart';
 
 class Settings extends StatelessWidget {
   const Settings({super.key});

@@ -1,10 +1,10 @@
-import 'package:cardea/data/models/loyalty-card.model.dart';
-import 'package:cardea/ui/loyalty-card/loyalty-card.viewmodel.dart';
+import 'package:cardea/data/models/loyalty_card.model.dart';
+import 'package:cardea/ui/loyalty-card/loyalty_card.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'loaylty-card-manager.dart';
-import 'loyalty-card-details.dart';
+import 'loaylty_card_manager.dart';
+import 'loyalty_card_details.dart';
 
 class LoyaltyCardItem extends StatelessWidget {
   final LoyaltyCard card;

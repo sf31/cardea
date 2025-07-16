@@ -1,5 +1,5 @@
-import 'package:cardea/data/models/loyalty-card.model.dart';
-import 'package:cardea/ui/loyalty-card/widgets/loaylty-card-manager.dart';
+import 'package:cardea/data/models/loyalty_card.model.dart';
+import 'package:cardea/ui/loyalty-card/widgets/loaylty_card_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:uuid/uuid.dart';

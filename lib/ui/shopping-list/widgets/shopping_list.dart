@@ -1,11 +1,11 @@
-import 'package:cardea/data/models/shopping-item.model.dart';
-import 'package:cardea/ui/shopping-list/widgets/shopping-list-todo.dart';
+import 'package:cardea/data/models/shopping_item.model.dart';
+import 'package:cardea/ui/shopping-list/widgets/shopping_list_todo.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../shopping-item.viewmodel.dart';
-import 'empty-shopping-list.dart';
-import 'input-shopping-item.dart';
+import '../shopping_item.viewmodel.dart';
+import 'empty_shopping_liist.dart';
+import 'input_shopping_item.dart';
 
 class ShoppingList extends StatefulWidget {
   const ShoppingList({super.key});

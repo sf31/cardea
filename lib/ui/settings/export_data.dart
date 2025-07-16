@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/services/import_export_json_usecase.dart';
-import '../loyalty-card/loyalty-card.viewmodel.dart';
-import '../shopping-list/shopping-item.viewmodel.dart';
+import '../loyalty-card/loyalty_card.viewmodel.dart';
+import '../shopping-list/shopping_item.viewmodel.dart';
 
 class ExportData extends StatefulWidget {
   const ExportData({super.key});

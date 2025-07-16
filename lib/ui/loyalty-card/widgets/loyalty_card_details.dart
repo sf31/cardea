@@ -1,5 +1,5 @@
 import 'package:barcode_widget/barcode_widget.dart';
-import 'package:cardea/data/models/loyalty-card.model.dart';
+import 'package:cardea/data/models/loyalty_card.model.dart';
 import 'package:flutter/material.dart';
 
 class LoyaltyCardDetails extends StatelessWidget {

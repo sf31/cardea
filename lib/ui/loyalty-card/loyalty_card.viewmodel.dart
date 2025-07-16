@@ -1,7 +1,7 @@
 import 'dart:collection';
 
-import 'package:cardea/data/models/loyalty-card.model.dart';
-import 'package:cardea/data/repositories/loyalty-card.repository.dart';
+import 'package:cardea/data/models/loyalty_card.model.dart';
+import 'package:cardea/data/repositories/loyalty_card.repository.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

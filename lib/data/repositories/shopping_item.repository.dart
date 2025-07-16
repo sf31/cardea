@@ -1,7 +1,7 @@
 import 'package:cardea/data/repositories/generic.repository.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../models/shopping-item.model.dart';
+import '../models/shopping_item.model.dart';
 
 class ShoppingItemRepository extends GenericRepository<ShoppingItem> {
   ShoppingItemRepository({required Database db}) : super(db, 'shopping_items');

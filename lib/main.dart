@@ -1,14 +1,13 @@
-import 'package:cardea/ui/loyalty-card/widgets/loyalty-card-list.dart';
-import 'package:cardea/ui/shopping-list/widgets/shopping-list.dart';
+import 'package:cardea/ui/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'data/repositories/loyalty-card.repository.dart';
-import 'data/repositories/shopping-item.repository.dart';
+import 'data/repositories/loyalty_card.repository.dart';
+import 'data/repositories/shopping_item.repository.dart';
 import 'data/services/database.service.dart';
-import 'data/services/shared-prefs.service.dart';
-import 'ui/loyalty-card/loyalty-card.viewmodel.dart';
-import 'ui/shopping-list/shopping-item.viewmodel.dart';
+import 'data/services/shared_prefs.service.dart';
+import 'ui/loyalty-card/loyalty_card.viewmodel.dart';
+import 'ui/shopping-list/shopping_item.viewmodel.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,7 +44,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       theme: ThemeData(
         // colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         colorScheme: ColorScheme.fromSeed(
@@ -53,48 +51,7 @@ class MyApp extends StatelessWidget {
           brightness: brightness,
         ),
       ),
-      // home: SafeArea(child: const MyHomePage(title: 'Flutter Demo Home Page')),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int currentPageIndex = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: <Widget>[LoyaltyCardList(), ShoppingList()][currentPageIndex],
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
-        indicatorColor: Colors.amber,
-        selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
-          NavigationDestination(
-            selectedIcon: Icon(Icons.wallet),
-            icon: Icon(Icons.wallet),
-            label: 'Cards',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.shopping_basket),
-            label: 'Shopping',
-          ),
-        ],
-      ),
+      home: const MyHomePage(),
     );
   }
 }

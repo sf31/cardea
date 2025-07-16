@@ -1,7 +1,7 @@
 import 'dart:collection';
 
-import 'package:cardea/data/models/shopping-item.model.dart';
-import 'package:cardea/data/repositories/shopping-item.repository.dart';
+import 'package:cardea/data/models/shopping_item.model.dart';
+import 'package:cardea/data/repositories/shopping_item.repository.dart';
 import 'package:flutter/material.dart';
 
 class ShoppingItemViewModel with ChangeNotifier {

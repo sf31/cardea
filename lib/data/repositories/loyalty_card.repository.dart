@@ -1,7 +1,7 @@
 import 'package:cardea/data/repositories/generic.repository.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../models/loyalty-card.model.dart';
+import '../models/loyalty_card.model.dart';
 
 class LoyaltyCardRepository extends GenericRepository<LoyaltyCard> {
   LoyaltyCardRepository({required Database db}) : super(db, 'loyalty_cards');
