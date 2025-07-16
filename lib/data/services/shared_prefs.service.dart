@@ -12,4 +12,14 @@ class SharedPreferencesService {
     final sortBy = prefs.getString('sortBy') ?? 'alphabetical';
     return Result.ok(sortBy);
   }
+
+  Future<void> setThemeMode(String mode) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('themeMode', mode);
+  }
+
+  Future<String?> getThemeMode() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('themeMode');
+  }
 }

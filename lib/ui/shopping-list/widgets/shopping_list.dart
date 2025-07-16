@@ -3,6 +3,7 @@ import 'package:cardea/ui/shopping-list/widgets/shopping_list_todo.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../settings/settings.dart';
 import '../shopping_item.viewmodel.dart';
 import 'empty_shopping_liist.dart';
 import 'input_shopping_item.dart';
@@ -64,7 +65,19 @@ class _ShoppingListState extends State<ShoppingList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Shopping List')),
+      appBar: AppBar(
+        title: Text('Shopping List'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (context) => Settings()));
+            },
+            icon: Icon(Icons.settings),
+          ),
+        ],
+      ),
       body: Consumer<ShoppingItemViewModel>(
         builder: (context, provider, child) {
           if (provider.itemList.isEmpty && !_showNewItem) {

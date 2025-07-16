@@ -17,15 +17,14 @@ class ShoppingListTodo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: ListView.builder(
-        padding: EdgeInsets.all(8.0),
         itemCount: itemList.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(itemList[index].name),
-            trailing: IconButton(
+            leading: IconButton(
               icon: const Icon(Icons.check_box_outline_blank),
               onPressed: () => onItemComplete(itemList[index]),
             ),
+            title: Text(itemList[index].name),
             onTap: () => onItemEdit(itemList[index]),
           );
         },

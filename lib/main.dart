@@ -8,6 +8,7 @@ import 'data/services/database.service.dart';
 import 'data/services/shared_prefs.service.dart';
 import 'ui/loyalty-card/loyalty_card.viewmodel.dart';
 import 'ui/shopping-list/shopping_item.viewmodel.dart';
+import 'utils/theme_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +19,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         Provider(create: (context) => SharedPreferencesService()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(
           create:
               (_) => LoyaltyCardViewModel(
@@ -43,14 +45,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp(
       theme: ThemeData(
-        // colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.green,
-          brightness: brightness,
+          brightness: Brightness.light,
         ),
       ),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.green,
+          brightness: Brightness.dark,
+        ),
+      ),
+      themeMode: themeProvider.themeMode,
       home: const MyHomePage(),
     );
   }

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/services/import_export_json_usecase.dart';
+import '../../utils/theme_provider.dart';
 import '../shopping-list/shopping_item.viewmodel.dart';
 
 class Settings extends StatelessWidget {
@@ -52,6 +53,19 @@ class Settings extends StatelessWidget {
       body: Column(
         children: [
           ListTile(
+            leading: const Icon(Icons.brightness_6),
+            title: const Text('Dark Mode'),
+            trailing: Consumer<ThemeProvider>(
+              builder:
+                  (context, themeProvider, _) => Switch(
+                    value: themeProvider.themeMode == ThemeMode.dark,
+                    onChanged: (value) {
+                      themeProvider.toggleTheme(value);
+                    },
+                  ),
+            ),
+          ),
+          ListTile(
             leading: const Icon(Icons.file_upload),
             title: const Text('Export Cards'),
             onTap:
@@ -59,7 +73,6 @@ class Settings extends StatelessWidget {
                   showModalBottomSheet(
                     context: context,
                     showDragHandle: true,
-                    backgroundColor: Colors.white,
                     builder: (BuildContext context) {
                       return const ExportData();
                     },
