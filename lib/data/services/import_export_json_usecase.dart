@@ -37,10 +37,16 @@ class ImportExportJsonUseCase implements ImportExportUseCase {
       final loyaltyCardsRaw = data['loyaltyCards'] ?? [];
       final shoppingItemsRaw = data['shoppingItems'] ?? [];
 
-      final loyaltyCards =
-          loyaltyCardsRaw.map((e) => LoyaltyCard.fromMap(e)).toList();
-      final shoppingItems =
-          shoppingItemsRaw.map((e) => ShoppingItem.fromMap(e)).toList();
+      final List<LoyaltyCard> loyaltyCards = [];
+      final List<ShoppingItem> shoppingItems = [];
+
+      for (var card in loyaltyCardsRaw) {
+        loyaltyCards.add(LoyaltyCard.fromMap(card));
+      }
+
+      for (var item in shoppingItemsRaw) {
+        shoppingItems.add(ShoppingItem.fromMap(item));
+      }
 
       await loyaltyCardViewModel.repository.clear();
       await shoppingItemViewModel.repository.clear();
