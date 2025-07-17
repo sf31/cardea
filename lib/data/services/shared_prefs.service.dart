@@ -1,4 +1,3 @@
-import 'package:cardea/utils/result.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesService {
@@ -7,10 +6,10 @@ class SharedPreferencesService {
     await prefs.setString('sortBy', sortBy);
   }
 
-  Future<Result<String?>> getLoyaltyCardSortBy() async {
+  Future<String> getLoyaltyCardSortBy() async {
     final prefs = await SharedPreferences.getInstance();
     final sortBy = prefs.getString('sortBy') ?? 'alphabetical';
-    return Result.ok(sortBy);
+    return sortBy;
   }
 
   Future<void> setThemeMode(String mode) async {

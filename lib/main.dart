@@ -1,4 +1,5 @@
 import 'package:cardea/ui/home/home_page.dart';
+import 'package:cardea/ui/settings/settings.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,22 +15,28 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DatabaseService().init();
   final db = DatabaseService().database;
+  final sharedPrefsService = SharedPreferencesService();
+  final loyaltyCardRepository = LoyaltyCardRepository(sharedPrefsService, db);
+  final shoppingItemRepository = ShoppingItemRepository(db: db);
 
   runApp(
     MultiProvider(
       providers: [
-        Provider(create: (context) => SharedPreferencesService()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(
           create:
-              (_) => LoyaltyCardViewModel(
-                repository: LoyaltyCardRepository(db: db),
-              ),
+              (_) => LoyaltyCardViewModel(repository: loyaltyCardRepository),
         ),
         ChangeNotifierProvider(
           create:
-              (_) => ShoppingItemViewModel(
-                repository: ShoppingItemRepository(db: db),
+              (_) => ShoppingItemViewModel(repository: shoppingItemRepository),
+        ),
+        ChangeNotifierProvider(
+          create:
+              (_) => SettingsViewModel(
+                sharedPrefs: sharedPrefsService,
+                loyaltyCardRepository: loyaltyCardRepository,
+                shoppingItemRepository: shoppingItemRepository,
               ),
         ),
       ],

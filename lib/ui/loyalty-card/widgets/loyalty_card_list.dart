@@ -5,10 +5,9 @@ import 'package:cardea/ui/loyalty-card/loyalty_card.viewmodel.dart';
 import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_add_btn.dart';
 import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_item.dart';
 import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_scanner.dart';
-import 'package:cardea/ui/settings/settings.dart';
+import 'package:cardea/ui/settings/widgets/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 class LoyaltyCardList extends StatelessWidget {
@@ -16,8 +15,8 @@ class LoyaltyCardList extends StatelessWidget {
 
   void _sortBy(BuildContext context) async {
     final List<String> options = ['alphabetical', 'most-used'];
-    final prefs = await SharedPreferences.getInstance();
-    final sortBy = prefs.getString('sortBy') ?? 'alphabetical';
+    final vm = Provider.of<LoyaltyCardViewModel>(context, listen: false);
+    final sortBy = vm.sortBy;
 
     final selectedOption = await showDialog<String>(
       context: context,
@@ -45,7 +44,7 @@ class LoyaltyCardList extends StatelessWidget {
     );
 
     if (selectedOption != null) {
-      // repo.setSortPreference(selectedOption);
+      vm.setSortBy(selectedOption);
     }
   }
 

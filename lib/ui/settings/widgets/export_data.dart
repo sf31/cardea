@@ -1,12 +1,9 @@
 import 'dart:convert';
 
+import 'package:cardea/ui/settings/settings.viewmodel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../data/services/import_export_json_usecase.dart';
-import '../loyalty-card/loyalty_card.viewmodel.dart';
-import '../shopping-list/shopping_item.viewmodel.dart';
 
 class ExportData extends StatefulWidget {
   const ExportData({super.key});
@@ -16,18 +13,14 @@ class ExportData extends StatefulWidget {
 }
 
 class _ExportDataState extends State<ExportData> {
-  bool exportCard = true;
+  bool exportCardList = true;
   bool exportShoppingList = true;
   bool isExporting = false;
   bool? exportSuccess = false;
   String? errorMessage;
 
-  ShoppingItemViewModel _getShoppingItemViewModel(BuildContext context) {
-    return Provider.of<ShoppingItemViewModel>(context, listen: false);
-  }
-
-  LoyaltyCardViewModel _getLoyaltyCardViewModel(BuildContext context) {
-    return Provider.of<LoyaltyCardViewModel>(context, listen: false);
+  SettingsViewModel _getViewModel(BuildContext context) {
+    return Provider.of<SettingsViewModel>(context, listen: false);
   }
 
   Future saveJsonToFile(BuildContext context) async {
@@ -36,14 +29,9 @@ class _ExportDataState extends State<ExportData> {
         errorMessage = null;
         isExporting = true;
       });
-      final useCase = ImportExportJsonUseCase(
-        loyaltyCardViewModel: _getLoyaltyCardViewModel(context),
-        shoppingItemViewModel: _getShoppingItemViewModel(context),
-      );
-      final json = await useCase.exportDataToJson(
-        exportCard,
-        exportShoppingList,
-      );
+      final json = await _getViewModel(
+        context,
+      ).exportJson(exportCardList, exportShoppingList);
       final timestamp = DateTime.now().toIso8601String();
       final filename = 'cardea_export_$timestamp.json';
       final jsonBytes = utf8.encode(json);
@@ -88,10 +76,10 @@ class _ExportDataState extends State<ExportData> {
         Row(
           children: [
             Checkbox(
-              value: exportCard,
+              value: exportCardList,
               onChanged: (value) {
                 setState(() {
-                  exportCard = value ?? true;
+                  exportCardList = value ?? true;
                 });
               },
             ),

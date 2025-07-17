@@ -3,7 +3,7 @@ import 'package:cardea/ui/shopping-list/widgets/shopping_list_todo.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../settings/settings.dart';
+import '../../settings/widgets/settings.dart';
 import '../shopping_item.viewmodel.dart';
 import 'empty_shopping_liist.dart';
 import 'input_shopping_item.dart';

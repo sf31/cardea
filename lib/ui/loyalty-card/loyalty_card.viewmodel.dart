@@ -3,12 +3,11 @@ import 'dart:collection';
 import 'package:cardea/data/models/loyalty_card.model.dart';
 import 'package:cardea/data/repositories/loyalty_card.repository.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoyaltyCardViewModel with ChangeNotifier {
   final LoyaltyCardRepository repository;
   List<LoyaltyCard> _cardList = [];
-  String _sortBy = 'alphabetical';
+  String sortBy = 'alphabetical';
 
   LoyaltyCardViewModel({required this.repository}) : super() {
     loadCards();
@@ -19,6 +18,7 @@ class LoyaltyCardViewModel with ChangeNotifier {
 
   Future<void> loadCards() async {
     _cardList = await repository.getAll();
+    sortBy = await repository.getSortBy();
     _sortCards();
     notifyListeners();
   }
@@ -48,10 +48,9 @@ class LoyaltyCardViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void setSortPreference(String sortBy) async {
-    _sortBy = sortBy;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('sortBy', sortBy);
+  void setSortBy(String newSortBy) async {
+    await repository.setSortBy(newSortBy);
+    sortBy = newSortBy;
     _sortCards();
     notifyListeners();
   }
@@ -66,11 +65,11 @@ class LoyaltyCardViewModel with ChangeNotifier {
   }
 
   void _sortCards() {
-    if (_sortBy == 'alphabetical') {
+    if (sortBy == 'alphabetical') {
       _cardList.sort(
         (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
       );
-    } else if (_sortBy == 'most-used') {
+    } else if (sortBy == 'most-used') {
       _cardList.sort((a, b) => b.usageCount.compareTo(a.usageCount));
     }
   }

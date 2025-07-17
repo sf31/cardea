@@ -1,24 +1,18 @@
 import 'dart:io';
 
-import 'package:cardea/ui/loyalty-card/loyalty_card.viewmodel.dart';
-import 'package:cardea/ui/settings/export_data.dart';
+import 'package:cardea/ui/settings/settings.viewmodel.dart';
+import 'package:cardea/ui/settings/widgets/export_data.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../data/services/import_export_json_usecase.dart';
-import '../../utils/theme_provider.dart';
-import '../shopping-list/shopping_item.viewmodel.dart';
+import '../../../utils/theme_provider.dart';
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
 
-  ShoppingItemViewModel _getShoppingItemViewModel(BuildContext context) {
-    return Provider.of<ShoppingItemViewModel>(context, listen: false);
-  }
-
-  LoyaltyCardViewModel _getLoyaltyCardViewModel(BuildContext context) {
-    return Provider.of<LoyaltyCardViewModel>(context, listen: false);
+  SettingsViewModel _getViewModel(BuildContext context) {
+    return Provider.of<SettingsViewModel>(context, listen: false);
   }
 
   Future<void> _importData(BuildContext context) async {
@@ -30,11 +24,7 @@ class Settings extends StatelessWidget {
       if (result != null && result.files.single.path != null) {
         final file = File(result.files.single.path!);
         final json = await file.readAsString();
-        final useCase = ImportExportJsonUseCase(
-          loyaltyCardViewModel: _getLoyaltyCardViewModel(context),
-          shoppingItemViewModel: _getShoppingItemViewModel(context),
-        );
-        await useCase.importDataFromJson(json);
+        await _getViewModel(context).importJson(json);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Data imported successfully')),
         );
