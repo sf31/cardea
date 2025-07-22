@@ -32,12 +32,7 @@ Future<void> main() async {
               (_) => ShoppingItemViewModel(repository: shoppingItemRepository),
         ),
         ChangeNotifierProvider(
-          create:
-              (_) => SettingsViewModel(
-                sharedPrefs: sharedPrefsService,
-                loyaltyCardRepository: loyaltyCardRepository,
-                shoppingItemRepository: shoppingItemRepository,
-              ),
+          create: (_) => SettingsViewModel(sharedPrefs: sharedPrefsService),
         ),
       ],
       child: MyApp(),

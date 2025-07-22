@@ -48,9 +48,9 @@ class ShoppingItemViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void addMultiple(List<ShoppingItem> items) {
-    for (var item in items) {
-      upsert(item);
-    }
+  Future<void> setAll(List<ShoppingItem> items) async {
+    await repository.setAll(items);
+    _itemList = items;
+    notifyListeners();
   }
 }

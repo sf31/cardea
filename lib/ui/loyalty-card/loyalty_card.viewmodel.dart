@@ -36,12 +36,6 @@ class LoyaltyCardViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void addMultiple(List<LoyaltyCard> cards) {
-    for (var card in cards) {
-      upsert(card);
-    }
-  }
-
   void removeById(String id) {
     _cardList.removeWhere((card) => card.id == id);
     repository.delete(id);
@@ -62,6 +56,13 @@ class LoyaltyCardViewModel with ChangeNotifier {
       repository.update(_cardList[index]);
       notifyListeners();
     }
+  }
+
+  Future<void> setAll(List<LoyaltyCard> cards) async {
+    await repository.setAll(cards);
+    _cardList = cards;
+    _sortCards();
+    notifyListeners();
   }
 
   void _sortCards() {

@@ -22,6 +22,13 @@ abstract class GenericRepository<T extends BaseModel> {
     });
   }
 
+  Future<void> setAll(List<T> entities) async {
+    await clear();
+    for (var entity in entities) {
+      await create(entity);
+    }
+  }
+
   Future<T?> getById(String id) async {
     final List<Map<String, dynamic>> maps = await db.query(
       tableName,
