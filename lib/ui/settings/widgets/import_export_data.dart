@@ -215,7 +215,7 @@ class _ImportExportDataState extends State<ImportExportData> {
                         child:
                             isImporting
                                 ? const Text('Importing...')
-                                : const Text('Import'),
+                                : const Text('Select file'),
                       ),
                       if (importErrorMessage != null)
                         Text(
