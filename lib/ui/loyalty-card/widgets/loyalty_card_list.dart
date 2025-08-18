@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
+import 'loyalty_card_search.dart';
+
 class LoyaltyCardList extends StatelessWidget {
   const LoyaltyCardList({super.key});
 
@@ -72,15 +74,22 @@ class LoyaltyCardList extends StatelessWidget {
       ),
       body: Consumer<LoyaltyCardViewModel>(
         builder: (context, repo, child) {
-          final cardList = GridView.count(
-            crossAxisCount: 2,
-            childAspectRatio: 2,
-            padding: const EdgeInsets.all(10),
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
+          final cardList = Column(
             children: [
-              ...repo.cardList.map((card) => LoyaltyCardItem(card: card)),
-              LoyaltyCardAddBtn(),
+              Expanded(
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  childAspectRatio: 2,
+                  padding: const EdgeInsets.all(10),
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  children: [
+                    ...repo.cardList.map((card) => LoyaltyCardItem(card: card)),
+                    LoyaltyCardAddBtn(),
+                  ],
+                ),
+              ),
+              repo.showSearch ? LoyaltyCardSearch() : SizedBox(),
             ],
           );
 
@@ -114,7 +123,15 @@ class LoyaltyCardList extends StatelessWidget {
           );
 
           return Scaffold(
-            body: repo.cardList.isEmpty ? emptyCardList : cardList,
+            body: repo.totalCardCount == 0 ? emptyCardList : cardList,
+            floatingActionButton:
+                repo.showSearch
+                    ? SizedBox()
+                    : FloatingActionButton.extended(
+                      onPressed: () => repo.toggleSearch(),
+                      icon: Icon(Icons.search),
+                      label: Text('Find a card'),
+                    ),
           );
         },
       ),

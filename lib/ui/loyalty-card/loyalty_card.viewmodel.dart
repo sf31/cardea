@@ -7,7 +7,10 @@ import 'package:flutter/material.dart';
 class LoyaltyCardViewModel with ChangeNotifier {
   final LoyaltyCardRepository repository;
   List<LoyaltyCard> _cardList = [];
+  int totalCardCount = 0;
   String sortBy = 'alphabetical';
+  bool showSearch = false;
+  String? searchText;
 
   LoyaltyCardViewModel({required this.repository}) : super() {
     loadCards();
@@ -19,6 +22,7 @@ class LoyaltyCardViewModel with ChangeNotifier {
   Future<void> loadCards() async {
     _cardList = await repository.getAll();
     sortBy = await repository.getSortBy();
+    totalCardCount = _cardList.length;
     _sortCards();
     notifyListeners();
   }
@@ -73,5 +77,27 @@ class LoyaltyCardViewModel with ChangeNotifier {
     } else if (sortBy == 'most-used') {
       _cardList.sort((a, b) => b.usageCount.compareTo(a.usageCount));
     }
+  }
+
+  Future<void> onSearch(String filter) async {
+    searchText = filter;
+    if (filter.isNotEmpty) {
+      _cardList =
+          _cardList.where((card) {
+            return card.name.toLowerCase().contains(filter.toLowerCase());
+          }).toList();
+    } else {
+      await loadCards(); // Reload all cards if search is cleared
+    }
+    notifyListeners();
+  }
+
+  void toggleSearch() {
+    showSearch = !showSearch;
+    if (!showSearch) {
+      searchText = null; // Clear search filter when toggling off
+      loadCards(); // Reload all cards when search is closed
+    }
+    notifyListeners();
   }
 }
