@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:cardea/data/models/loyalty_card.model.dart';
 import 'package:cardea/ui/loyalty-card/loyalty_card.viewmodel.dart';
-import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_add_btn.dart';
 import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_item.dart';
 import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_scanner.dart';
 import 'package:cardea/ui/settings/widgets/settings.dart';
@@ -10,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-import 'loyalty_card_search.dart';
+import 'loyalty_card_find.dart';
 
 class LoyaltyCardList extends StatelessWidget {
   const LoyaltyCardList({super.key});
@@ -76,6 +75,7 @@ class LoyaltyCardList extends StatelessWidget {
         builder: (context, repo, child) {
           final cardList = Column(
             children: [
+              LoyaltyCardFind(),
               Expanded(
                 child: GridView.count(
                   crossAxisCount: 2,
@@ -85,11 +85,9 @@ class LoyaltyCardList extends StatelessWidget {
                   mainAxisSpacing: 10,
                   children: [
                     ...repo.cardList.map((card) => LoyaltyCardItem(card: card)),
-                    LoyaltyCardAddBtn(),
                   ],
                 ),
               ),
-              repo.showSearch ? LoyaltyCardSearch() : SizedBox(),
             ],
           );
 
@@ -124,14 +122,15 @@ class LoyaltyCardList extends StatelessWidget {
 
           return Scaffold(
             body: repo.totalCardCount == 0 ? emptyCardList : cardList,
-            floatingActionButton:
-                repo.showSearch
-                    ? SizedBox()
-                    : FloatingActionButton.extended(
-                      onPressed: () => repo.toggleSearch(),
-                      icon: Icon(Icons.search),
-                      label: Text('Find a card'),
-                    ),
+            floatingActionButton: FloatingActionButton.extended(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => LoyaltyCardScanner()),
+                );
+              },
+              icon: Icon(Icons.add),
+              label: Text('Add Card'),
+            ),
           );
         },
       ),

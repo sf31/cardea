@@ -9,8 +9,7 @@ class LoyaltyCardViewModel with ChangeNotifier {
   List<LoyaltyCard> _cardList = [];
   int totalCardCount = 0;
   String sortBy = 'alphabetical';
-  bool showSearch = false;
-  String? searchText;
+  String? filterString;
 
   LoyaltyCardViewModel({required this.repository}) : super() {
     loadCards();
@@ -79,24 +78,15 @@ class LoyaltyCardViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> onSearch(String filter) async {
-    searchText = filter;
+  Future<void> onFilter(String filter) async {
+    filterString = filter;
     if (filter.isNotEmpty) {
       _cardList =
           _cardList.where((card) {
             return card.name.toLowerCase().contains(filter.toLowerCase());
           }).toList();
     } else {
-      await loadCards(); // Reload all cards if search is cleared
-    }
-    notifyListeners();
-  }
-
-  void toggleSearch() {
-    showSearch = !showSearch;
-    if (!showSearch) {
-      searchText = null; // Clear search filter when toggling off
-      loadCards(); // Reload all cards when search is closed
+      await loadCards();
     }
     notifyListeners();
   }
