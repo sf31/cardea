@@ -1,0 +1,86 @@
+import 'package:cardea/ui/loyalty-card/loyalty_card.viewmodel.dart';
+import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_add_btn.dart';
+import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_empty.dart';
+import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_find.dart';
+import 'package:cardea/ui/settings/widgets/settings.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'loyalty_card_list.dart';
+
+class LoyaltyCardHome extends StatelessWidget {
+  const LoyaltyCardHome({super.key});
+
+  void _sortBy(BuildContext context) async {
+    final List<String> options = ['alphabetical', 'most-used'];
+    final vm = Provider.of<LoyaltyCardViewModel>(context, listen: false);
+    final sortBy = vm.sortBy;
+
+    final selectedOption = await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text('Sort by'),
+          children:
+              options.map((option) {
+                return SimpleDialogOption(
+                  onPressed: () {
+                    Navigator.pop(context, option);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(option),
+                      if (sortBy == option)
+                        const Icon(Icons.check, color: Colors.green),
+                    ],
+                  ),
+                );
+              }).toList(),
+        );
+      },
+    );
+
+    if (selectedOption != null) {
+      vm.setSortBy(selectedOption);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Your cards'),
+        actions: [
+          IconButton(
+            onPressed: () => _sortBy(context),
+            icon: Icon(Icons.filter_list),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (context) => Settings()));
+            },
+            icon: Icon(Icons.settings),
+          ),
+        ],
+      ),
+      body: Consumer<LoyaltyCardViewModel>(
+        builder: (context, vm, child) {
+          if (vm.totalCardCount == 0) return LoyaltyCardEmpty();
+
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                LoyaltyCardFind(),
+                LoyaltyCardGrid(cardList: vm.cardList),
+                LoyaltyCardAddBtn(),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

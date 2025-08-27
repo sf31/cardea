@@ -1,4 +1,4 @@
-import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_list.dart';
+import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_home.dart';
 import 'package:cardea/ui/shopping-list/widgets/shopping_list.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +15,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: <Widget>[LoyaltyCardList(), ShoppingList()][currentPageIndex],
+      body: <Widget>[LoyaltyCardHome(), ShoppingList()][currentPageIndex],
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {

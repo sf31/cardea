@@ -35,6 +35,7 @@ class LoyaltyCardViewModel with ChangeNotifier {
       _cardList.add(card);
       repository.create(card);
     }
+    totalCardCount = _cardList.length;
     _sortCards();
     notifyListeners();
   }
@@ -42,6 +43,7 @@ class LoyaltyCardViewModel with ChangeNotifier {
   void removeById(String id) {
     _cardList.removeWhere((card) => card.id == id);
     repository.delete(id);
+    totalCardCount = _cardList.length;
     notifyListeners();
   }
 
@@ -65,6 +67,7 @@ class LoyaltyCardViewModel with ChangeNotifier {
     await repository.setAll(cards);
     _cardList = cards;
     _sortCards();
+    totalCardCount = _cardList.length;
     notifyListeners();
   }
 
