@@ -68,13 +68,25 @@ class LoyaltyCardHome extends StatelessWidget {
       ),
       body: Consumer<LoyaltyCardViewModel>(
         builder: (context, vm, child) {
-          if (vm.totalCardCount == 0) return LoyaltyCardEmpty();
+          if (vm.cardList.isEmpty) return LoyaltyCardEmpty();
+
+          var noResultsWidget = Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Text(
+              'No results found for "${vm.filterString}"',
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+          );
 
           return SingleChildScrollView(
             child: Column(
               children: [
                 LoyaltyCardFind(),
-                LoyaltyCardGrid(cardList: vm.cardList),
+                vm.filteredCardList != null && vm.filteredCardList!.isEmpty
+                    ? noResultsWidget
+                    : LoyaltyCardGrid(
+                      cardList: vm.filteredCardList ?? vm.cardList,
+                    ),
                 LoyaltyCardAddBtn(),
               ],
             ),

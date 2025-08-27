@@ -61,7 +61,7 @@ class _LoyaltyCardFindState extends State<LoyaltyCardFind> {
                         context,
                         listen: false,
                       );
-                      vm.onFilter('');
+                      vm.onFilter(null);
                       _filterController.text = '';
                       FocusManager.instance.primaryFocus?.unfocus();
                     },

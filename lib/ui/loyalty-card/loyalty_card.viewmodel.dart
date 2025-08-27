@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 class LoyaltyCardViewModel with ChangeNotifier {
   final LoyaltyCardRepository repository;
   List<LoyaltyCard> _cardList = [];
-  int totalCardCount = 0;
   String sortBy = 'alphabetical';
+  List<LoyaltyCard>? filteredCardList;
   String? filterString;
 
   LoyaltyCardViewModel({required this.repository}) : super() {
@@ -21,7 +21,6 @@ class LoyaltyCardViewModel with ChangeNotifier {
   Future<void> loadCards() async {
     _cardList = await repository.getAll();
     sortBy = await repository.getSortBy();
-    totalCardCount = _cardList.length;
     _sortCards();
     notifyListeners();
   }
@@ -35,7 +34,6 @@ class LoyaltyCardViewModel with ChangeNotifier {
       _cardList.add(card);
       repository.create(card);
     }
-    totalCardCount = _cardList.length;
     _sortCards();
     notifyListeners();
   }
@@ -43,7 +41,6 @@ class LoyaltyCardViewModel with ChangeNotifier {
   void removeById(String id) {
     _cardList.removeWhere((card) => card.id == id);
     repository.delete(id);
-    totalCardCount = _cardList.length;
     notifyListeners();
   }
 
@@ -67,7 +64,6 @@ class LoyaltyCardViewModel with ChangeNotifier {
     await repository.setAll(cards);
     _cardList = cards;
     _sortCards();
-    totalCardCount = _cardList.length;
     notifyListeners();
   }
 
@@ -81,14 +77,15 @@ class LoyaltyCardViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> onFilter(String filter) async {
+  Future<void> onFilter(String? filter) async {
     filterString = filter;
-    if (filter.isNotEmpty) {
-      _cardList =
+    if (filter != null && filter.isNotEmpty) {
+      filteredCardList =
           _cardList.where((card) {
             return card.name.toLowerCase().contains(filter.toLowerCase());
           }).toList();
     } else {
+      filteredCardList = null;
       await loadCards();
     }
     notifyListeners();
