@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../settings/widgets/settings.dart';
 import '../shopping_item.viewmodel.dart';
-import 'empty_shopping_liist.dart';
+import 'empty_shopping_list.dart';
 import 'input_shopping_item.dart';
 
 class ShoppingList extends StatefulWidget {
@@ -93,6 +93,11 @@ class _ShoppingListState extends State<ShoppingList> {
               _showNewItem
                   ? InputShoppingItem(
                     onNameConfirm: onNameChanged,
+                    focusLostCallback:
+                        () => setState(() {
+                          _showNewItem = false;
+                          _itemToEdit = null;
+                        }),
                     name: _itemToEdit?.name,
                   )
                   : SizedBox(),

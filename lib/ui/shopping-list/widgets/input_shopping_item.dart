@@ -1,10 +1,17 @@
+import 'package:cardea/utils/theme.utils.dart';
 import 'package:flutter/material.dart';
 
 class InputShoppingItem extends StatefulWidget {
   final String? name;
   final void Function(String text, bool isChecked) onNameConfirm;
+  final void Function() focusLostCallback;
 
-  const InputShoppingItem({super.key, required this.onNameConfirm, this.name});
+  const InputShoppingItem({
+    super.key,
+    required this.onNameConfirm,
+    required this.focusLostCallback,
+    this.name,
+  });
 
   @override
   State<InputShoppingItem> createState() => _InputShoppingItemState();
@@ -36,23 +43,25 @@ class _InputShoppingItemState extends State<InputShoppingItem> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(7.0),
+      padding: EdgeInsets.all(0.0),
       child: TextField(
+        onTapOutside: (evt) => widget.focusLostCallback(),
         focusNode: _focusNode,
         controller: _controller,
         onSubmitted: (_) => _submit(true),
-        decoration: InputDecoration(
+        style: themedInputTextStyle(context),
+        decoration: themedInputDecoration(context).copyWith(
           hintText: 'Enter item name',
-          // labelText: 'New Item',
-          border: const OutlineInputBorder(),
-          prefixIconColor: Colors.red,
-          prefixIcon: IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () => _submit(true),
+          border: null,
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(0),
+            borderSide: BorderSide.none,
           ),
-          suffixIconColor: Colors.green,
           suffixIcon: IconButton(
-            icon: const Icon(Icons.checklist),
+            icon: Icon(
+              Icons.format_list_bulleted_add,
+              color: Colors.green[600],
+            ),
             onPressed: () => _submit(false),
           ),
         ),

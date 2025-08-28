@@ -1,3 +1,4 @@
+import 'package:cardea/utils/theme.utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -32,27 +33,23 @@ class _LoyaltyCardFindState extends State<LoyaltyCardFind> {
     return Padding(
       padding: EdgeInsetsGeometry.all(10),
       child: TextFormField(
-        style: TextStyle(color: Colors.grey[900]),
-        cursorColor: Colors.grey[700],
+        style: themedInputTextStyle(context),
         onChanged: (e) => _viewModel.onFilter(e),
         autofocus: false,
         onTapOutside: (evt) => FocusManager.instance.primaryFocus?.unfocus(),
         controller: _filterController,
-        decoration: InputDecoration(
-          fillColor: Colors.grey[300],
-          filled: true,
+        decoration: themedInputDecoration(context).copyWith(
+          hintStyle: TextStyle(color: Colors.grey[500]),
+          hintText: 'Find a card',
+          prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey[300] ?? Colors.red),
+            borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(25),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey[300] ?? Colors.red),
+            borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(25),
           ),
-          hintStyle: TextStyle(color: Colors.grey[700]),
-          hintText: 'Find a card',
-          prefixIcon: Icon(Icons.search, color: Colors.grey[700]),
-          contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
           suffixIcon:
               _filterController.text.isNotEmpty
                   ? InkWell(
@@ -65,7 +62,7 @@ class _LoyaltyCardFindState extends State<LoyaltyCardFind> {
                       _filterController.text = '';
                       FocusManager.instance.primaryFocus?.unfocus();
                     },
-                    child: Icon(Icons.close, color: Colors.grey[700]),
+                    child: Icon(Icons.close, color: Colors.grey[500]),
                   )
                   : null,
         ),
