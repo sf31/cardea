@@ -9,7 +9,10 @@ import 'package:provider/provider.dart';
 import 'loyalty_card_list.dart';
 
 class LoyaltyCardHome extends StatelessWidget {
-  const LoyaltyCardHome({super.key});
+  final FocusNode findFocusNode = FocusNode();
+  final ValueNotifier<bool> atTop = ValueNotifier(false);
+
+  LoyaltyCardHome({super.key});
 
   void _sortBy(BuildContext context) async {
     final List<String> options = ['alphabetical', 'most-used'];
@@ -78,17 +81,33 @@ class LoyaltyCardHome extends StatelessWidget {
             ),
           );
 
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                LoyaltyCardFind(),
-                vm.filteredCardList != null && vm.filteredCardList!.isEmpty
-                    ? noResultsWidget
-                    : LoyaltyCardGrid(
-                      cardList: vm.filteredCardList ?? vm.cardList,
-                    ),
-                LoyaltyCardAddBtn(),
-              ],
+          return NotificationListener<ScrollNotification>(
+            onNotification: (notification) {
+              if (notification is ScrollEndNotification) {
+                atTop.value =
+                    notification.metrics.pixels <=
+                    notification.metrics.minScrollExtent;
+              } else if (notification is ScrollUpdateNotification) {
+                atTop.value = false;
+              }
+
+              if (notification is OverscrollNotification && atTop.value) {
+                findFocusNode.requestFocus();
+              }
+              return false;
+            },
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  LoyaltyCardFind(findFocusNode: findFocusNode),
+                  vm.filteredCardList != null && vm.filteredCardList!.isEmpty
+                      ? noResultsWidget
+                      : LoyaltyCardGrid(
+                        cardList: vm.filteredCardList ?? vm.cardList,
+                      ),
+                  LoyaltyCardAddBtn(),
+                ],
+              ),
             ),
           );
         },

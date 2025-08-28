@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import '../loyalty_card.viewmodel.dart';
 
 class LoyaltyCardFind extends StatefulWidget {
-  const LoyaltyCardFind({super.key});
+  final FocusNode findFocusNode;
+
+  const LoyaltyCardFind({super.key, required this.findFocusNode});
 
   @override
   State<LoyaltyCardFind> createState() => _LoyaltyCardFindState();
@@ -36,7 +38,9 @@ class _LoyaltyCardFindState extends State<LoyaltyCardFind> {
         style: themedInputTextStyle(context),
         onChanged: (e) => _viewModel.onFilter(e),
         autofocus: false,
-        onTapOutside: (evt) => FocusManager.instance.primaryFocus?.unfocus(),
+        focusNode: widget.findFocusNode,
+        onTapOutside: (evt) => widget.findFocusNode.unfocus(),
+        // onTapOutside: (evt) => FocusManager.instance.primaryFocus?.unfocus(),
         controller: _filterController,
         decoration: themedInputDecoration(context).copyWith(
           hintStyle: TextStyle(color: Colors.grey[500]),
