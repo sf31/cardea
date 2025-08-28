@@ -42,24 +42,10 @@ class _ShoppingListState extends State<ShoppingList> {
     if (dismiss) setState(() => _showNewItem = false);
   }
 
-  void onItemComplete(ShoppingItem item) {
-    _getViewModel().removeById(item.id);
-  }
-
   void onItemEdit(ShoppingItem item) {
     if (_itemToEdit != null) return;
     setState(() => _showNewItem = true);
     setState(() => _itemToEdit = item);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
@@ -86,9 +72,8 @@ class _ShoppingListState extends State<ShoppingList> {
           return Column(
             children: [
               ShoppingListTodo(
-                itemList: provider.itemList,
-                onItemComplete: onItemComplete,
                 onItemEdit: onItemEdit,
+                showNewItem: _showNewItem,
               ),
               _showNewItem
                   ? InputShoppingItem(

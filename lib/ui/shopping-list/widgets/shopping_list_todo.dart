@@ -1,34 +1,90 @@
 import 'package:cardea/data/models/shopping_item.model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class ShoppingListTodo extends StatelessWidget {
-  final List<ShoppingItem> itemList;
-  final Function(ShoppingItem item) onItemComplete;
+import '../shopping_item.viewmodel.dart';
+
+class ShoppingListTodo extends StatefulWidget {
   final Function(ShoppingItem item) onItemEdit;
+  final bool showNewItem;
 
   const ShoppingListTodo({
     super.key,
-    required this.itemList,
-    required this.onItemComplete,
     required this.onItemEdit,
+    required this.showNewItem,
   });
 
   @override
+  State<ShoppingListTodo> createState() => _ShoppingListTodoState();
+}
+
+class _ShoppingListTodoState extends State<ShoppingListTodo>
+    with WidgetsBindingObserver {
+  final ScrollController _scrollController = ScrollController();
+
+  ShoppingItemViewModel _getViewModel() {
+    return Provider.of<ShoppingItemViewModel>(context, listen: false);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    _scrollToBottom();
+  }
+
+  void _onItemComplete(ShoppingItem item) {
+    _getViewModel().removeById(item.id);
+  }
+
+  void _scrollToBottom() {
+    if (!widget.showNewItem) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: itemList.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: IconButton(
-              icon: const Icon(Icons.check_box_outline_blank),
-              onPressed: () => onItemComplete(itemList[index]),
-            ),
-            title: Text(itemList[index].name),
-            onTap: () => onItemEdit(itemList[index]),
-          );
-        },
-      ),
+    return Consumer<ShoppingItemViewModel>(
+      builder: (context, vm, child) {
+        _scrollToBottom();
+
+        return Expanded(
+          child: ListView.builder(
+            controller: _scrollController,
+            itemCount: vm.itemList.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: IconButton(
+                  icon: const Icon(Icons.check_box_outline_blank),
+                  onPressed: () => _onItemComplete(vm.itemList[index]),
+                ),
+                title: Text(vm.itemList[index].name),
+                onTap: () => _onItemComplete(vm.itemList[index]),
+                onLongPress: () => widget.onItemEdit(vm.itemList[index]),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }
