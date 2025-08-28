@@ -21,4 +21,14 @@ class SharedPreferencesService {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('themeMode');
   }
+
+  Future<void> setEarlyAccessAlertShown() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('earlyAccessAlertShown', true);
+  }
+
+  Future<bool> earlyAccessAlertShown() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('earlyAccessAlertShown') ?? false;
+  }
 }
