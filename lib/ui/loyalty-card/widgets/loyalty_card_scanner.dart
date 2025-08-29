@@ -77,7 +77,7 @@ class LoyaltyCardScanner extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        ElevatedButton(
+                        FilledButton(
                           onPressed: () => _manualAdd(context),
                           child: Text('Add Manually'),
                         ),

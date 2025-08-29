@@ -1,5 +1,6 @@
 import 'package:cardea/data/models/shopping_item.model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../shopping_item.viewmodel.dart';
@@ -72,14 +73,18 @@ class _ShoppingListTodoState extends State<ShoppingListTodo>
             controller: _scrollController,
             itemCount: vm.itemList.length,
             itemBuilder: (context, index) {
+              final item = vm.itemList[index];
               return ListTile(
                 leading: IconButton(
                   icon: const Icon(Icons.check_box_outline_blank),
-                  onPressed: () => _onItemComplete(vm.itemList[index]),
+                  onPressed: () => _onItemComplete(item),
                 ),
-                title: Text(vm.itemList[index].name),
-                onTap: () => _onItemComplete(vm.itemList[index]),
-                onLongPress: () => widget.onItemEdit(vm.itemList[index]),
+                title: Text(item.name),
+                onTap: () {
+                  _onItemComplete(item);
+                  HapticFeedback.vibrate();
+                },
+                onLongPress: () => widget.onItemEdit(item),
               );
             },
           ),

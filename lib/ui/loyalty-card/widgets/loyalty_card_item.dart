@@ -1,6 +1,7 @@
 import 'package:cardea/data/models/loyalty_card.model.dart';
 import 'package:cardea/ui/loyalty-card/loyalty_card.viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'loaylty_card_manager.dart';
@@ -15,6 +16,7 @@ class LoyaltyCardItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        HapticFeedback.vibrate();
         Provider.of<LoyaltyCardViewModel>(
           context,
           listen: false,
