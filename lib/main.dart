@@ -7,6 +7,7 @@ import 'data/repositories/loyalty_card.repository.dart';
 import 'data/repositories/shopping_item.repository.dart';
 import 'data/services/database.service.dart';
 import 'data/services/shared_prefs.service.dart';
+import 'l10n/app_localizations.dart';
 import 'ui/loyalty-card/loyalty_card.viewmodel.dart';
 import 'ui/shopping-list/shopping_item.viewmodel.dart';
 import 'utils/theme_provider.dart';
@@ -63,6 +64,8 @@ class MyApp extends StatelessWidget {
       ),
       themeMode: themeProvider.themeMode,
       home: const MyHomePage(),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
     );
   }
 }

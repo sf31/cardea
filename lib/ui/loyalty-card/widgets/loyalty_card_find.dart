@@ -1,3 +1,4 @@
+import 'package:cardea/l10n/app_localizations.dart';
 import 'package:cardea/utils/theme.utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -44,7 +45,7 @@ class _LoyaltyCardFindState extends State<LoyaltyCardFind> {
         controller: _filterController,
         decoration: themedInputDecoration(context).copyWith(
           hintStyle: TextStyle(color: Colors.grey[500]),
-          hintText: 'Find a card',
+          hintText: AppLocalizations.of(context)?.loyaltyCardSearchLabel ?? '',
           prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide.none,

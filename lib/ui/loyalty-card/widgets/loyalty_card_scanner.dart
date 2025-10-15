@@ -1,4 +1,5 @@
 import 'package:cardea/data/models/loyalty_card.model.dart';
+import 'package:cardea/l10n/app_localizations.dart';
 import 'package:cardea/ui/loyalty-card/widgets/loaylty_card_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -44,7 +45,11 @@ class LoyaltyCardScanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Card')),
+      appBar: AppBar(
+        title: Text(
+          AppLocalizations.of(context)?.loyaltyCardManagerTitleNew ?? '',
+        ),
+      ),
       backgroundColor: Colors.black,
       body: Stack(
         children: [
@@ -68,8 +73,11 @@ class LoyaltyCardScanner extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Text(
-                          'Scan your card',
+                        Text(
+                          AppLocalizations.of(
+                                context,
+                              )?.loyaltyCardManagerScanLabel ??
+                              '',
                           overflow: TextOverflow.fade,
                           style: TextStyle(
                             color: Colors.white,
@@ -79,7 +87,12 @@ class LoyaltyCardScanner extends StatelessWidget {
                         ),
                         FilledButton(
                           onPressed: () => _manualAdd(context),
-                          child: Text('Add Manually'),
+                          child: Text(
+                            AppLocalizations.of(
+                                  context,
+                                )?.loyaltyCardManagerScanManually ??
+                                '',
+                          ),
                         ),
                       ],
                     ),

@@ -1,3 +1,4 @@
+import 'package:cardea/l10n/app_localizations.dart';
 import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_scanner.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ class LoyaltyCardAddBtn extends StatelessWidget {
             () => Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => LoyaltyCardScanner()),
             ),
-        label: Text('New Card'),
+        label: Text(AppLocalizations.of(context)?.loyaltyCardNewBtn ?? ''),
       ),
     );
   }

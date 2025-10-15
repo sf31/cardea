@@ -1,3 +1,4 @@
+import 'package:cardea/l10n/app_localizations.dart';
 import 'package:cardea/utils/theme.utils.dart';
 import 'package:flutter/material.dart';
 
@@ -51,7 +52,7 @@ class _InputShoppingItemState extends State<InputShoppingItem> {
         onSubmitted: (_) => _submit(true),
         style: themedInputTextStyle(context),
         decoration: themedInputDecoration(context).copyWith(
-          hintText: 'Enter item name',
+          hintText: AppLocalizations.of(context)?.shoppingListInputHint,
           border: null,
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(0),

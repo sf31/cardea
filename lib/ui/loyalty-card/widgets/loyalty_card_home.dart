@@ -1,3 +1,4 @@
+import 'package:cardea/l10n/app_localizations.dart';
 import 'package:cardea/ui/loyalty-card/loyalty_card.viewmodel.dart';
 import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_add_btn.dart';
 import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_empty.dart';
@@ -23,7 +24,7 @@ class LoyaltyCardHome extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
-          title: const Text('Sort by'),
+          title: Text(AppLocalizations.of(context)?.loyaltyCardSortBy ?? ''),
           children:
               options.map((option) {
                 return SimpleDialogOption(
@@ -53,7 +54,9 @@ class LoyaltyCardHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your cards'),
+        title: Text(
+          AppLocalizations.of(context)?.loyaltyCardSectionTitle ?? '',
+        ),
         actions: [
           IconButton(
             onPressed: () => _sortBy(context),
@@ -76,7 +79,10 @@ class LoyaltyCardHome extends StatelessWidget {
           var noResultsWidget = Padding(
             padding: EdgeInsets.all(20.0),
             child: Text(
-              'No results found for "${vm.filterString}"',
+              AppLocalizations.of(
+                    context,
+                  )?.loyaltyCardEmptySearchResult(vm.filterString ?? '') ??
+                  '',
               style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
           );

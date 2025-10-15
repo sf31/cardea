@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../../data/models/loyalty_card.model.dart';
 import '../../../data/models/shopping_item.model.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../loyalty-card/loyalty_card.viewmodel.dart';
 import '../../shopping-list/shopping_item.viewmodel.dart';
 
@@ -149,11 +150,17 @@ class _ImportExportDataState extends State<ImportExportData> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return DefaultTabController(
       length: 2,
       child: Column(
         children: [
-          const TabBar(tabs: [Tab(text: 'Export'), Tab(text: 'Import')]),
+          TabBar(
+            tabs: [
+              Tab(text: l10n?.settingsExportLabel ?? ''),
+              Tab(text: l10n?.settingsImportLabel ?? ''),
+            ],
+          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -163,7 +170,7 @@ class _ImportExportDataState extends State<ImportExportData> {
                     children: [
                       CheckboxListTile(
                         value: exportCardList,
-                        title: const Text('Loyalty Cards'),
+                        title: Text(l10n?.loyaltyCardsLabel ?? ''),
                         onChanged: (value) {
                           setState(() {
                             exportCardList = !exportCardList;
@@ -172,7 +179,7 @@ class _ImportExportDataState extends State<ImportExportData> {
                       ),
                       CheckboxListTile(
                         value: exportShoppingList,
-                        title: const Text('Shopping List'),
+                        title: Text(l10n?.shoppingListLabel ?? ''),
                         onChanged: (value) {
                           setState(() {
                             exportShoppingList = !exportShoppingList;
@@ -189,13 +196,13 @@ class _ImportExportDataState extends State<ImportExportData> {
                                     : () => saveJsonToFile(context),
                             child:
                                 isExporting
-                                    ? const Text('Exporting...')
-                                    : const Text('Export'),
+                                    ? Text(l10n?.settingsExportInProgress ?? '')
+                                    : Text(l10n?.settingsExportBtn ?? ''),
                           ),
                           if (exportSuccess == true)
                             Text(
                               textAlign: TextAlign.center,
-                              'Export completed successfully!',
+                              l10n?.settingsExportSuccess ?? '',
                               style: TextStyle(color: Colors.green),
                             ),
                           if (exportErrorMessage != null)
@@ -214,8 +221,8 @@ class _ImportExportDataState extends State<ImportExportData> {
                         onPressed: isImporting ? null : importFromJson,
                         child:
                             isImporting
-                                ? const Text('Importing...')
-                                : const Text('Select file'),
+                                ? Text(l10n?.settingsImportInProgress ?? '')
+                                : Text(l10n?.settingsImportBtn ?? ''),
                       ),
                       if (importErrorMessage != null)
                         Text(
@@ -223,8 +230,8 @@ class _ImportExportDataState extends State<ImportExportData> {
                           style: const TextStyle(color: Colors.red),
                         ),
                       if (importSuccess == true)
-                        const Text(
-                          'Import completed successfully!',
+                        Text(
+                          l10n?.settingsImportSuccess ?? '',
                           style: TextStyle(color: Colors.green),
                         ),
                     ],

@@ -1,11 +1,11 @@
 import 'package:cardea/data/models/shopping_item.model.dart';
+import 'package:cardea/l10n/app_localizations.dart';
 import 'package:cardea/ui/shopping-list/widgets/shopping_list_todo.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../settings/widgets/settings.dart';
 import '../shopping_item.viewmodel.dart';
-import 'empty_shopping_list.dart';
 import 'input_shopping_item.dart';
 
 class ShoppingList extends StatefulWidget {
@@ -50,9 +50,10 @@ class _ShoppingListState extends State<ShoppingList> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Shopping List'),
+        title: Text(l10n?.shoppingListSectionTitle ?? ''),
         actions: [
           IconButton(
             onPressed: () {
@@ -67,7 +68,16 @@ class _ShoppingListState extends State<ShoppingList> {
       body: Consumer<ShoppingItemViewModel>(
         builder: (context, provider, child) {
           if (provider.itemList.isEmpty && !_showNewItem) {
-            return EmptyShoppingList();
+            return Center(
+              child: Text(
+                l10n?.shoppingListEmptyLabel ?? '',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            );
           }
           return Column(
             children: [
@@ -95,7 +105,7 @@ class _ShoppingListState extends State<ShoppingList> {
               ? SizedBox()
               : FloatingActionButton.extended(
                 onPressed: () => setState(() => _showNewItem = !_showNewItem),
-                label: const Text('New Item'),
+                label: Text(l10n?.shoppingListNewItemBtn ?? ''),
                 icon: const Icon(Icons.add),
               ),
     );

@@ -1,19 +1,21 @@
 import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_add_btn.dart';
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
+
 class LoyaltyCardEmpty extends StatelessWidget {
   const LoyaltyCardEmpty({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         spacing: 20,
         children: [
           Text(
-            'Mmmh... nothing here yet!',
+            AppLocalizations.of(context)?.loyaltyCardEmptyLabel ?? '',
             style: TextStyle(
               color: Colors.grey,
               fontSize: 16,
@@ -21,7 +23,7 @@ class LoyaltyCardEmpty extends StatelessWidget {
             ),
           ),
           Text(
-            'Tap the + button below to add your first Card.',
+            AppLocalizations.of(context)?.loyaltyCardEmptyBtn ?? '',
             style: TextStyle(
               color: Colors.grey,
               fontSize: 16,

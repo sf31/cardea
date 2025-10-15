@@ -1,4 +1,5 @@
 import 'package:cardea/data/models/loyalty_card.model.dart';
+import 'package:cardea/l10n/app_localizations.dart';
 import 'package:cardea/ui/loyalty-card/loyalty_card.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -50,7 +51,9 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Pick a color!'),
+          title: Text(
+            AppLocalizations.of(context)?.loyaltyCardManagerColorLabel ?? '',
+          ),
           content: SingleChildScrollView(
             // child: MaterialPicker(
             //   pickerColor: pickerColor,
@@ -64,7 +67,7 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
           ),
           actions: <Widget>[
             ElevatedButton(
-              child: const Text('Confirm'),
+              child: Text(AppLocalizations.of(context)?.confirmBtnLabel ?? ''),
               onPressed: () {
                 setState(() => currentColor = pickerColor);
                 Navigator.of(context).pop();
@@ -104,10 +107,13 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+    final title =
+        widget.isNewCard
+            ? localizations?.loyaltyCardManagerTitleNew
+            : localizations?.loyaltyCardManagerTitleEdit;
     return Scaffold(
-      appBar: AppBar(
-        title: widget.isNewCard ? Text('Add Card') : Text('Edit Card'),
-      ),
+      appBar: AppBar(title: Text(title ?? '')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -121,8 +127,8 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
                     FocusManager.instance.primaryFocus?.unfocus();
                   },
                   controller: _nameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Card Name',
+                  decoration: InputDecoration(
+                    labelText: localizations?.loyaltyCardManagerNameLabel ?? '',
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey),
                     ),
@@ -132,7 +138,7 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a name';
+                      return localizations?.loyaltyCardManagerMissingName ?? '';
                     }
                     return null;
                   },
@@ -176,8 +182,14 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  TextButton(onPressed: _onDelete, child: const Text('Delete')),
-                  ElevatedButton(onPressed: _onSave, child: const Text('Save')),
+                  TextButton(
+                    onPressed: _onDelete,
+                    child: Text(localizations?.deleteBtnLabel ?? ''),
+                  ),
+                  ElevatedButton(
+                    onPressed: _onSave,
+                    child: Text(localizations?.saveBtnLabel ?? ''),
+                  ),
                 ],
               ),
             ],

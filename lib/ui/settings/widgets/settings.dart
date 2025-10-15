@@ -1,3 +1,4 @@
+import 'package:cardea/l10n/app_localizations.dart';
 import 'package:cardea/ui/settings/widgets/import_export_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,13 +10,14 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: Text(localizations?.settingsSectionTitle ?? '')),
       body: Column(
         children: [
           ListTile(
             leading: const Icon(Icons.brightness_6),
-            title: const Text('Dark Mode'),
+            title: Text(localizations?.settingsDarkTheme ?? ''),
             trailing: Consumer<ThemeProvider>(
               builder:
                   (context, themeProvider, _) => Switch(
@@ -28,7 +30,7 @@ class Settings extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.file_upload),
-            title: const Text('Import/Export Data'),
+            title: Text(localizations?.settingsImportExportBtn ?? ''),
             onTap:
                 () => {
                   showModalBottomSheet(

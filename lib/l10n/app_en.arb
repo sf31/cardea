@@ -1,0 +1,200 @@
+{
+
+    "confirmBtnLabel": "Confirm",
+    "@confirmBtnLabel": {
+        "description": "Label for confirm button"
+    },
+    "cancelBtnLabel": "Cancel",
+    "@cancelBtnLabel": {
+        "description": "Label for cancel button"
+    },
+    "deleteBtnLabel": "Delete",
+    "@deleteBtnLabel": {
+        "description": "Label for delete button"
+    },
+    "editBtnLabel": "Edit",
+    "@editBtnLabel": {
+        "description": "Label for edit button"
+    },
+    "saveBtnLabel": "Save",
+    "@saveBtnLabel": {
+        "description": "Label for save button"
+    },
+
+
+    "loyaltyCardsLabel": "Loyalty Cards",
+    "@loyaltyCardsLabel": {
+        "description": "Label for loyalty cards"
+    },
+    "shoppingListLabel": "Shopping List",
+    "@shoppingListLabel": {
+        "description": "Label for shopping list"
+    },
+
+
+    "bottomNavLoyaltyCards": "Cards",
+    "@bottomNavLoyaltyCards": {
+        "description": "Label for the loyalty cards tab in the bottom navigation"
+    },
+    "bottomNavShoppingList": "Shopping",
+    "@bottomNavShoppingList": {
+        "description": "Label for the shopping list tab in the bottom navigation"
+    },
+
+
+    "welcomeMsgTitle": "Welcome to Cardea!",
+    "@welcomeMsgTitle": {
+        "description": "Title for the welcome message"
+    },
+    "welcomeMsgBody": "This app is still under development, so please be aware of potential bugs and missing features.",
+    "@welcomeMsgBody": {
+        "description": "Body text for the welcome message"
+    },
+    "welcomeMsgHint": "Hint: you can import/export your data in the settings page for backup or transfer to another device.",
+    "@welcomeMsgHint": {
+        "description": "Hint text for the welcome message"
+    },
+    "welcomeMsgButton": "Got it!",
+    "@welcomeMsgButton": {
+        "description": "Button text to dismiss the welcome message"
+    },
+
+
+    "loyaltyCardSectionTitle": "Your Cards",
+    "@loyaltyCardSectionTitle": {
+        "description": "Title for the loyalty cards section"
+    },
+    "loyaltyCardNewBtn": "New Card",
+    "@loyaltyCardNewBtn": {
+        "description": "Button text to add a new loyalty card"
+    },
+    "loyaltyCardEmptyLabel": "Mmmh... nothing here yet!",
+    "@loyaltyCardEmptyLabel": {
+        "description": "Text displayed when there are no loyalty cards"
+    },
+    "loyaltyCardEmptyBtn": "Tap the + button below to add your first Card.",
+    "@loyaltyCardEmptyBtn": {
+        "description": "Instruction text to add the first loyalty card"
+    },
+    "loyaltyCardSortBy": "Sort by",
+    "@loyaltyCardSortBy": {
+        "description": "Label for sorting options"
+    },
+    "loyaltyCardSearchLabel": "Find a Card",
+    "@loyaltyCardSearchLabel": {
+        "description": "Label for the search bar to find a loyalty card"
+    },
+    "loyaltyCardEmptySearchResult": "No results found for {searchTerm}.",
+    "@loyaltyCardEmptySearchResult": {
+        "description": "Text displayed when no search results are found",
+        "placeholders": {
+            "searchTerm": {
+                "type": "String",
+                "example": "MyCard"
+            }
+        }
+    },
+
+
+    "loyaltyCardManagerScanLabel": "Scan your card",
+    "@loyaltyCardManagerScanLabel": {
+        "description": "Label for the scan card button in the loyalty card manager"
+    },
+    "loyaltyCardManagerScanManually": "Enter code manually",
+    "@loyaltyCardManagerScanManually": {
+        "description": "Label for the manual code entry option in the loyalty card manager"
+    },
+    "loyaltyCardManagerTitleNew": "Add New Card",
+    "@loyaltyCardManagerTitleNew": {
+        "description": "Title for the loyalty card manager when adding a new card"
+    },
+    "loyaltyCardManagerTitleEdit": "Edit Card",
+    "@loyaltyCardManagerTitleEdit": {
+        "description": "Title for the loyalty card manager when editing an existing card"
+    },
+    "loyaltyCardManagerColorLabel": "Pick a color",
+    "@loyaltyCardManagerColorLabel": {
+        "description": "Label for the color picker in the loyalty card manager"
+    },
+    "loyaltyCardManagerNameLabel": "Card Name",
+    "@loyaltyCardManagerNameLabel": {
+        "description": "Label for the card name input field in the loyalty card manager"
+    },
+    "loyaltyCardManagerMissingName": "Please provide a name for the card.",
+    "@loyaltyCardManagerMissingName": {
+        "description": "Error message when the card name is missing"
+    },
+
+
+    "settingsSectionTitle": "Settings",
+    "@settingsSectionTitle": {
+        "description": "Title for the settings section"
+    },
+    "settingsImportExportBtn": "Import/Export Data",
+    "@settingsImportExportBtn": {
+        "description": "Button text for the import/export data option in settings"
+    },
+    "settingsDarkTheme": "Dark Theme",
+    "@settingsDarkTheme": {
+        "description": "Button text for the theme option in settings"
+    },
+    "settingsExportLabel": "Export",
+    "@settingExportLabel": {
+        "description": "Label for the export option in import/export settings"
+    },
+    "settingsExportBtn": "Export Data",
+    "@settingExportBtn": {
+        "description": "Button text to export data"
+    },
+    "settingsExportInProgress": "Exporting...",
+    "@settingExportInProgress": {
+        "description": "Text displayed while export is in progress"
+    },
+    "settingsExportSuccess": "Data exported successfully!",
+    "@settingExportSuccess": {
+        "description": "Message displayed when data export is successful"
+    },
+    "settingsExportError": "Failed to export data. Please try again.",
+    "@settingExportError": {
+        "description": "Error message displayed when data export fails"
+    },
+
+    "settingsImportLabel": "Import",
+    "@settingImportLabel": {
+        "description": "Label for the import option in import/export settings"
+    },
+    "settingsImportBtn": "Select file",
+    "@settingImportBtn": {
+        "description": "Button text to import data"
+    },
+    "settingsImportInProgress": "Importing...",
+    "@settingImportInProgress": {
+        "description": "Text displayed while import is in progress"
+    },
+    "settingsImportSuccess": "Data imported successfully!",
+    "@settingImportSuccess": {
+        "description": "Message displayed when data import is successful"
+    },
+    "settingsImportError": "Failed to import data. Please ensure the file is valid.",
+    "@settingImportError": {
+        "description": "Error message displayed when data import fails"
+    },
+
+
+    "shoppingListSectionTitle": "Shopping List",
+    "@shoppingListSectionTitle": {
+        "description": "Title for the shopping list section"
+    },
+    "shoppingListNewItemBtn": "New Item",
+    "@shoppingListNewItemBtn": {
+        "description": "Button text to add a new item to the shopping list"
+    },
+    "shoppingListEmptyLabel": "Your shopping list is empty!",
+    "@shoppingListEmptyLabel": {
+        "description": "Text displayed when the shopping list is empty"
+    },
+    "shoppingListInputHint": "What do you need to buy?",
+    "@shoppingListInputHint": {
+        "description": "Hint text for the shopping list input field"
+    }
+}

@@ -3,6 +3,8 @@ import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_home.dart';
 import 'package:cardea/ui/shopping-list/widgets/shopping_list.dart';
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
@@ -25,18 +27,14 @@ class _MyHomePageState extends State<MyHomePage> {
         barrierDismissible: false,
         builder:
             (context) => AlertDialog(
-              title: Text('Welcome to Cardea!'),
+              title: Text(AppLocalizations.of(context)?.welcomeMsgTitle ?? ''),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'This app is still under development, so please be aware of potential bugs and missing features.',
-                  ),
+                  Text(AppLocalizations.of(context)?.welcomeMsgBody ?? ''),
                   SizedBox(height: 16),
-                  Text(
-                    'Hint: you can import/export your data in the settings page for backup or transfer to another device.',
-                  ),
+                  Text(AppLocalizations.of(context)?.welcomeMsgHint ?? ''),
                 ],
               ),
               actions: [
@@ -45,7 +43,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     _prefsService.setEarlyAccessAlertShown();
                     Navigator.of(context).pop();
                   },
-                  child: Text('Got it!'),
+                  child: Text(
+                    AppLocalizations.of(context)?.welcomeMsgButton ?? '',
+                  ),
                 ),
               ],
             ),
@@ -55,6 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       body: <Widget>[LoyaltyCardHome(), ShoppingList()][currentPageIndex],
       bottomNavigationBar: NavigationBar(
@@ -65,15 +66,15 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         indicatorColor: Colors.green,
         selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
+        destinations: <Widget>[
           NavigationDestination(
             selectedIcon: Icon(Icons.wallet),
             icon: Icon(Icons.wallet),
-            label: 'Cards',
+            label: l10n?.bottomNavLoyaltyCards ?? '',
           ),
           NavigationDestination(
             icon: Icon(Icons.shopping_basket),
-            label: 'Shopping',
+            label: l10n?.bottomNavShoppingList ?? '',
           ),
         ],
       ),

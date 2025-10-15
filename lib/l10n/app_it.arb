@@ -1,0 +1,60 @@
+{
+    "confirmBtnLabel": "Conferma",
+    "cancelBtnLabel": "Annulla",
+    "deleteBtnLabel": "Elimina",
+    "editBtnLabel": "Modifica",
+    "saveBtnLabel": "Aggiungi",
+
+
+    "loyaltyCardsLabel": "Carte Fedeltà",
+    "shoppingListLabel": "Lista della Spesa",
+
+
+    "bottomNavLoyaltyCards": "Carte",
+    "bottomNavShoppingList": "Lista",
+
+
+    "welcomeMsgTitle": "Benvenutə in Cardea!",
+    "welcomeMsgBody": "L'app è ancora in fase di sviluppo, quindi tieni presente che potrebbero esserci bug e funzionalità mancanti.",
+    "welcomeMsgHint": "Suggerimento: puoi importare/esportare i tuoi dati nella pagina delle impostazioni per backup o trasferimento a un altro dispositivo.",
+    "welcomeMsgButton": "Capito!",
+
+
+    "loyaltyCardSectionTitle": "Le tue carte",
+    "loyaltyCardNewBtn": "Aggiungi carta",
+    "loyaltyCardEmptyLabel": "Mmmh... niente qui per ora!",
+    "loyaltyCardEmptyBtn": "Tocca il pulsante + qui sotto per aggiungere la tua prima carta.",
+    "loyaltyCardSortBy": "Ordina per",
+    "loyaltyCardSearchLabel": "Cerca",
+    "loyaltyCardEmptySearchResult": "Nessun risultato trovato per {searchTerm}.",
+
+
+    "loyaltyCardManagerScanLabel": "Scansiona la tua carta",
+    "loyaltyCardManagerScanManually": "Inserisci il codice manualmente",
+    "loyaltyCardManagerTitleNew": "Aggiungi nuova carta",
+    "loyaltyCardManagerTitleEdit": "Modifica carta",
+    "loyaltyCardManagerColorLabel": "Scegli un colore",
+    "loyaltyCardManagerNameLabel": "Nome della carta",
+    "loyaltyCardManagerMissingName": "Fornisci un nome per la carta",
+
+
+    "settingsSectionTitle": "Impostazioni",
+    "settingsImportExportBtn": "Importa/Esporta Dati",
+    "settingsDarkTheme": "Tema Scuro",
+    "settingsExportLabel": "Esporta",
+    "settingsExportBtn": "Esporta Dati",
+    "settingsExportInProgress": "Esportazione in corso...",
+    "settingsExportSuccess": "Dati esportati con successo!",
+    "settingsExportError": "Esportazione dei dati non riuscita. Per favore riprova.",
+    "settingsImportLabel": "Importa",
+    "settingsImportBtn": "Seleziona file",
+    "settingsImportInProgress": "Importazione in corso...",
+    "settingsImportSuccess": "Dati importati con successo!",
+    "settingsImportError": "Importazione dei dati non riuscita. Assicurati che il file sia valido.",
+
+
+    "shoppingListSectionTitle": "Lista della Spesa",
+    "shoppingListNewItemBtn": "Aggiungi",
+    "shoppingListEmptyLabel": "La tua lista della spesa è vuota!",
+    "shoppingListInputHint": "Cosa devi comprare?"
+}
