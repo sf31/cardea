@@ -9,29 +9,33 @@ class LoyaltyCardEmpty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        spacing: 20,
-        children: [
-          Text(
-            AppLocalizations.of(context)?.loyaltyCardEmptyLabel ?? '',
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 16,
-              fontStyle: FontStyle.italic,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 30),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          spacing: 20,
+          children: [
+            Text(
+              AppLocalizations.of(context)?.loyaltyCardEmptyLabel ?? '',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 16,
+                fontStyle: FontStyle.italic,
+              ),
             ),
-          ),
-          Text(
-            AppLocalizations.of(context)?.loyaltyCardEmptyBtn ?? '',
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 16,
-              fontStyle: FontStyle.italic,
+            Text(
+              AppLocalizations.of(context)?.loyaltyCardEmptyBtn ?? '',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 16,
+                fontStyle: FontStyle.italic,
+              ),
             ),
-          ),
-          LoyaltyCardAddBtn(),
-        ],
+            LoyaltyCardAddBtn(),
+          ],
+        ),
       ),
     );
   }

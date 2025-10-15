@@ -52,11 +52,10 @@ class LoyaltyCardHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          AppLocalizations.of(context)?.loyaltyCardSectionTitle ?? '',
-        ),
+        title: Text(l10n?.loyaltyCardSectionTitle ?? ''),
         actions: [
           IconButton(
             onPressed: () => _sortBy(context),
@@ -79,10 +78,7 @@ class LoyaltyCardHome extends StatelessWidget {
           var noResultsWidget = Padding(
             padding: EdgeInsets.all(20.0),
             child: Text(
-              AppLocalizations.of(
-                    context,
-                  )?.loyaltyCardEmptySearchResult(vm.filterString ?? '') ??
-                  '',
+              l10n?.loyaltyCardEmptySearchResult(vm.filterString ?? '') ?? '',
               style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
           );
