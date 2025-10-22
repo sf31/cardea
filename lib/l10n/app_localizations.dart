@@ -128,11 +128,23 @@ abstract class AppLocalizations {
   /// **'Save'**
   String get saveBtnLabel;
 
-  /// Label for add button
+  /// Label for copied to clipboard confirmation
   ///
   /// In en, this message translates to:
   /// **'Add'**
   String get addBtnLabel;
+
+  /// No description provided for @copyToClipboardBtnLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get copyToClipboardBtnLabel;
+
+  /// No description provided for @copiedToClipboardLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get copiedToClipboardLabel;
 
   /// Label for loyalty cards
   ///
@@ -206,11 +218,23 @@ abstract class AppLocalizations {
   /// **'Tap the + button below to add your first Card.'**
   String get loyaltyCardEmptyBtn;
 
-  /// Label for sorting options
+  /// Label for sort by usage option
   ///
   /// In en, this message translates to:
   /// **'Sort by'**
   String get loyaltyCardSortBy;
+
+  /// No description provided for @loyaltyCardSortByName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get loyaltyCardSortByName;
+
+  /// No description provided for @loyaltyCardSortByUsage.
+  ///
+  /// In en, this message translates to:
+  /// **'Usage'**
+  String get loyaltyCardSortByUsage;
 
   /// Label for the search bar to find a loyalty card
   ///

@@ -5,6 +5,10 @@
     "editBtnLabel": "Modifica",
     "saveBtnLabel": "Salva",
     "addBtnLabel": "Aggiungi",
+    "copyToClipboardBtnLabel": "Copia",
+    "copiedToClipboardLabel": "Copiato negli appunti!",
+
+
 
     "loyaltyCardsLabel": "Carte Fedeltà",
     "shoppingListLabel": "Lista della Spesa",

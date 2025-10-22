@@ -27,6 +27,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get addBtnLabel => 'Aggiungi';
 
   @override
+  String get copyToClipboardBtnLabel => 'Copia';
+
+  @override
+  String get copiedToClipboardLabel => 'Copiato negli appunti!';
+
+  @override
   String get loyaltyCardsLabel => 'Carte Fedeltà';
 
   @override
@@ -67,6 +73,12 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get loyaltyCardSortBy => 'Ordina per';
+
+  @override
+  String get loyaltyCardSortByName => 'Nome';
+
+  @override
+  String get loyaltyCardSortByUsage => 'Utilizzo';
 
   @override
   String get loyaltyCardSearchLabel => 'Cerca';
