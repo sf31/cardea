@@ -59,10 +59,7 @@ class _InputShoppingItemState extends State<InputShoppingItem> {
             borderSide: BorderSide.none,
           ),
           suffixIcon: IconButton(
-            icon: Icon(
-              Icons.format_list_bulleted_add,
-              color: Colors.green[600],
-            ),
+            icon: Icon(Icons.add_circle, color: Colors.green[600]),
             onPressed: () => _submit(false),
           ),
         ),
