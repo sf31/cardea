@@ -24,7 +24,7 @@
     "@addBtnLabel": {
         "description": "Label for add button"
     },
-    "copyToClipboardBtnLabel": "Add",
+    "copyToClipboardBtnLabel": "Copy",
     "@addBtnLabel": {
         "description": "Label for copy to clipboard button"
     },
