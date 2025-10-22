@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import 'loaylty_card_manager.dart';
+import 'loyalty-card-manager/loyalty_card_manager.dart';
 import 'loyalty_card_details.dart';
 
 class LoyaltyCardItem extends StatelessWidget {
@@ -33,7 +33,8 @@ class LoyaltyCardItem extends StatelessWidget {
       onLongPress: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => LoyaltyCardManager(card: card),
+            builder:
+                (context) => LoyaltyCardManager(card: card, isNewCard: false),
           ),
         );
       },

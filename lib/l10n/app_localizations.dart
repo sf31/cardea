@@ -128,6 +128,12 @@ abstract class AppLocalizations {
   /// **'Save'**
   String get saveBtnLabel;
 
+  /// Label for add button
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get addBtnLabel;
+
   /// Label for loyalty cards
   ///
   /// In en, this message translates to:

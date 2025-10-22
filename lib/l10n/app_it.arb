@@ -3,8 +3,8 @@
     "cancelBtnLabel": "Annulla",
     "deleteBtnLabel": "Elimina",
     "editBtnLabel": "Modifica",
-    "saveBtnLabel": "Aggiungi",
-
+    "saveBtnLabel": "Salva",
+    "addBtnLabel": "Aggiungi",
 
     "loyaltyCardsLabel": "Carte Fedeltà",
     "shoppingListLabel": "Lista della Spesa",

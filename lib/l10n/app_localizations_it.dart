@@ -21,7 +21,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get editBtnLabel => 'Modifica';
 
   @override
-  String get saveBtnLabel => 'Aggiungi';
+  String get saveBtnLabel => 'Salva';
+
+  @override
+  String get addBtnLabel => 'Aggiungi';
 
   @override
   String get loyaltyCardsLabel => 'Carte Fedeltà';

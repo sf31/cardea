@@ -1,6 +1,6 @@
 import 'package:cardea/data/models/loyalty_card.model.dart';
 import 'package:cardea/l10n/app_localizations.dart';
-import 'package:cardea/ui/loyalty-card/widgets/loaylty_card_manager.dart';
+import 'package:cardea/ui/loyalty-card/widgets/loyalty-card-manager/loyalty_card_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:uuid/uuid.dart';
@@ -25,7 +25,9 @@ class LoyaltyCardScanner extends StatelessWidget {
       usageCount: 0,
     );
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => LoyaltyCardManager(card: card)),
+      MaterialPageRoute(
+        builder: (context) => LoyaltyCardManager(card: card, isNewCard: true),
+      ),
     );
   }
 
@@ -38,7 +40,9 @@ class LoyaltyCardScanner extends StatelessWidget {
       usageCount: 0,
     );
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => LoyaltyCardManager(card: card)),
+      MaterialPageRoute(
+        builder: (context) => LoyaltyCardManager(card: card, isNewCard: true),
+      ),
     );
   }
 

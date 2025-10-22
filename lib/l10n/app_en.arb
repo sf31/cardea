@@ -20,6 +20,11 @@
     "@saveBtnLabel": {
         "description": "Label for save button"
     },
+    "addBtnLabel": "Add",
+    "@addBtnLabel": {
+        "description": "Label for add button"
+    },
+
 
 
     "loyaltyCardsLabel": "Loyalty Cards",
