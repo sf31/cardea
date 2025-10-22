@@ -2,12 +2,13 @@ import 'dart:collection';
 
 import 'package:cardea/data/models/loyalty_card.model.dart';
 import 'package:cardea/data/repositories/loyalty_card.repository.dart';
+import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_sort.dart';
 import 'package:flutter/material.dart';
 
 class LoyaltyCardViewModel with ChangeNotifier {
   final LoyaltyCardRepository repository;
   List<LoyaltyCard> _cardList = [];
-  String sortBy = 'alphabetical';
+  SortOption sortBy = SortOption.alphabetical;
   List<LoyaltyCard>? filteredCardList;
   String? filterString;
 
@@ -44,7 +45,7 @@ class LoyaltyCardViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void setSortBy(String newSortBy) async {
+  void setSortBy(SortOption newSortBy) async {
     await repository.setSortBy(newSortBy);
     sortBy = newSortBy;
     _sortCards();
@@ -68,11 +69,11 @@ class LoyaltyCardViewModel with ChangeNotifier {
   }
 
   void _sortCards() {
-    if (sortBy == 'alphabetical') {
+    if (sortBy == SortOption.alphabetical) {
       _cardList.sort(
         (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
       );
-    } else if (sortBy == 'most-used') {
+    } else if (sortBy == SortOption.mostUsed) {
       _cardList.sort((a, b) => b.usageCount.compareTo(a.usageCount));
     }
   }

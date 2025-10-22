@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'loyalty_card_list.dart';
+import 'loyalty_card_sort.dart';
 
 class LoyaltyCardHome extends StatelessWidget {
   final FocusNode findFocusNode = FocusNode();
@@ -16,34 +17,37 @@ class LoyaltyCardHome extends StatelessWidget {
   LoyaltyCardHome({super.key});
 
   void _sortBy(BuildContext context) async {
-    final List<String> options = ['alphabetical', 'most-used'];
     final vm = Provider.of<LoyaltyCardViewModel>(context, listen: false);
-    final sortBy = vm.sortBy;
-
-    final selectedOption = await showDialog<String>(
+    final selectedOption = await showDialog<SortOption>(
       context: context,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          title: Text(AppLocalizations.of(context)?.loyaltyCardSortBy ?? ''),
-          children:
-              options.map((option) {
-                return SimpleDialogOption(
-                  onPressed: () {
-                    Navigator.pop(context, option);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(option),
-                      if (sortBy == option)
-                        const Icon(Icons.check, color: Colors.green),
-                    ],
-                  ),
-                );
-              }).toList(),
-        );
-      },
+      builder:
+          (BuildContext context) => LoyaltyCardSort(currentSortBy: vm.sortBy),
     );
+
+    // final selectedOption = await showDialog<String>(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return SimpleDialog(
+    //       title: Text(AppLocalizations.of(context)?.loyaltyCardSortBy ?? ''),
+    //       children:
+    //           options.map((option) {
+    //             return SimpleDialogOption(
+    //               onPressed: () {
+    //                 Navigator.pop(context, option);
+    //               },
+    //               child: Row(
+    //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                 children: [
+    //                   Text(option),
+    //                   if (sortBy == option)
+    //                     const Icon(Icons.check, color: Colors.green),
+    //                 ],
+    //               ),
+    //             );
+    //           }).toList(),
+    //     );
+    //   },
+    // );
 
     if (selectedOption != null) {
       vm.setSortBy(selectedOption);

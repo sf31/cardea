@@ -25,6 +25,8 @@
     "loyaltyCardEmptyLabel": "Mmmh... niente qui per ora!",
     "loyaltyCardEmptyBtn": "Tocca il pulsante + qui sotto per aggiungere la tua prima carta.",
     "loyaltyCardSortBy": "Ordina per",
+    "loyaltyCardSortByName": "Nome",
+    "loyaltyCardSortByUsage": "Utilizzo",
     "loyaltyCardSearchLabel": "Cerca",
     "loyaltyCardEmptySearchResult": "Nessun risultato trovato per {searchTerm}.",
 

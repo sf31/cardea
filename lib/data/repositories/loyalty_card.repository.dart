@@ -1,4 +1,5 @@
 import 'package:cardea/data/repositories/generic.repository.dart';
+import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_sort.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../models/loyalty_card.model.dart';
@@ -25,11 +26,11 @@ class LoyaltyCardRepository extends GenericRepository<LoyaltyCard> {
     return card.toMap();
   }
 
-  Future<void> setSortBy(String sortBy) async {
+  Future<void> setSortBy(SortOption sortBy) async {
     await _sharedPrefs.setLoyaltyCardSortBy(sortBy);
   }
 
-  Future<String> getSortBy() async {
+  Future<SortOption> getSortBy() async {
     return await _sharedPrefs.getLoyaltyCardSortBy();
   }
 }

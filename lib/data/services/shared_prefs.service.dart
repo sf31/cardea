@@ -1,15 +1,22 @@
+import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_sort.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesService {
-  Future<void> setLoyaltyCardSortBy(String sortBy) async {
+  Future<void> setLoyaltyCardSortBy(SortOption sortBy) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('sortBy', sortBy);
+    await prefs.setString('sortBy', sortBy.name);
   }
 
-  Future<String> getLoyaltyCardSortBy() async {
+  Future<SortOption> getLoyaltyCardSortBy() async {
     final prefs = await SharedPreferences.getInstance();
-    final sortBy = prefs.getString('sortBy') ?? 'alphabetical';
-    return sortBy;
+    final sortBy = prefs.getString('sortBy');
+    if (sortBy != null) {
+      return SortOption.values.firstWhere(
+        (e) => e.name == sortBy,
+        orElse: () => SortOption.alphabetical,
+      );
+    }
+    return SortOption.alphabetical;
   }
 
   Future<void> setThemeMode(String mode) async {

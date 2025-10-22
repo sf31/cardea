@@ -85,6 +85,14 @@
     "@loyaltyCardSortBy": {
         "description": "Label for sorting options"
     },
+    "loyaltyCardSortByName": "Name",
+    "@loyaltyCardSortBy": {
+        "description": "Label for sort by name option"
+    },
+    "loyaltyCardSortByUsage": "Usage",
+    "@loyaltyCardSortBy": {
+        "description": "Label for sort by usage option"
+    },
     "loyaltyCardSearchLabel": "Find a Card",
     "@loyaltyCardSearchLabel": {
         "description": "Label for the search bar to find a loyalty card"
