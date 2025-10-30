@@ -27,7 +27,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addBtnLabel => 'Add';
 
   @override
-  String get copyToClipboardBtnLabel => 'Add';
+  String get copyToClipboardBtnLabel => 'Copy';
 
   @override
   String get copiedToClipboardLabel => 'Copied to clipboard';

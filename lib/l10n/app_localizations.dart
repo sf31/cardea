@@ -137,7 +137,7 @@ abstract class AppLocalizations {
   /// No description provided for @copyToClipboardBtnLabel.
   ///
   /// In en, this message translates to:
-  /// **'Add'**
+  /// **'Copy'**
   String get copyToClipboardBtnLabel;
 
   /// No description provided for @copiedToClipboardLabel.
