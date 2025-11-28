@@ -77,14 +77,19 @@ class _ShoppingListTodoState extends State<ShoppingListTodo>
               return ListTile(
                 leading: IconButton(
                   icon: const Icon(Icons.check_box_outline_blank),
-                  onPressed: () => _onItemComplete(item),
+                  onPressed: () {
+                    _onItemComplete(item);
+                    HapticFeedback.vibrate();
+                  },
                 ),
                 title: Text(item.name),
                 onTap: () {
-                  _onItemComplete(item);
-                  HapticFeedback.vibrate();
+                  widget.onItemEdit(item);
+                  // HapticFeedback.vibrate();
                 },
-                onLongPress: () => widget.onItemEdit(item),
+                onLongPress: () {
+                  widget.onItemEdit(item);
+                },
               );
             },
           ),
