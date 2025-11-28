@@ -12,8 +12,17 @@ class ShoppingItemViewModel with ChangeNotifier {
     _loadItems();
   }
 
-  UnmodifiableListView<ShoppingItem> get itemList =>
-      UnmodifiableListView(_itemList);
+  UnmodifiableListView<ShoppingItem> get itemList {
+    final toDoItems =
+        _itemList.where((item) => item.completedAt == null).toList();
+    return UnmodifiableListView(toDoItems);
+  }
+
+  UnmodifiableListView<ShoppingItem> get itemListDone {
+    final doneItems =
+        _itemList.where((item) => item.completedAt != null).toList();
+    return UnmodifiableListView(doneItems);
+  }
 
   Future<void> _loadItems() async {
     _itemList = await repository.getAll();

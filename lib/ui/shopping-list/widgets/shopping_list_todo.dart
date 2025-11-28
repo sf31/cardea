@@ -46,7 +46,7 @@ class _ShoppingListTodoState extends State<ShoppingListTodo>
   }
 
   void _onItemComplete(ShoppingItem item) {
-    _getViewModel().removeById(item.id);
+    _getViewModel().setCompleted(item.id);
   }
 
   void _scrollToBottom() {
@@ -84,7 +84,7 @@ class _ShoppingListTodoState extends State<ShoppingListTodo>
                 ),
                 title: Text(item.name),
                 onTap: () {
-                  widget.onItemEdit(item);
+                  // widget.onItemEdit(item);
                   // HapticFeedback.vibrate();
                 },
                 onLongPress: () {
