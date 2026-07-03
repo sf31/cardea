@@ -5,40 +5,49 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:uuid/uuid.dart';
 
-class LoyaltyCardScanner extends StatelessWidget {
+class LoyaltyCardScanner extends StatefulWidget {
+  const LoyaltyCardScanner({super.key});
+
+  @override
+  State<LoyaltyCardScanner> createState() => _LoyaltyCardScannerState();
+}
+
+class _LoyaltyCardScannerState extends State<LoyaltyCardScanner> {
   final MobileScannerController _controller = MobileScannerController();
+  bool _isNavigating = false;
 
-  LoyaltyCardScanner({super.key});
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
-  void _handleBarcode(BarcodeCapture barcodes, BuildContext context) {
+  void _handleBarcode(BarcodeCapture barcodes) {
+    if (_isNavigating) return;
     Barcode? barcode = barcodes.barcodes.firstOrNull;
     String? value = barcode?.displayValue;
 
     if (value == null) return;
 
-    _controller.dispose();
-    LoyaltyCard card = LoyaltyCard(
-      id: const Uuid().v4(),
-      name: '',
-      barcode: value,
-      color: Colors.blue,
-      usageCount: 0,
-    );
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => LoyaltyCardManager(card: card, isNewCard: true),
-      ),
-    );
+    _openCardManager(barcode: value);
   }
 
-  void _manualAdd(BuildContext context) {
-    LoyaltyCard card = LoyaltyCard(
+  void _manualAdd() {
+    _openCardManager(barcode: '');
+  }
+
+  void _openCardManager({required String barcode}) {
+    if (_isNavigating) return;
+    _isNavigating = true;
+
+    final card = LoyaltyCard(
       id: const Uuid().v4(),
       name: '',
-      barcode: '',
+      barcode: barcode,
       color: Colors.blue,
       usageCount: 0,
     );
+
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => LoyaltyCardManager(card: card, isNewCard: true),
@@ -59,7 +68,7 @@ class LoyaltyCardScanner extends StatelessWidget {
         children: [
           MobileScanner(
             onDetect: (BarcodeCapture barcodes) {
-              _handleBarcode(barcodes, context);
+              _handleBarcode(barcodes);
             },
             controller: _controller,
           ),
@@ -90,7 +99,7 @@ class LoyaltyCardScanner extends StatelessWidget {
                           ),
                         ),
                         FilledButton(
-                          onPressed: () => _manualAdd(context),
+                          onPressed: _manualAdd,
                           child: Text(
                             AppLocalizations.of(
                                   context,
