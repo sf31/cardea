@@ -368,6 +368,24 @@ abstract class AppLocalizations {
   /// **'Failed to import data. Please ensure the file is valid.'**
   String get settingsImportError;
 
+  /// Title for the import confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Replace existing data?'**
+  String get settingsImportConfirmTitle;
+
+  /// Body text for the import confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Importing this file will replace your current cards and shopping list.'**
+  String get settingsImportConfirmBody;
+
+  /// Confirm action text for the import confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Import'**
+  String get settingsImportConfirmAction;
+
   /// Title for the shopping list section
   ///
   /// In en, this message translates to:

@@ -57,6 +57,9 @@
     "settingsImportInProgress": "Importazione in corso...",
     "settingsImportSuccess": "Dati importati con successo!",
     "settingsImportError": "Importazione dei dati non riuscita. Assicurati che il file sia valido.",
+    "settingsImportConfirmTitle": "Sostituire i dati esistenti?",
+    "settingsImportConfirmBody": "Importare questo file sostituirà le carte e la lista della spesa attuali.",
+    "settingsImportConfirmAction": "Importa",
 
 
     "shoppingListSectionTitle": "Lista della Spesa",

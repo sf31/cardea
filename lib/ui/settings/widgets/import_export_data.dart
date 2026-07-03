@@ -93,6 +93,7 @@ class _ImportExportDataState extends State<ImportExportData> {
 
   Future<void> importFromJson() async {
     try {
+      final l10n = AppLocalizations.of(context);
       final cardVm = Provider.of<LoyaltyCardViewModel>(context, listen: false);
       final shoppingVm = Provider.of<ShoppingItemViewModel>(
         context,
@@ -104,6 +105,29 @@ class _ImportExportDataState extends State<ImportExportData> {
       );
       if (!mounted) return;
 
+      if (result == null || result.files.single.path == null) return;
+
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder:
+            (context) => AlertDialog(
+              title: Text(l10n?.settingsImportConfirmTitle ?? ''),
+              content: Text(l10n?.settingsImportConfirmBody ?? ''),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text(l10n?.cancelBtnLabel ?? ''),
+                ),
+                FilledButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text(l10n?.settingsImportConfirmAction ?? ''),
+                ),
+              ],
+            ),
+      );
+      if (!mounted) return;
+      if (confirmed != true) return;
+
       setState(() {
         isImporting = true;
         importErrorMessage = null;
@@ -111,37 +135,31 @@ class _ImportExportDataState extends State<ImportExportData> {
 
       await Future.delayed(const Duration(milliseconds: 500));
 
-      if (result != null && result.files.single.path != null) {
-        final file = File(result.files.single.path!);
-        final json = await file.readAsString();
-        final data = jsonDecode(json);
-        final loyaltyCardsRaw = data['loyaltyCards'] ?? [];
-        final shoppingItemsRaw = data['shoppingItems'] ?? [];
+      final file = File(result.files.single.path!);
+      final json = await file.readAsString();
+      final data = jsonDecode(json);
+      final loyaltyCardsRaw = data['loyaltyCards'] ?? [];
+      final shoppingItemsRaw = data['shoppingItems'] ?? [];
 
-        final List<LoyaltyCard> loyaltyCards = [];
-        final List<ShoppingItem> shoppingItems = [];
+      final List<LoyaltyCard> loyaltyCards = [];
+      final List<ShoppingItem> shoppingItems = [];
 
-        for (var card in loyaltyCardsRaw) {
-          loyaltyCards.add(LoyaltyCard.fromMap(card));
-        }
-
-        for (var item in shoppingItemsRaw) {
-          shoppingItems.add(ShoppingItem.fromMap(item));
-        }
-
-        await cardVm.setAll(loyaltyCards);
-        await shoppingVm.setAll(shoppingItems);
-        if (!mounted) return;
-
-        setState(() {
-          isImporting = false;
-          importSuccess = true;
-        });
-      } else {
-        setState(() {
-          isImporting = false;
-        });
+      for (var card in loyaltyCardsRaw) {
+        loyaltyCards.add(LoyaltyCard.fromMap(card));
       }
+
+      for (var item in shoppingItemsRaw) {
+        shoppingItems.add(ShoppingItem.fromMap(item));
+      }
+
+      await cardVm.setAll(loyaltyCards);
+      await shoppingVm.setAll(shoppingItems);
+      if (!mounted) return;
+
+      setState(() {
+        isImporting = false;
+        importSuccess = true;
+      });
     } catch (e) {
       setState(() {
         isImporting = false;

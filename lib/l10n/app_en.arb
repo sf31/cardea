@@ -200,6 +200,18 @@
     "@settingImportError": {
         "description": "Error message displayed when data import fails"
     },
+    "settingsImportConfirmTitle": "Replace existing data?",
+    "@settingsImportConfirmTitle": {
+        "description": "Title for the import confirmation dialog"
+    },
+    "settingsImportConfirmBody": "Importing this file will replace your current cards and shopping list.",
+    "@settingsImportConfirmBody": {
+        "description": "Body text for the import confirmation dialog"
+    },
+    "settingsImportConfirmAction": "Import",
+    "@settingsImportConfirmAction": {
+        "description": "Confirm action text for the import confirmation dialog"
+    },
 
 
     "shoppingListSectionTitle": "Shopping List",

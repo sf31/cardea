@@ -151,6 +151,16 @@ class AppLocalizationsEn extends AppLocalizations {
       'Failed to import data. Please ensure the file is valid.';
 
   @override
+  String get settingsImportConfirmTitle => 'Replace existing data?';
+
+  @override
+  String get settingsImportConfirmBody =>
+      'Importing this file will replace your current cards and shopping list.';
+
+  @override
+  String get settingsImportConfirmAction => 'Import';
+
+  @override
   String get shoppingListSectionTitle => 'Shopping List';
 
   @override

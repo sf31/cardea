@@ -152,6 +152,16 @@ class AppLocalizationsIt extends AppLocalizations {
       'Importazione dei dati non riuscita. Assicurati che il file sia valido.';
 
   @override
+  String get settingsImportConfirmTitle => 'Sostituire i dati esistenti?';
+
+  @override
+  String get settingsImportConfirmBody =>
+      'L\'importazione di questo file sostituirà le carte e la lista della spesa attuali.';
+
+  @override
+  String get settingsImportConfirmAction => 'Importa';
+
+  @override
   String get shoppingListSectionTitle => 'Lista della Spesa';
 
   @override
