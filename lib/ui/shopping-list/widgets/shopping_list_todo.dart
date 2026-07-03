@@ -19,35 +19,14 @@ class ShoppingListTodo extends StatefulWidget {
   State<ShoppingListTodo> createState() => _ShoppingListTodoState();
 }
 
-class _ShoppingListTodoState extends State<ShoppingListTodo>
-    with WidgetsBindingObserver {
-  final ScrollController _scrollController = ScrollController();
-
+class _ShoppingListTodoState extends State<ShoppingListTodo> {
   ShoppingItemViewModel _getViewModel() {
     return Provider.of<ShoppingItemViewModel>(context, listen: false);
   }
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  void didChangeMetrics() {
-    _scrollToBottom();
-  }
-
   Future<void> _onItemComplete(ShoppingItem item) async {
     final vm = _getViewModel();
-    final success = await vm.setCompleted(item.id);
+    final success = await vm.toggleCompleted(item.id);
     if (!mounted) return;
     if (!success && vm.errorMessage != null) {
       ScaffoldMessenger.of(
@@ -56,50 +35,34 @@ class _ShoppingListTodoState extends State<ShoppingListTodo>
     }
   }
 
-  void _scrollToBottom() {
-    if (!widget.showNewItem) return;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeOut,
-        );
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<ShoppingItemViewModel>(
       builder: (context, vm, child) {
-        _scrollToBottom();
-
-        return Expanded(
-          child: ListView.builder(
-            controller: _scrollController,
-            itemCount: vm.itemList.length,
-            itemBuilder: (context, index) {
-              final item = vm.itemList[index];
-              return ListTile(
-                leading: IconButton(
-                  icon: const Icon(Icons.check_box_outline_blank),
-                  onPressed: () async {
-                    await _onItemComplete(item);
-                    HapticFeedback.vibrate();
-                  },
-                ),
-                title: Text(item.name),
-                onTap: () {
-                  // widget.onItemEdit(item);
-                  // HapticFeedback.vibrate();
+        return ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: vm.itemList.length,
+          itemBuilder: (context, index) {
+            final item = vm.itemList[index];
+            return ListTile(
+              leading: IconButton(
+                icon: const Icon(Icons.check_box_outline_blank),
+                onPressed: () async {
+                  await _onItemComplete(item);
+                  HapticFeedback.vibrate();
                 },
-                onLongPress: () {
-                  widget.onItemEdit(item);
-                },
-              );
-            },
-          ),
+              ),
+              title: Text(item.name),
+              onTap: () {
+                // widget.onItemEdit(item);
+                // HapticFeedback.vibrate();
+              },
+              onLongPress: () {
+                widget.onItemEdit(item);
+              },
+            );
+          },
         );
       },
     );

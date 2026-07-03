@@ -171,4 +171,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shoppingListInputHint => 'What do you need to buy?';
+
+  @override
+  String shoppingListCompletedSectionTitle(int count) {
+    return 'Completed ($count)';
+  }
 }

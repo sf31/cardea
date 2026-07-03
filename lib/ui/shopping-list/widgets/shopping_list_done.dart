@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../shopping_item.viewmodel.dart';
@@ -11,66 +12,43 @@ class ShoppingListDone extends StatefulWidget {
 }
 
 class _ShoppingListDoneState extends State<ShoppingListDone> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
+  Future<void> _onItemComplete(ShoppingItemViewModel vm, String id) async {
+    final success = await vm.toggleCompleted(id);
+    if (!mounted) return;
+    if (!success && vm.errorMessage != null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(vm.errorMessage!)));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<ShoppingItemViewModel>(
       builder: (context, vm, child) {
-        return Expanded(
-          child: ListView.builder(
-            itemCount: vm.itemListDone.length,
-            itemBuilder: (context, index) {
-              final item = vm.itemListDone[index];
-              return ListTile(
-                leading: IconButton(
-                  icon: const Icon(Icons.check_box),
-                  onPressed: () {
-                    // _onItemComplete(item);
-                    // HapticFeedback.vibrate();
-                  },
-                ),
-                title: Text(
-                  item.name,
-                  style: const TextStyle(
-                    decoration: TextDecoration.lineThrough,
-                    color: Colors.grey,
-                  ),
-                ),
-                onTap: () {
-                  // widget.onItemEdit(item);
-                  // HapticFeedback.vibrate();
+        return ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: vm.itemListDone.length,
+          itemBuilder: (context, index) {
+            final item = vm.itemListDone[index];
+            return ListTile(
+              leading: IconButton(
+                icon: const Icon(Icons.check_box),
+                onPressed: () async {
+                  await _onItemComplete(vm, item.id);
+                  HapticFeedback.vibrate();
                 },
-                onLongPress: () {
-                  // widget.onItemEdit(item);
-                },
-              ); // return ListTile(
-              //   leading: IconButton(
-              //     icon: const Icon(Icons.check_box_outline_blank),
-              //     onPressed: () {
-              //       _onItemComplete(item);
-              //       HapticFeedback.vibrate();
-              //     },
-              //   ),
-              //   title: Text(item.name),
-              //   onTap: () {
-              //     // widget.onItemEdit(item);
-              //     HapticFeedback.vibrate();
-              //   },
-              //   onLongPress: () {
-              //     // widget.onItemEdit(item);
-              //   },
-              // );
-            },
-          ),
+              ),
+              title: Text(
+                item.name,
+                style: const TextStyle(
+                  decoration: TextDecoration.lineThrough,
+                  color: Colors.grey,
+                ),
+              ),
+            );
+          },
         );
       },
     );

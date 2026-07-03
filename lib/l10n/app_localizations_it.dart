@@ -156,7 +156,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settingsImportConfirmBody =>
-      'L\'importazione di questo file sostituirà le carte e la lista della spesa attuali.';
+      'Importare questo file sostituirà le carte e la lista della spesa attuali.';
 
   @override
   String get settingsImportConfirmAction => 'Importa';
@@ -172,4 +172,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get shoppingListInputHint => 'Cosa devi comprare?';
+
+  @override
+  String shoppingListCompletedSectionTitle(int count) {
+    return 'Completati ($count)';
+  }
 }

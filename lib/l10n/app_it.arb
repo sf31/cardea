@@ -65,5 +65,6 @@
     "shoppingListSectionTitle": "Lista della Spesa",
     "shoppingListNewItemBtn": "Aggiungi",
     "shoppingListEmptyLabel": "La tua lista della spesa è vuota!",
-    "shoppingListInputHint": "Cosa devi comprare?"
+    "shoppingListInputHint": "Cosa devi comprare?",
+    "shoppingListCompletedSectionTitle": "Completati ({count})"
 }

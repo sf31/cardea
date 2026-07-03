@@ -409,6 +409,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'What do you need to buy?'**
   String get shoppingListInputHint;
+
+  /// Title for the completed shopping items section
+  ///
+  /// In en, this message translates to:
+  /// **'Completed ({count})'**
+  String shoppingListCompletedSectionTitle(int count);
 }
 
 class _AppLocalizationsDelegate

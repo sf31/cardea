@@ -1,5 +1,6 @@
 import 'package:cardea/data/models/shopping_item.model.dart';
 import 'package:cardea/l10n/app_localizations.dart';
+import 'package:cardea/ui/shopping-list/widgets/shopping_list_done.dart';
 import 'package:cardea/ui/shopping-list/widgets/shopping_list_todo.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,9 @@ class ShoppingList extends StatefulWidget {
 
 class _ShoppingListState extends State<ShoppingList> {
   bool _showNewItem = false;
+  bool _showCompletedItems = false;
   ShoppingItem? _itemToEdit;
+  final ScrollController _scrollController = ScrollController();
 
   ShoppingItemViewModel _getViewModel() {
     return Provider.of<ShoppingItemViewModel>(context, listen: false);
@@ -65,6 +68,24 @@ class _ShoppingListState extends State<ShoppingList> {
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToBottom() {
+    if (!_showNewItem) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_scrollController.hasClients) return;
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+      );
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return Scaffold(
@@ -83,7 +104,9 @@ class _ShoppingListState extends State<ShoppingList> {
       ),
       body: Consumer<ShoppingItemViewModel>(
         builder: (context, provider, child) {
-          if (provider.itemList.isEmpty && !_showNewItem) {
+          if (provider.itemList.isEmpty &&
+              provider.itemListDone.isEmpty &&
+              !_showNewItem) {
             return Center(
               child: Text(
                 l10n?.shoppingListEmptyLabel ?? '',
@@ -95,23 +118,55 @@ class _ShoppingListState extends State<ShoppingList> {
               ),
             );
           }
+          _scrollToBottom();
           return Column(
             children: [
-              ShoppingListTodo(
-                onItemEdit: onItemEdit,
-                showNewItem: _showNewItem,
+              Expanded(
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  padding: EdgeInsets.only(
+                    bottom: _showNewItem ? 0 : kFloatingActionButtonMargin + 56,
+                  ),
+                  child: Column(
+                    children: [
+                      ShoppingListTodo(
+                        onItemEdit: onItemEdit,
+                        showNewItem: _showNewItem,
+                      ),
+                      if (provider.itemListDone.isNotEmpty)
+                        Card(
+                          margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                          child: ExpansionTile(
+                            initiallyExpanded: _showCompletedItems,
+                            onExpansionChanged:
+                                (expanded) => setState(
+                                  () => _showCompletedItems = expanded,
+                                ),
+                            title: Text(
+                              l10n?.shoppingListCompletedSectionTitle(
+                                    provider.itemListDone.length,
+                                  ) ??
+                                  '',
+                            ),
+                            children: const [ShoppingListDone()],
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
               ),
-              _showNewItem
-                  ? InputShoppingItem(
-                    onNameConfirm: onNameChanged,
-                    focusLostCallback:
-                        () => setState(() {
-                          _showNewItem = false;
-                          _itemToEdit = null;
-                        }),
-                    name: _itemToEdit?.name,
-                  )
-                  : SizedBox(),
+              if (_showNewItem)
+                InputShoppingItem(
+                  onNameConfirm: onNameChanged,
+                  focusLostCallback:
+                      () => setState(() {
+                        _showNewItem = false;
+                        _itemToEdit = null;
+                      }),
+                  name: _itemToEdit?.name,
+                )
+              else
+                SizedBox(),
             ],
           );
         },

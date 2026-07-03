@@ -53,7 +53,7 @@ class ShoppingItemViewModel with ChangeNotifier {
     }
   }
 
-  Future<bool> setCompleted(String id) async {
+  Future<bool> toggleCompleted(String id) async {
     int currentIndex = _itemList.indexWhere((c) => c.id == id);
     if (currentIndex != -1) {
       bool completed = _itemList[currentIndex].completedAt != null;

@@ -229,5 +229,15 @@
     "shoppingListInputHint": "What do you need to buy?",
     "@shoppingListInputHint": {
         "description": "Hint text for the shopping list input field"
+    },
+    "shoppingListCompletedSectionTitle": "Completed ({count})",
+    "@shoppingListCompletedSectionTitle": {
+        "description": "Title for the completed shopping items section",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "3"
+            }
+        }
     }
 }
