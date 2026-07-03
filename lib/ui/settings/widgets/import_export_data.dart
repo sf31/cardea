@@ -30,9 +30,11 @@ class _ImportExportDataState extends State<ImportExportData> {
   String? importErrorMessage;
 
   Future saveJsonToFile(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
     try {
       setState(() {
         exportErrorMessage = null;
+        exportSuccess = false;
         isExporting = true;
       });
 
@@ -79,12 +81,12 @@ class _ImportExportDataState extends State<ImportExportData> {
         setState(() {
           isExporting = false;
           exportSuccess = false;
-          exportErrorMessage = '';
+          exportErrorMessage = null;
         });
       }
     } catch (e) {
       setState(() {
-        exportErrorMessage = 'Export failed: $e';
+        exportErrorMessage = l10n?.settingsExportError ?? '';
         isExporting = false;
         exportSuccess = false;
       });
@@ -131,6 +133,7 @@ class _ImportExportDataState extends State<ImportExportData> {
       setState(() {
         isImporting = true;
         importErrorMessage = null;
+        importSuccess = false;
       });
 
       await Future.delayed(const Duration(milliseconds: 500));
@@ -159,11 +162,14 @@ class _ImportExportDataState extends State<ImportExportData> {
       setState(() {
         isImporting = false;
         importSuccess = true;
+        importErrorMessage = null;
       });
     } catch (e) {
+      final l10n = AppLocalizations.of(context);
       setState(() {
         isImporting = false;
         importSuccess = false;
+        importErrorMessage = l10n?.settingsImportError ?? '';
       });
     }
   }
