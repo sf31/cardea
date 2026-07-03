@@ -15,12 +15,16 @@ class LoyaltyCardItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
         HapticFeedback.vibrate();
-        Provider.of<LoyaltyCardViewModel>(
-          context,
-          listen: false,
-        ).incrementUsageCount(card);
+        final vm = Provider.of<LoyaltyCardViewModel>(context, listen: false);
+        final success = await vm.incrementUsageCount(card);
+        if (!context.mounted) return;
+        if (!success && vm.errorMessage != null) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(vm.errorMessage!)));
+        }
         showModalBottomSheet(
           showDragHandle: true,
           context: context,

@@ -45,8 +45,15 @@ class _ShoppingListTodoState extends State<ShoppingListTodo>
     _scrollToBottom();
   }
 
-  void _onItemComplete(ShoppingItem item) {
-    _getViewModel().setCompleted(item.id);
+  Future<void> _onItemComplete(ShoppingItem item) async {
+    final vm = _getViewModel();
+    final success = await vm.setCompleted(item.id);
+    if (!mounted) return;
+    if (!success && vm.errorMessage != null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(vm.errorMessage!)));
+    }
   }
 
   void _scrollToBottom() {
@@ -77,8 +84,8 @@ class _ShoppingListTodoState extends State<ShoppingListTodo>
               return ListTile(
                 leading: IconButton(
                   icon: const Icon(Icons.check_box_outline_blank),
-                  onPressed: () {
-                    _onItemComplete(item);
+                  onPressed: () async {
+                    await _onItemComplete(item);
                     HapticFeedback.vibrate();
                   },
                 ),

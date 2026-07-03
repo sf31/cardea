@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 class ShoppingItemViewModel with ChangeNotifier {
   final ShoppingItemRepository repository;
   List<ShoppingItem> _itemList = [];
+  String? errorMessage;
 
   ShoppingItemViewModel({required this.repository}) : super() {
     _loadItems();
@@ -29,37 +30,75 @@ class ShoppingItemViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void upsert(ShoppingItem item) {
+  Future<bool> upsert(ShoppingItem item) async {
     int currentIndex = _itemList.indexWhere((c) => c.id == item.id);
-    if (currentIndex != -1) {
-      _itemList[currentIndex] = item;
-      repository.update(item);
-    } else {
-      _itemList.add(item);
-      repository.create(item);
+    try {
+      if (currentIndex != -1) {
+        await repository.update(item);
+        _itemList[currentIndex] = item;
+      } else {
+        await repository.create(item);
+        _itemList.add(item);
+      }
+      errorMessage = null;
+      notifyListeners();
+      return true;
+    } catch (_) {
+      errorMessage = 'Unable to save changes.';
+      notifyListeners();
+      return false;
     }
-    notifyListeners();
   }
 
-  void setCompleted(String id) {
+  Future<bool> setCompleted(String id) async {
     int currentIndex = _itemList.indexWhere((c) => c.id == id);
     if (currentIndex != -1) {
       bool completed = _itemList[currentIndex].completedAt != null;
-      _itemList[currentIndex].completedAt = completed ? null : DateTime.now();
-      repository.update(_itemList[currentIndex]);
-      notifyListeners();
+      final updatedItem = ShoppingItem(
+        id: _itemList[currentIndex].id,
+        name: _itemList[currentIndex].name,
+        updatedAt: _itemList[currentIndex].updatedAt,
+        completedAt: completed ? null : DateTime.now(),
+      );
+      try {
+        await repository.update(updatedItem);
+        _itemList[currentIndex] = updatedItem;
+        errorMessage = null;
+        notifyListeners();
+        return true;
+      } catch (_) {
+        errorMessage = 'Unable to save changes.';
+        notifyListeners();
+        return false;
+      }
     }
+    return false;
   }
 
-  void removeById(String id) {
-    _itemList.removeWhere((card) => card.id == id);
-    repository.delete(id);
-    notifyListeners();
+  Future<bool> removeById(String id) async {
+    try {
+      await repository.delete(id);
+      _itemList.removeWhere((card) => card.id == id);
+      errorMessage = null;
+      notifyListeners();
+      return true;
+    } catch (_) {
+      errorMessage = 'Unable to save changes.';
+      notifyListeners();
+      return false;
+    }
   }
 
   Future<void> setAll(List<ShoppingItem> items) async {
     await repository.setAll(items);
     _itemList = items;
     notifyListeners();
+  }
+
+  void clearError() {
+    if (errorMessage != null) {
+      errorMessage = null;
+      notifyListeners();
+    }
   }
 }

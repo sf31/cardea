@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class InputShoppingItem extends StatefulWidget {
   final String? name;
-  final void Function(String text, bool isChecked) onNameConfirm;
+  final Future<bool> Function(String text, bool isChecked) onNameConfirm;
   final void Function() focusLostCallback;
 
   const InputShoppingItem({
@@ -22,9 +22,9 @@ class _InputShoppingItemState extends State<InputShoppingItem> {
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
 
-  void _submit(bool dismiss) {
-    widget.onNameConfirm(_controller.text, dismiss);
-    _controller.clear();
+  Future<void> _submit(bool dismiss) async {
+    final success = await widget.onNameConfirm(_controller.text, dismiss);
+    if (success) _controller.clear();
   }
 
   @override
@@ -49,7 +49,7 @@ class _InputShoppingItemState extends State<InputShoppingItem> {
         onTapOutside: (evt) => widget.focusLostCallback(),
         focusNode: _focusNode,
         controller: _controller,
-        onSubmitted: (_) => _submit(true),
+        onSubmitted: (_) async => _submit(true),
         style: themedInputTextStyle(context),
         decoration: themedInputDecoration(context).copyWith(
           hintText: AppLocalizations.of(context)?.shoppingListInputHint,
@@ -60,7 +60,7 @@ class _InputShoppingItemState extends State<InputShoppingItem> {
           ),
           suffixIcon: IconButton(
             icon: Icon(Icons.add_circle, color: Colors.green[600]),
-            onPressed: () => _submit(false),
+            onPressed: () async => _submit(false),
           ),
         ),
       ),

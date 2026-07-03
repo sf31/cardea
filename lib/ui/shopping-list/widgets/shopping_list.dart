@@ -23,15 +23,30 @@ class _ShoppingListState extends State<ShoppingList> {
     return Provider.of<ShoppingItemViewModel>(context, listen: false);
   }
 
-  void onNameChanged(String name, bool dismiss) {
+  void _showPersistenceError(String? message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message ?? 'Unable to save changes.')),
+    );
+  }
+
+  Future<bool> onNameChanged(String name, bool dismiss) async {
     final itemToEdit = _itemToEdit;
+    bool success = true;
 
     if (name.isNotEmpty) {
+      final vm = _getViewModel();
       if (itemToEdit == null) {
-        _getViewModel().upsert(ShoppingItem.fromName(name));
+        success = await vm.upsert(ShoppingItem.fromName(name));
       } else {
         final newItem = itemToEdit.copyWith(name: name);
-        _getViewModel().upsert(newItem);
+        success = await vm.upsert(newItem);
+      }
+      if (!mounted) return false;
+      if (!success) {
+        _showPersistenceError(vm.errorMessage);
+        return false;
+      }
+      if (itemToEdit != null) {
         setState(() {
           _itemToEdit = null;
           _showNewItem = false;
@@ -40,6 +55,7 @@ class _ShoppingListState extends State<ShoppingList> {
     }
 
     if (dismiss) setState(() => _showNewItem = false);
+    return true;
   }
 
   void onItemEdit(ShoppingItem item) {

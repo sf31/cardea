@@ -45,12 +45,19 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
     super.dispose();
   }
 
-  void _onSave() {
+  void _showPersistenceError(String? message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message ?? 'Unable to save changes.')),
+    );
+  }
+
+  Future<void> _onSave() async {
     if (_formKey.currentState!.validate()) {
       final name = _nameController.text;
       final barcode = _barcodeController.text;
+      final vm = Provider.of<LoyaltyCardViewModel>(context, listen: false);
 
-      Provider.of<LoyaltyCardViewModel>(context, listen: false).upsert(
+      final success = await vm.upsert(
         LoyaltyCard(
           id: widget.card.id,
           name: name,
@@ -59,15 +66,23 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
           usageCount: widget.card.usageCount,
         ),
       );
+      if (!mounted) return;
+      if (!success) {
+        _showPersistenceError(vm.errorMessage);
+        return;
+      }
       Navigator.of(context).pop();
     }
   }
 
-  void _onDelete() {
-    Provider.of<LoyaltyCardViewModel>(
-      context,
-      listen: false,
-    ).removeById(widget.card.id);
+  Future<void> _onDelete() async {
+    final vm = Provider.of<LoyaltyCardViewModel>(context, listen: false);
+    final success = await vm.removeById(widget.card.id);
+    if (!mounted) return;
+    if (!success) {
+      _showPersistenceError(vm.errorMessage);
+      return;
+    }
     Navigator.of(context).pop();
   }
 

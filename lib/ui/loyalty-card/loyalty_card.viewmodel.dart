@@ -11,6 +11,7 @@ class LoyaltyCardViewModel with ChangeNotifier {
   SortOption sortBy = SortOption.alphabetical;
   List<LoyaltyCard>? filteredCardList;
   String? filterString;
+  String? errorMessage;
 
   LoyaltyCardViewModel({required this.repository}) : super() {
     loadCards();
@@ -26,23 +27,39 @@ class LoyaltyCardViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void upsert(LoyaltyCard card) {
+  Future<bool> upsert(LoyaltyCard card) async {
     int currentIndex = _cardList.indexWhere((c) => c.id == card.id);
-    if (currentIndex != -1) {
-      _cardList[currentIndex] = card;
-      repository.update(card);
-    } else {
-      _cardList.add(card);
-      repository.create(card);
+    try {
+      if (currentIndex != -1) {
+        await repository.update(card);
+        _cardList[currentIndex] = card;
+      } else {
+        await repository.create(card);
+        _cardList.add(card);
+      }
+      errorMessage = null;
+      _sortCards();
+      notifyListeners();
+      return true;
+    } catch (_) {
+      errorMessage = 'Unable to save changes.';
+      notifyListeners();
+      return false;
     }
-    _sortCards();
-    notifyListeners();
   }
 
-  void removeById(String id) {
-    _cardList.removeWhere((card) => card.id == id);
-    repository.delete(id);
-    notifyListeners();
+  Future<bool> removeById(String id) async {
+    try {
+      await repository.delete(id);
+      _cardList.removeWhere((card) => card.id == id);
+      errorMessage = null;
+      notifyListeners();
+      return true;
+    } catch (_) {
+      errorMessage = 'Unable to save changes.';
+      notifyListeners();
+      return false;
+    }
   }
 
   void setSortBy(SortOption newSortBy) async {
@@ -52,11 +69,35 @@ class LoyaltyCardViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void incrementUsageCount(LoyaltyCard card) {
+  Future<bool> incrementUsageCount(LoyaltyCard card) async {
     int index = _cardList.indexWhere((c) => c.id == card.id);
     if (index != -1) {
-      _cardList[index].usageCount++;
-      repository.update(_cardList[index]);
+      final updatedCard = LoyaltyCard(
+        id: _cardList[index].id,
+        name: _cardList[index].name,
+        barcode: _cardList[index].barcode,
+        color: _cardList[index].color,
+        usageCount: _cardList[index].usageCount + 1,
+        updatedAt: _cardList[index].updatedAt,
+      );
+      try {
+        await repository.update(updatedCard);
+        _cardList[index] = updatedCard;
+        errorMessage = null;
+        notifyListeners();
+        return true;
+      } catch (_) {
+        errorMessage = 'Unable to save changes.';
+        notifyListeners();
+        return false;
+      }
+    }
+    return false;
+  }
+
+  void clearError() {
+    if (errorMessage != null) {
+      errorMessage = null;
       notifyListeners();
     }
   }
