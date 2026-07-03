@@ -47,7 +47,7 @@ class _ImportExportDataState extends State<ImportExportData> {
       );
 
       final loyaltyCardList = loyaltyCardVm.cardList;
-      final shoppingList = shoppingItemVm.itemList;
+      final shoppingList = shoppingItemVm.allItems;
 
       final json = jsonEncode({
         'loyaltyCards':

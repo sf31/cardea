@@ -13,6 +13,9 @@ class ShoppingItemViewModel with ChangeNotifier {
     _loadItems();
   }
 
+  UnmodifiableListView<ShoppingItem> get allItems =>
+      UnmodifiableListView(_itemList);
+
   UnmodifiableListView<ShoppingItem> get itemList {
     final toDoItems =
         _itemList.where((item) => item.completedAt == null).toList();

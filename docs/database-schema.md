@@ -20,6 +20,21 @@ as production data: schema changes must be backward-compatible and migrated.
 - Import/export compatibility should be considered when changing persisted
   fields.
 
+## Schema Change Checklist
+
+Before releasing a schema change:
+
+- [ ] Increment the `openDatabase` version.
+- [ ] Add an `onUpgrade` migration for every previously published version that
+  can upgrade to the new version.
+- [ ] Keep migration code data-preserving unless a destructive change is
+  explicitly intentional.
+- [ ] Verify a fresh install creates the expected latest schema.
+- [ ] Verify an upgrade from the previous published app preserves existing
+  cards and shopping items.
+- [ ] Check whether JSON import/export needs compatibility handling.
+- [ ] Update this document with the new schema version.
+
 ## Table: `loyalty_cards`
 
 Created by schema `v1`:
