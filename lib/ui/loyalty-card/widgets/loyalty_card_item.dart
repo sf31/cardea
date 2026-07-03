@@ -28,7 +28,7 @@ class LoyaltyCardItem extends StatelessWidget {
         showModalBottomSheet(
           showDragHandle: true,
           context: context,
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           builder: (BuildContext context) {
             return LoyaltyCardDetails(card: card);
           },

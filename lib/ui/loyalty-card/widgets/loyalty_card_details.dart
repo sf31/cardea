@@ -27,6 +27,7 @@ class _LoyaltyCardDetailsState extends State<LoyaltyCardDetails> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       children: [
         Padding(
@@ -34,7 +35,7 @@ class _LoyaltyCardDetailsState extends State<LoyaltyCardDetails> {
           child: Text(
             widget.card.name,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 30, color: Colors.black),
+            style: TextStyle(fontSize: 30, color: colorScheme.onSurface),
           ),
         ),
         BarcodeWidget(
@@ -52,7 +53,7 @@ class _LoyaltyCardDetailsState extends State<LoyaltyCardDetails> {
             children: [
               Text(
                 widget.card.barcode,
-                style: TextStyle(fontSize: 20, color: Colors.black),
+                style: TextStyle(fontSize: 20, color: colorScheme.onSurface),
               ),
               _copied
                   ? TextButton(
