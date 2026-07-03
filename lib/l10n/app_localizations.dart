@@ -128,19 +128,19 @@ abstract class AppLocalizations {
   /// **'Save'**
   String get saveBtnLabel;
 
-  /// Label for copied to clipboard confirmation
+  /// Label for add button
   ///
   /// In en, this message translates to:
   /// **'Add'**
   String get addBtnLabel;
 
-  /// No description provided for @copyToClipboardBtnLabel.
+  /// Label for copy to clipboard button
   ///
   /// In en, this message translates to:
   /// **'Copy'**
   String get copyToClipboardBtnLabel;
 
-  /// No description provided for @copiedToClipboardLabel.
+  /// Label for copied to clipboard confirmation
   ///
   /// In en, this message translates to:
   /// **'Copied to clipboard'**
@@ -218,19 +218,19 @@ abstract class AppLocalizations {
   /// **'Tap the + button below to add your first Card.'**
   String get loyaltyCardEmptyBtn;
 
-  /// Label for sort by usage option
+  /// Label for sorting options
   ///
   /// In en, this message translates to:
   /// **'Sort by'**
   String get loyaltyCardSortBy;
 
-  /// No description provided for @loyaltyCardSortByName.
+  /// Label for sort by name option
   ///
   /// In en, this message translates to:
   /// **'Name'**
   String get loyaltyCardSortByName;
 
-  /// No description provided for @loyaltyCardSortByUsage.
+  /// Label for sort by usage option
   ///
   /// In en, this message translates to:
   /// **'Usage'**
@@ -308,61 +308,61 @@ abstract class AppLocalizations {
   /// **'Dark Theme'**
   String get settingsDarkTheme;
 
-  /// No description provided for @settingsExportLabel.
+  /// Label for the export option in import/export settings
   ///
   /// In en, this message translates to:
   /// **'Export'**
   String get settingsExportLabel;
 
-  /// No description provided for @settingsExportBtn.
+  /// Button text to export data
   ///
   /// In en, this message translates to:
   /// **'Export Data'**
   String get settingsExportBtn;
 
-  /// No description provided for @settingsExportInProgress.
+  /// Text displayed while export is in progress
   ///
   /// In en, this message translates to:
   /// **'Exporting...'**
   String get settingsExportInProgress;
 
-  /// No description provided for @settingsExportSuccess.
+  /// Message displayed when data export is successful
   ///
   /// In en, this message translates to:
   /// **'Data exported successfully!'**
   String get settingsExportSuccess;
 
-  /// No description provided for @settingsExportError.
+  /// Error message displayed when data export fails
   ///
   /// In en, this message translates to:
   /// **'Failed to export data. Please try again.'**
   String get settingsExportError;
 
-  /// No description provided for @settingsImportLabel.
+  /// Label for the import option in import/export settings
   ///
   /// In en, this message translates to:
   /// **'Import'**
   String get settingsImportLabel;
 
-  /// No description provided for @settingsImportBtn.
+  /// Button text to import data
   ///
   /// In en, this message translates to:
   /// **'Select file'**
   String get settingsImportBtn;
 
-  /// No description provided for @settingsImportInProgress.
+  /// Text displayed while import is in progress
   ///
   /// In en, this message translates to:
   /// **'Importing...'**
   String get settingsImportInProgress;
 
-  /// No description provided for @settingsImportSuccess.
+  /// Message displayed when data import is successful
   ///
   /// In en, this message translates to:
   /// **'Data imported successfully!'**
   String get settingsImportSuccess;
 
-  /// No description provided for @settingsImportError.
+  /// Error message displayed when data import fails
   ///
   /// In en, this message translates to:
   /// **'Failed to import data. Please ensure the file is valid.'**

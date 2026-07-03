@@ -25,11 +25,11 @@
         "description": "Label for add button"
     },
     "copyToClipboardBtnLabel": "Copy",
-    "@addBtnLabel": {
+    "@copyToClipboardBtnLabel": {
         "description": "Label for copy to clipboard button"
     },
     "copiedToClipboardLabel": "Copied to clipboard",
-    "@addBtnLabel": {
+    "@copiedToClipboardLabel": {
         "description": "Label for copied to clipboard confirmation"
     },
 
@@ -94,11 +94,11 @@
         "description": "Label for sorting options"
     },
     "loyaltyCardSortByName": "Name",
-    "@loyaltyCardSortBy": {
+    "@loyaltyCardSortByName": {
         "description": "Label for sort by name option"
     },
     "loyaltyCardSortByUsage": "Usage",
-    "@loyaltyCardSortBy": {
+    "@loyaltyCardSortByUsage": {
         "description": "Label for sort by usage option"
     },
     "loyaltyCardSearchLabel": "Find a Card",
@@ -160,44 +160,44 @@
         "description": "Button text for the theme option in settings"
     },
     "settingsExportLabel": "Export",
-    "@settingExportLabel": {
+    "@settingsExportLabel": {
         "description": "Label for the export option in import/export settings"
     },
     "settingsExportBtn": "Export Data",
-    "@settingExportBtn": {
+    "@settingsExportBtn": {
         "description": "Button text to export data"
     },
     "settingsExportInProgress": "Exporting...",
-    "@settingExportInProgress": {
+    "@settingsExportInProgress": {
         "description": "Text displayed while export is in progress"
     },
     "settingsExportSuccess": "Data exported successfully!",
-    "@settingExportSuccess": {
+    "@settingsExportSuccess": {
         "description": "Message displayed when data export is successful"
     },
     "settingsExportError": "Failed to export data. Please try again.",
-    "@settingExportError": {
+    "@settingsExportError": {
         "description": "Error message displayed when data export fails"
     },
 
     "settingsImportLabel": "Import",
-    "@settingImportLabel": {
+    "@settingsImportLabel": {
         "description": "Label for the import option in import/export settings"
     },
     "settingsImportBtn": "Select file",
-    "@settingImportBtn": {
+    "@settingsImportBtn": {
         "description": "Button text to import data"
     },
     "settingsImportInProgress": "Importing...",
-    "@settingImportInProgress": {
+    "@settingsImportInProgress": {
         "description": "Text displayed while import is in progress"
     },
     "settingsImportSuccess": "Data imported successfully!",
-    "@settingImportSuccess": {
+    "@settingsImportSuccess": {
         "description": "Message displayed when data import is successful"
     },
     "settingsImportError": "Failed to import data. Please ensure the file is valid.",
-    "@settingImportError": {
+    "@settingsImportError": {
         "description": "Error message displayed when data import fails"
     },
     "settingsImportConfirmTitle": "Replace existing data?",
