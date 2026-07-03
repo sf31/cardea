@@ -66,7 +66,7 @@ abstract class GenericRepository<T extends BaseModel> {
     await db.delete(tableName);
   }
 
-  _getEntityWithUpdatedAt(T entity) {
+  T _getEntityWithUpdatedAt(T entity) {
     final now = DateTime.now();
     return entity.copyWith(updatedAt: now) as T;
   }

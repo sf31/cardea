@@ -21,6 +21,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (await _prefsService.earlyAccessAlertShown()) return;
+      if (!mounted) return;
 
       showDialog(
         context: context,

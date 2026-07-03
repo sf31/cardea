@@ -1,4 +1,3 @@
-import 'package:cardea/data/models/shopping_item.model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,10 +11,6 @@ class ShoppingListDone extends StatefulWidget {
 }
 
 class _ShoppingListDoneState extends State<ShoppingListDone> {
-  ShoppingItemViewModel _getViewModel() {
-    return Provider.of<ShoppingItemViewModel>(context, listen: false);
-  }
-
   @override
   void initState() {
     super.initState();
@@ -24,10 +19,6 @@ class _ShoppingListDoneState extends State<ShoppingListDone> {
   @override
   void dispose() {
     super.dispose();
-  }
-
-  void _onItemComplete(ShoppingItem item) {
-    _getViewModel().setCompleted(item.id);
   }
 
   @override

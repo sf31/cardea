@@ -93,15 +93,16 @@ class _ImportExportDataState extends State<ImportExportData> {
 
   Future<void> importFromJson() async {
     try {
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['json'],
-      );
       final cardVm = Provider.of<LoyaltyCardViewModel>(context, listen: false);
       final shoppingVm = Provider.of<ShoppingItemViewModel>(
         context,
         listen: false,
       );
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['json'],
+      );
+      if (!mounted) return;
 
       setState(() {
         isImporting = true;
@@ -130,6 +131,7 @@ class _ImportExportDataState extends State<ImportExportData> {
 
         await cardVm.setAll(loyaltyCards);
         await shoppingVm.setAll(shoppingItems);
+        if (!mounted) return;
 
         setState(() {
           isImporting = false;

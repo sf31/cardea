@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
-const _LOYALTY_CARDS_TABLE = 'loyalty_cards';
-const _SHOPPING_ITEMS_TABLE = 'shopping_items';
+const _loyaltyCardsTable = 'loyalty_cards';
+const _shoppingItemsTable = 'shopping_items';
 
 class DatabaseService {
   static final DatabaseService _instance = DatabaseService._internal();
@@ -32,10 +32,10 @@ class DatabaseService {
 
   Future<void> _onCreate(Database db, int version) async {
     await db.execute(
-      'CREATE TABLE $_LOYALTY_CARDS_TABLE (id TEXT PRIMARY KEY, name TEXT, barcode TEXT, color NUMBER, usage_count INTEGER, updated_at INTEGER)',
+      'CREATE TABLE $_loyaltyCardsTable (id TEXT PRIMARY KEY, name TEXT, barcode TEXT, color NUMBER, usage_count INTEGER, updated_at INTEGER)',
     );
     await db.execute(
-      'CREATE TABLE $_SHOPPING_ITEMS_TABLE (id TEXT PRIMARY KEY, name TEXT, updated_at INTEGER, completed_at INTEGER)',
+      'CREATE TABLE $_shoppingItemsTable (id TEXT PRIMARY KEY, name TEXT, updated_at INTEGER, completed_at INTEGER)',
     );
   }
 

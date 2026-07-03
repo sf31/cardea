@@ -5,11 +5,7 @@ import 'package:flutter/material.dart';
 import '../../data/services/shared_prefs.service.dart';
 
 class SettingsViewModel with ChangeNotifier {
-  final SharedPreferencesService _sharedPrefs;
-
-  SettingsViewModel({required SharedPreferencesService sharedPrefs})
-    : _sharedPrefs = sharedPrefs,
-      super();
+  SettingsViewModel({required SharedPreferencesService sharedPrefs}) : super();
 
   Future<String> exportJson(bool exportCards, bool exportShopping) async {
     final cardList = [];
