@@ -10,11 +10,21 @@ import 'package:provider/provider.dart';
 import 'loyalty_card_list.dart';
 import 'loyalty_card_sort.dart';
 
-class LoyaltyCardHome extends StatelessWidget {
-  final FocusNode findFocusNode = FocusNode();
-  final ValueNotifier<bool> atTop = ValueNotifier(false);
+class LoyaltyCardHome extends StatefulWidget {
+  const LoyaltyCardHome({super.key});
 
-  LoyaltyCardHome({super.key});
+  @override
+  State<LoyaltyCardHome> createState() => _LoyaltyCardHomeState();
+}
+
+class _LoyaltyCardHomeState extends State<LoyaltyCardHome> {
+  final FocusNode findFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    findFocusNode.dispose();
+    super.dispose();
+  }
 
   void _sortBy(BuildContext context) async {
     final vm = Provider.of<LoyaltyCardViewModel>(context, listen: false);
@@ -87,34 +97,25 @@ class LoyaltyCardHome extends StatelessWidget {
             ),
           );
 
-          return NotificationListener<ScrollNotification>(
-            onNotification: (notification) {
-              if (notification is ScrollEndNotification) {
-                atTop.value =
-                    notification.metrics.pixels <=
-                    notification.metrics.minScrollExtent;
-              } else if (notification is ScrollUpdateNotification) {
-                atTop.value = false;
-              }
-
-              if (notification is OverscrollNotification && atTop.value) {
-                findFocusNode.requestFocus();
-              }
-              return false;
-            },
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  LoyaltyCardFind(findFocusNode: findFocusNode),
-                  vm.filteredCardList != null && vm.filteredCardList!.isEmpty
-                      ? noResultsWidget
-                      : LoyaltyCardGrid(
-                        cardList: vm.filteredCardList ?? vm.cardList,
-                      ),
-                  LoyaltyCardAddBtn(),
-                ],
+          return Column(
+            children: [
+              LoyaltyCardFind(findFocusNode: findFocusNode),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      vm.filteredCardList != null &&
+                              vm.filteredCardList!.isEmpty
+                          ? noResultsWidget
+                          : LoyaltyCardGrid(
+                            cardList: vm.filteredCardList ?? vm.cardList,
+                          ),
+                      LoyaltyCardAddBtn(),
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ],
           );
         },
       ),
