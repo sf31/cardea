@@ -22,10 +22,15 @@ abstract class GenericRepository<T extends BaseModel> {
     });
   }
 
-  Future<void> setAll(List<T> entities) async {
-    await clear();
+  Future<void> setAll(List<T> entities, {DatabaseExecutor? executor}) async {
+    final database = executor ?? db;
+    await database.delete(tableName);
     for (var entity in entities) {
-      await create(entity);
+      await database.insert(
+        tableName,
+        toMap(_getEntityWithUpdatedAt(entity)),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
     }
   }
 

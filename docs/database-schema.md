@@ -96,3 +96,5 @@ Model mapping: `ShoppingItem`
 - `GenericRepository.create` and `GenericRepository.update` stamp `updated_at`
   with the current time before writing.
 - `GenericRepository.setAll` clears the full table, then inserts each entity.
+- Import restore runs selected `setAll` operations through one SQLite
+  transaction before refreshing the viewmodels.

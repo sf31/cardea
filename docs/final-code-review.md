@@ -45,10 +45,14 @@ Status values: `planned`, `in progress`, `blocked`, `completed`, `skipped`.
      included sections.
    - Validation: `flutter analyze` passed and eight Flutter tests passed.
 
-3. [ ] **Make restore atomic** — `planned`
+3. [x] **Make restore atomic** — `completed`
    - Parse and validate the entire backup before modifying the database.
    - Replace all selected datasets in one SQLite transaction.
    - Ensure any failure leaves the original database unchanged.
+   - Implemented one shared transaction using the repositories' database
+     executor; viewmodels reload only after the transaction commits.
+   - Validation: `flutter analyze` passed and eight Flutter tests passed.
+     SQLite rollback still needs an on-device/integration smoke check.
 
 4. [ ] **Keep filtered card results synchronized** — `planned`
    - Derive search results from the source card list and current query instead

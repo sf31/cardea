@@ -10,7 +10,7 @@ class ShoppingItemViewModel with ChangeNotifier {
   String? errorMessage;
 
   ShoppingItemViewModel({required this.repository}) : super() {
-    _loadItems();
+    loadItems();
   }
 
   UnmodifiableListView<ShoppingItem> get allItems =>
@@ -28,7 +28,7 @@ class ShoppingItemViewModel with ChangeNotifier {
     return UnmodifiableListView(doneItems);
   }
 
-  Future<void> _loadItems() async {
+  Future<void> loadItems() async {
     _itemList = await repository.getAll();
     notifyListeners();
   }

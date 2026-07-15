@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../data/models/backup_data.model.dart';
+import '../../../data/services/database.service.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../loyalty-card/loyalty_card.viewmodel.dart';
 import '../../shopping-list/shopping_item.viewmodel.dart';
@@ -136,11 +137,25 @@ class _ImportExportDataState extends State<ImportExportData> {
       final json = await file.readAsString();
       final backup = BackupData.fromJson(json);
 
+      await DatabaseService().database.transaction((transaction) async {
+        if (backup.loyaltyCards != null) {
+          await cardVm.repository.setAll(
+            backup.loyaltyCards!,
+            executor: transaction,
+          );
+        }
+        if (backup.shoppingItems != null) {
+          await shoppingVm.repository.setAll(
+            backup.shoppingItems!,
+            executor: transaction,
+          );
+        }
+      });
       if (backup.loyaltyCards != null) {
-        await cardVm.setAll(backup.loyaltyCards!);
+        await cardVm.loadCards();
       }
       if (backup.shoppingItems != null) {
-        await shoppingVm.setAll(backup.shoppingItems!);
+        await shoppingVm.loadItems();
       }
       if (!mounted) return;
 
