@@ -25,18 +25,24 @@ class _LoyaltyCardScannerState extends State<LoyaltyCardScanner> {
   void _handleBarcode(BarcodeCapture barcodes) {
     if (_isNavigating) return;
     Barcode? barcode = barcodes.barcodes.firstOrNull;
-    String? value = barcode?.displayValue;
+    String? value = barcode?.rawValue ?? barcode?.displayValue;
 
     if (value == null) return;
 
-    _openCardManager(barcode: value);
+    _openCardManager(
+      barcode: value,
+      barcodeFormat: barcode?.format ?? BarcodeFormat.unknown,
+    );
   }
 
   void _manualAdd() {
-    _openCardManager(barcode: '');
+    _openCardManager(barcode: '', barcodeFormat: BarcodeFormat.code128);
   }
 
-  void _openCardManager({required String barcode}) {
+  void _openCardManager({
+    required String barcode,
+    required BarcodeFormat barcodeFormat,
+  }) {
     if (_isNavigating) return;
     _isNavigating = true;
 
@@ -44,6 +50,7 @@ class _LoyaltyCardScannerState extends State<LoyaltyCardScanner> {
       id: const Uuid().v4(),
       name: '',
       barcode: barcode,
+      barcodeFormat: barcodeFormat,
       color: Colors.blue,
       usageCount: 0,
     );

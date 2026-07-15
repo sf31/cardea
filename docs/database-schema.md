@@ -6,7 +6,7 @@ as production data: schema changes must be backward-compatible and migrated.
 ## Current Production Schema
 
 - Database file: `myapp.db`
-- SQLite version: `1`
+- SQLite version: `2`
 - Owner: `DatabaseService`
 - Source: `lib/data/services/database.service.dart`
 
@@ -19,6 +19,11 @@ as production data: schema changes must be backward-compatible and migrated.
 - Migrations must preserve existing user data.
 - Import/export compatibility should be considered when changing persisted
   fields.
+
+### Version 1 to 2
+
+Schema `v2` adds the nullable `barcode_format` column to `loyalty_cards`.
+Existing cards remain readable and default to Code 128 when the value is null.
 
 ## Schema Change Checklist
 
@@ -37,13 +42,14 @@ Before releasing a schema change:
 
 ## Table: `loyalty_cards`
 
-Created by schema `v1`:
+Created by schema `v1`; `barcode_format` was added in schema `v2`:
 
 ```sql
 CREATE TABLE loyalty_cards (
   id TEXT PRIMARY KEY,
   name TEXT,
   barcode TEXT,
+  barcode_format INTEGER,
   color NUMBER,
   usage_count INTEGER,
   updated_at INTEGER
@@ -57,6 +63,7 @@ Model mapping: `LoyaltyCard`
 | `id` | `id` | `String` | Primary key. |
 | `name` | `name` | `String` | Card display name. |
 | `barcode` | `barcode` | `String` | Stored barcode payload. |
+| `barcode_format` | `barcodeFormat` | `int` | Scanner `BarcodeFormat.rawValue`; legacy null values default to Code 128. |
 | `color` | `color` | `Color` | Stored as ARGB integer via `toARGB32()`. |
 | `usage_count` | `usageCount` | `int` | Defaults to `0` when missing in `fromMap`. |
 | `updated_at` | `updatedAt` | `DateTime` | Milliseconds since epoch; defaults to now when missing. |

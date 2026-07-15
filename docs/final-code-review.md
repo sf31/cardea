@@ -1,8 +1,120 @@
-# Final Code Review
+# Final Code Review and Improvement Plan
 
 Date: 2026-07-06
 
+Last review pass: 2026-07-15
+
 Scope: final pass over the current Cardea Flutter codebase after stabilization work.
+
+## Execution Plan
+
+Work through this list one task at a time. Complete and validate the current
+task before starting the next one. After each task, record its status here and
+prepare a semantic commit message, without creating the commit automatically.
+
+Status values: `planned`, `in progress`, `blocked`, `completed`, `skipped`.
+
+1. [x] **Barcode fidelity** — `completed`
+   - Decision: Cardea should faithfully preserve QR codes and the other barcode
+     formats supported by the scanner.
+   - Store the scanner's actual payload rather than its potentially shortened
+     display value.
+   - Preserve enough format information to render the saved card faithfully,
+     including a backward-compatible database migration if the format is
+     persisted.
+   - Validate scanning, manual entry, existing cards, display, export, and
+     import behavior.
+   - Implemented with `rawValue` plus `BarcodeFormat.rawValue`, a v1-to-v2
+     migration, legacy Code 128 fallback, and format-aware rendering.
+   - Validation: `flutter analyze` passed and four focused Flutter tests passed.
+     Physical camera scanning and an on-device v1 database upgrade still need
+     a device smoke check.
+
+2. [ ] **Define versioned backup semantics** — `planned`
+   - Decide whether import/export is a full backup product or a dev-oriented
+     escape hatch.
+   - Prevent a selective export from representing an omitted dataset as an
+     intentionally empty dataset.
+   - Add backup format/version metadata and explicit included-section metadata.
+   - Define compatibility behavior for existing unversioned export files.
+
+3. [ ] **Make restore atomic** — `planned`
+   - Parse and validate the entire backup before modifying the database.
+   - Replace all selected datasets in one SQLite transaction.
+   - Ensure any failure leaves the original database unchanged.
+
+4. [ ] **Keep filtered card results synchronized** — `planned`
+   - Derive search results from the source card list and current query instead
+     of caching a separate list.
+   - Cover add, edit, delete, usage updates, sorting, and import while a search
+     is active.
+
+5. [ ] **Fix clean-checkout Android builds** — `planned`
+   - Make debug configuration independent of private release signing files.
+   - Configure release signing only when valid properties are available.
+   - Align the README build instructions with the supported signing workflow.
+
+6. [ ] **Harden async widget lifecycle handling** — `planned`
+   - Add `mounted` guards to every UI update or context use following an async
+     gap in import/export and barcode details.
+   - Remove artificial delays that do not serve product behavior.
+
+7. [ ] **Add initial loading and failure states** — `planned`
+   - Make viewmodel initialization explicit and observable.
+   - Avoid presenting an uninitialized list as genuinely empty.
+   - Prevent export and mutations from racing initial database loads.
+   - Surface database-load failures safely.
+
+8. [ ] **Localize persistence failures** — `planned`
+   - Replace hardcoded English viewmodel messages with UI-mapped error codes or
+     another localization-safe boundary.
+
+9. [ ] **Protect destructive and repeated actions** — `planned`
+   - Confirm loyalty-card deletion.
+   - Disable save/delete/submit actions while persistence is in flight.
+   - Prevent rapid shopping-item submissions from creating duplicates.
+
+10. [ ] **Improve card color contrast** — `planned`
+    - Choose readable foreground text from the selected background color or
+      constrain the available palette.
+    - Check the result in light and dark themes.
+
+11. [ ] **Build a focused automated test suite** — `planned`
+    - Add model serialization tests.
+    - Add repository/viewmodel success and failure tests.
+    - Add backup parsing and transactional restore tests.
+    - Add scanner/barcode mapping tests and an app/provider smoke test.
+
+12. [ ] **Remove misleading and unused code** — `planned`
+    - Delete the unused `SettingsViewModel` and provider registration unless
+      import/export orchestration is intentionally moved into it.
+    - Remove dead helpers, stale comments, and unused direct dependencies such
+      as `camera` and `path_provider` after platform verification.
+    - Reassess the unnecessary-looking iOS microphone usage description.
+
+13. [ ] **Refresh Android build tooling** — `planned`
+    - Upgrade Gradle and the Android Gradle Plugin before their current versions
+      fall outside Flutter support.
+    - Run Android debug and release smoke builds after the upgrade.
+
+14. [ ] **Add version/build information to Settings** — `planned`
+    - Display the installed app version and build number for support and
+      debugging.
+
+15. [ ] **Decide whether to preserve tab-local state** — `planned`
+    - Confirm whether shopping input, expansion, scroll, and card-list state
+      should survive tab changes.
+    - Use stable tab children or an `IndexedStack` if preservation is desired.
+
+16. [ ] **Final cleanup and release validation** — `planned`
+    - Update this review so completed findings are no longer described as open.
+    - Run analysis, tests, clean-checkout builds, and Android/iOS smoke checks.
+    - Review database and backup compatibility documentation.
+
+### Already resolved
+
+- [x] `LoyaltyCardHome` is now a `StatefulWidget` and disposes its `FocusNode`.
+  The older finding below is retained as review history.
 
 Validation run:
 

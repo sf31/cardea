@@ -17,7 +17,7 @@ class DatabaseService {
 
     _db = await openDatabase(
       'myapp.db',
-      version: 1,
+      version: 2,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -32,7 +32,7 @@ class DatabaseService {
 
   Future<void> _onCreate(Database db, int version) async {
     await db.execute(
-      'CREATE TABLE $_loyaltyCardsTable (id TEXT PRIMARY KEY, name TEXT, barcode TEXT, color NUMBER, usage_count INTEGER, updated_at INTEGER)',
+      'CREATE TABLE $_loyaltyCardsTable (id TEXT PRIMARY KEY, name TEXT, barcode TEXT, barcode_format INTEGER, color NUMBER, usage_count INTEGER, updated_at INTEGER)',
     );
     await db.execute(
       'CREATE TABLE $_shoppingItemsTable (id TEXT PRIMARY KEY, name TEXT, updated_at INTEGER, completed_at INTEGER)',
@@ -40,15 +40,10 @@ class DatabaseService {
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    // if (oldVersion < 2) {
-    //   await db.execute(
-    //     '''ALTER TABLE $_SHOPPING_ITEMS_TABLE ADD COLUMN completed_at INTEGER''',
-    //   );
-    //   await db.execute(
-    //     ''' UPDATE $_SHOPPING_ITEMS_TABLE SET completed_at = NULL WHERE completed_at IS NULL''',
-    //   );
-    // }
-
-    // Future: if (oldVersion < 3) { migrate more... }
+    if (oldVersion < 2) {
+      await db.execute(
+        'ALTER TABLE $_loyaltyCardsTable ADD COLUMN barcode_format INTEGER',
+      );
+    }
   }
 }

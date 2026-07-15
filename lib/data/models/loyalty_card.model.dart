@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:mobile_scanner/mobile_scanner.dart';
+
 import 'base.model.dart';
 
 class LoyaltyCard extends BaseModel {
@@ -7,6 +9,7 @@ class LoyaltyCard extends BaseModel {
   String id;
   String name;
   String barcode;
+  BarcodeFormat barcodeFormat;
   Color color;
   int usageCount;
   @override
@@ -16,6 +19,7 @@ class LoyaltyCard extends BaseModel {
     required this.id,
     required this.name,
     required this.barcode,
+    this.barcodeFormat = BarcodeFormat.code128,
     required this.color,
     required this.usageCount,
     DateTime? updatedAt,
@@ -26,6 +30,7 @@ class LoyaltyCard extends BaseModel {
       'id': id,
       'name': name,
       'barcode': barcode,
+      'barcode_format': barcodeFormat.rawValue,
       'color': color.toARGB32(),
       'usage_count': usageCount,
       'updated_at': updatedAt.millisecondsSinceEpoch,
@@ -33,10 +38,12 @@ class LoyaltyCard extends BaseModel {
   }
 
   factory LoyaltyCard.fromMap(Map<String, dynamic> map) {
+    final barcodeFormat = _barcodeFormatFromMap(map['barcode_format']);
     return LoyaltyCard(
       id: map['id'],
       name: map['name'],
       barcode: map['barcode'],
+      barcodeFormat: barcodeFormat,
       color: Color(map['color']),
       usageCount: map['usage_count'] ?? 0,
       updatedAt:
@@ -52,9 +59,21 @@ class LoyaltyCard extends BaseModel {
       id: id,
       name: name,
       barcode: barcode,
+      barcodeFormat: barcodeFormat,
       color: color,
       usageCount: usageCount,
       updatedAt: updatedAt ?? this.updatedAt,
     );
+  }
+
+  static BarcodeFormat _barcodeFormatFromMap(Object? value) {
+    if (value is int) {
+      try {
+        return BarcodeFormat.fromRawValue(value);
+      } on ArgumentError {
+        // Fall through to the legacy default for unknown persisted values.
+      }
+    }
+    return BarcodeFormat.code128;
   }
 }

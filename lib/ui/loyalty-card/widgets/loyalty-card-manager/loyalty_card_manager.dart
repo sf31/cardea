@@ -62,6 +62,7 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
           id: widget.card.id,
           name: name,
           barcode: barcode,
+          barcodeFormat: widget.card.barcodeFormat,
           color: currentColor,
           usageCount: widget.card.usageCount,
         ),

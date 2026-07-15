@@ -76,6 +76,7 @@ class LoyaltyCardViewModel with ChangeNotifier {
         id: _cardList[index].id,
         name: _cardList[index].name,
         barcode: _cardList[index].barcode,
+        barcodeFormat: _cardList[index].barcodeFormat,
         color: _cardList[index].color,
         usageCount: _cardList[index].usageCount + 1,
         updatedAt: _cardList[index].updatedAt,
