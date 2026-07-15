@@ -5,8 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../data/models/loyalty_card.model.dart';
-import '../../../data/models/shopping_item.model.dart';
+import '../../../data/models/backup_data.model.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../loyalty-card/loyalty_card.viewmodel.dart';
 import '../../shopping-list/shopping_item.viewmodel.dart';
@@ -51,16 +50,11 @@ class _ImportExportDataState extends State<ImportExportData> {
       final loyaltyCardList = loyaltyCardVm.cardList;
       final shoppingList = shoppingItemVm.allItems;
 
-      final json = jsonEncode({
-        'loyaltyCards':
-            exportCardList
-                ? loyaltyCardList.map((card) => card.toMap()).toList()
-                : [],
-        'shoppingItems':
-            exportShoppingList
-                ? shoppingList.map((item) => item.toMap()).toList()
-                : [],
-      });
+      final json =
+          BackupData(
+            loyaltyCards: exportCardList ? loyaltyCardList.toList() : null,
+            shoppingItems: exportShoppingList ? shoppingList.toList() : null,
+          ).toJson();
       final timestamp = DateTime.now().toIso8601String();
       final filename = 'cardea_export_$timestamp.json';
       final jsonBytes = utf8.encode(json);
@@ -140,23 +134,14 @@ class _ImportExportDataState extends State<ImportExportData> {
 
       final file = File(result.files.single.path!);
       final json = await file.readAsString();
-      final data = jsonDecode(json);
-      final loyaltyCardsRaw = data['loyaltyCards'] ?? [];
-      final shoppingItemsRaw = data['shoppingItems'] ?? [];
+      final backup = BackupData.fromJson(json);
 
-      final List<LoyaltyCard> loyaltyCards = [];
-      final List<ShoppingItem> shoppingItems = [];
-
-      for (var card in loyaltyCardsRaw) {
-        loyaltyCards.add(LoyaltyCard.fromMap(card));
+      if (backup.loyaltyCards != null) {
+        await cardVm.setAll(backup.loyaltyCards!);
       }
-
-      for (var item in shoppingItemsRaw) {
-        shoppingItems.add(ShoppingItem.fromMap(item));
+      if (backup.shoppingItems != null) {
+        await shoppingVm.setAll(backup.shoppingItems!);
       }
-
-      await cardVm.setAll(loyaltyCards);
-      await shoppingVm.setAll(shoppingItems);
       if (!mounted) return;
 
       setState(() {

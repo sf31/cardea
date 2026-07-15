@@ -30,13 +30,20 @@ Status values: `planned`, `in progress`, `blocked`, `completed`, `skipped`.
      Physical camera scanning and an on-device v1 database upgrade still need
      a device smoke check.
 
-2. [ ] **Define versioned backup semantics** — `planned`
+2. [x] **Define versioned backup semantics** — `completed`
    - Decide whether import/export is a full backup product or a dev-oriented
      escape hatch.
    - Prevent a selective export from representing an omitted dataset as an
      intentionally empty dataset.
    - Add backup format/version metadata and explicit included-section metadata.
    - Define compatibility behavior for existing unversioned export files.
+   - Decision: keep import/export as a selective local backup/transfer feature;
+     only explicitly included sections are replaced on import.
+   - Implemented `formatVersion: 1` and `includedSections`, preserving selected
+     empty sections and omitting unselected sections.
+   - Unversioned files remain readable by treating their present legacy keys as
+     included sections.
+   - Validation: `flutter analyze` passed and eight Flutter tests passed.
 
 3. [ ] **Make restore atomic** — `planned`
    - Parse and validate the entire backup before modifying the database.
