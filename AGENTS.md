@@ -35,5 +35,8 @@ These instructions apply to the entire repository.
 
 ## Task Workflow
 
+- Before each implementation task, explain the proposed scope, approach, and
+  validation, then wait for the user's explicit agreement.
+- Do not modify application code for that task before agreement is given.
 - Do not create commits. At the end of each completed task, suggest one semantic
   commit message.
