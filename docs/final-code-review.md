@@ -54,11 +54,14 @@ Status values: `planned`, `in progress`, `blocked`, `completed`, `skipped`.
    - Validation: `flutter analyze` passed and eight Flutter tests passed.
      SQLite rollback still needs an on-device/integration smoke check.
 
-4. [ ] **Keep filtered card results synchronized** — `planned`
+4. [x] **Keep filtered card results synchronized** — `completed`
    - Derive search results from the source card list and current query instead
      of caching a separate list.
    - Cover add, edit, delete, usage updates, sorting, and import while a search
      is active.
+   - Implemented a derived, case-insensitive filter and removed the database
+     reload when clearing the search.
+   - Validation: `flutter analyze` passed and nine Flutter tests passed.
 
 5. [ ] **Fix clean-checkout Android builds** — `planned`
    - Make debug configuration independent of private release signing files.

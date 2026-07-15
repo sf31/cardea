@@ -1,5 +1,6 @@
 import 'package:cardea/data/models/loyalty_card.model.dart';
 import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_details.dart';
+import 'package:cardea/ui/loyalty-card/loyalty_card.viewmodel.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -65,5 +66,28 @@ void main() {
     await tester.pumpWidget(MaterialApp(home: LoyaltyCardDetails(card: card)));
 
     expect(find.byType(BarcodeWidget), findsOneWidget);
+  });
+
+  test('filters card names case-insensitively and preserves source order', () {
+    final cards = [
+      LoyaltyCard(
+        id: 'card-1',
+        name: 'Super Shop',
+        barcode: '1',
+        color: Colors.blue,
+        usageCount: 0,
+      ),
+      LoyaltyCard(
+        id: 'card-2',
+        name: 'Bookshop',
+        barcode: '2',
+        color: Colors.blue,
+        usageCount: 0,
+      ),
+    ];
+
+    final results = LoyaltyCardViewModel.filterCards(cards, 'SHOP').toList();
+
+    expect(results.map((card) => card.id), ['card-1', 'card-2']);
   });
 }

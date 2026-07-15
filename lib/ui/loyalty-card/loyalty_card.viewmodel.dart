@@ -9,9 +9,18 @@ class LoyaltyCardViewModel with ChangeNotifier {
   final LoyaltyCardRepository repository;
   List<LoyaltyCard> _cardList = [];
   SortOption sortBy = SortOption.alphabetical;
-  List<LoyaltyCard>? filteredCardList;
   String? filterString;
   String? errorMessage;
+
+  static Iterable<LoyaltyCard> filterCards(
+    Iterable<LoyaltyCard> cards,
+    String? filter,
+  ) {
+    if (filter == null || filter.isEmpty) return cards;
+
+    final query = filter.toLowerCase();
+    return cards.where((card) => card.name.toLowerCase().contains(query));
+  }
 
   LoyaltyCardViewModel({required this.repository}) : super() {
     loadCards();
@@ -19,6 +28,13 @@ class LoyaltyCardViewModel with ChangeNotifier {
 
   UnmodifiableListView<LoyaltyCard> get cardList =>
       UnmodifiableListView(_cardList);
+
+  UnmodifiableListView<LoyaltyCard>? get filteredCardList {
+    final filter = filterString;
+    if (filter == null || filter.isEmpty) return null;
+
+    return UnmodifiableListView(filterCards(_cardList, filter));
+  }
 
   Future<void> loadCards() async {
     _cardList = await repository.getAll();
@@ -120,17 +136,8 @@ class LoyaltyCardViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> onFilter(String? filter) async {
+  void onFilter(String? filter) {
     filterString = filter;
-    if (filter != null && filter.isNotEmpty) {
-      filteredCardList =
-          _cardList.where((card) {
-            return card.name.toLowerCase().contains(filter.toLowerCase());
-          }).toList();
-    } else {
-      filteredCardList = null;
-      await loadCards();
-    }
     notifyListeners();
   }
 }
