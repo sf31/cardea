@@ -41,12 +41,11 @@ Status values: `planned`, `in progress`, `blocked`, `completed`, `skipped`.
 
 ## Prioritized cleanup plan
 
-5. [ ] **Safeguard the current branch** — `planned`
-   - Push or otherwise back up the current local work before further changes.
-   - Audit note: on 2026-07-27, local `master` was clean but 21 commits ahead of
-     the only branch on `origin`.
+5. [x] **Safeguard the current branch** — `completed`
+   - Repository backup and pushing are owner-managed and will be handled
+     separately from this cleanup plan.
 
-6. [ ] **Fix and modernize Android builds** — `planned`
+6. [x] **Fix and modernize Android builds** — `completed`
    - Make debug builds independent of private release-signing files.
    - Configure release signing only when all required properties are present.
    - Upgrade Gradle and the Android Gradle Plugin to versions supported by the
@@ -55,6 +54,11 @@ Status values: `planned`, `in progress`, `blocked`, `completed`, `skipped`.
      release build workflows in the README.
    - Validate a debug build from a clean checkout and the intended release
      signing behavior.
+   - Implemented conditional release signing with the standard debug-key
+     fallback for local builds, Gradle 8.14, and Android Gradle Plugin 8.11.1.
+   - Validation: analysis and all 9 tests passed; clean-checkout debug and
+     release-mode APKs built; the private release configuration produced a
+     signed APK verified with Android's `apksigner`.
 
 7. [ ] **Stabilize asynchronous UI and persistence state** — `planned`
    - Add `mounted` guards before UI updates or context use after async gaps.
@@ -119,9 +123,9 @@ Audit run on 2026-07-27 with Flutter 3.44.8 and Dart 3.12.2:
 
 - `flutter analyze`: passed with no issues.
 - `flutter test`: all 9 tests passed.
-- Clean-checkout Android debug build: failed because release-signing
-  properties were required during Gradle configuration.
-- The same build warned that Gradle 8.10.2 and Android Gradle Plugin 8.7.0
-  should be upgraded for continued Flutter support.
+- Clean-checkout Android debug and release-mode APK builds: passed without
+  private signing properties.
+- Private release-signing APK build and Android signature verification: passed.
+- Android tooling upgraded to Gradle 8.14 and Android Gradle Plugin 8.11.1.
 - Public GitHub issues: none open.
 - Public GitHub pull requests: none open.

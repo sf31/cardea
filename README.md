@@ -25,7 +25,7 @@ flutter pub get
 # Run on Android
 flutter run
 
-# Build APK
+# Build an installable APK
 flutter build apk --release
 ```
 
