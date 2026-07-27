@@ -15,9 +15,28 @@ These instructions apply to the entire repository.
 
 - Do not add or install a new third-party package without explicit user
   approval.
+- Do not modify `pubspec.yaml` or `pubspec.lock` without explicit user
+  approval, including when removing, upgrading, or resolving dependencies.
 - Use Flutter/Dart built-ins or packages already present in the project first.
 - If a new package would provide a meaningful benefit, stop before changing
   dependencies and explain why it is worthwhile and what benefit it provides.
+
+## Git
+
+- Read-only Git inspection is allowed, such as `git status`, `git diff`, `git
+  log`, and `git show`.
+- Do not run Git commands that write or alter repository state. The user alone
+  performs commits, merges, rebases, resets, reverts, branch or tag changes,
+  staging, pushes, pulls, remote changes, and any other destructive or
+  state-changing Git operation.
+
+## Delivery Tooling
+
+- Do not assume a Git provider, CI/CD service, or other third-party delivery
+  tool is available.
+- Keep the codebase and its documentation agnostic to hosting, CI/CD, pipeline,
+  testing, and release providers. The user owns the choice and operation of
+  those tools and final release processes.
 
 ## Sensitive Data
 
