@@ -101,10 +101,14 @@ Status values: `planned`, `in progress`, `blocked`, `completed`, `skipped`.
    - Validation: localization generation, formatting, analysis, all 11 tests,
      and whitespace checks passed.
 
-10. [ ] **Make loyalty-card text readable on every color** — `planned`
-    - Choose light or dark foreground text from the selected background color,
-      or constrain the palette to accessible combinations.
-    - Check the result in both light and dark themes.
+10. [x] **Make loyalty-card text readable on every color** — `completed`
+   - Choose light or dark foreground text from the selected background color,
+     or constrain the palette to accessible combinations.
+   - Check the result in both light and dark themes.
+   - Card labels now choose black or white text from the background luminance,
+     with coverage for light and dark card colors.
+   - Validation: formatting, analysis, all 12 tests, and whitespace checks
+     passed.
 
 11. [ ] **Remove dead code, dependencies, and stale documentation** — `planned`
     - Remove the unused `SettingsViewModel` and its provider registration.

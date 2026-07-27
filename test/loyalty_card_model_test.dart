@@ -1,5 +1,6 @@
 import 'package:cardea/data/models/loyalty_card.model.dart';
 import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_details.dart';
+import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_item.dart';
 import 'package:cardea/ui/loyalty-card/loyalty_card.viewmodel.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
@@ -89,5 +90,10 @@ void main() {
     final results = LoyaltyCardViewModel.filterCards(cards, 'SHOP').toList();
 
     expect(results.map((card) => card.id), ['card-1', 'card-2']);
+  });
+
+  test('chooses readable card text for light and dark backgrounds', () {
+    expect(LoyaltyCardItem.foregroundColorFor(Colors.yellow), Colors.black);
+    expect(LoyaltyCardItem.foregroundColorFor(Colors.indigo), Colors.white);
   });
 }

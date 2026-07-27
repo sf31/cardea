@@ -13,6 +13,13 @@ class LoyaltyCardItem extends StatelessWidget {
 
   const LoyaltyCardItem({super.key, required this.card});
 
+  static Color foregroundColorFor(Color backgroundColor) {
+    return ThemeData.estimateBrightnessForColor(backgroundColor) ==
+            Brightness.dark
+        ? Colors.white
+        : Colors.black;
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -59,10 +66,10 @@ class LoyaltyCardItem extends StatelessWidget {
               card.name,
               maxLines: 2,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: foregroundColorFor(card.color),
               ),
             ),
           ),
