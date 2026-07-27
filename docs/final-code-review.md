@@ -78,25 +78,28 @@ Status values: `planned`, `in progress`, `blocked`, `completed`, `skipped`.
    - Validation: localization generation and formatting completed; analysis,
      all 9 tests, and whitespace checks passed.
 
-8. [ ] **Add focused tests and basic CI** — `planned`
+8. [ ] **Add focused tests** — `planned`
    - Keep the existing backup, barcode, rendering, and filtering tests.
    - Add repository and viewmodel success/failure tests.
    - Add backup validation and transactional rollback coverage.
    - Add database creation and v1-to-v2 migration coverage.
    - Add a small app/provider smoke test.
-   - Add a minimal CI workflow that runs analysis and tests; include a clean
-     Android debug build if its runtime is reasonable.
    - Completed in this pass: malformed backup records now produce
      `FormatException`, with coverage for invalid section metadata and data;
-     GitHub Actions now runs `flutter analyze` and `flutter test`.
+     local analysis and test coverage was expanded.
    - Repository/database integration and provider smoke coverage remain for a
      follow-up because they require a platform-backed SQLite test setup.
+   - CI pipelines are intentionally out of scope for this repository.
 
-9. [ ] **Add shopping-list cleanup** — `planned`
+9. [x] **Add shopping-list cleanup** — `completed`
    - Give users a simple way to permanently remove completed items.
    - Prefer one confirmed **Clear completed** action unless individual deletion
      is also needed for the intended workflow.
    - Reuse the existing repository/viewmodel deletion path where practical.
+   - Added a localized confirmation dialog and a busy state that prevents
+     overlapping clears or item toggles while completed items are removed.
+   - Validation: localization generation, formatting, analysis, all 11 tests,
+     and whitespace checks passed.
 
 10. [ ] **Make loyalty-card text readable on every color** — `planned`
     - Choose light or dark foreground text from the selected background color,

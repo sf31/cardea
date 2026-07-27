@@ -72,5 +72,8 @@
     "shoppingListNewItemBtn": "Aggiungi",
     "shoppingListEmptyLabel": "La tua lista della spesa è vuota!",
     "shoppingListInputHint": "Cosa devi comprare?",
-    "shoppingListCompletedSectionTitle": "Completati ({count})"
+    "shoppingListCompletedSectionTitle": "Completati ({count})",
+    "shoppingListClearCompletedBtn": "Cancella completati",
+    "shoppingListClearCompletedTitle": "Cancellare gli elementi completati?",
+    "shoppingListClearCompletedBody": "Gli elementi completati verranno eliminati definitivamente."
 }

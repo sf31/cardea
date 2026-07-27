@@ -451,6 +451,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Completed ({count})'**
   String shoppingListCompletedSectionTitle(int count);
+
+  /// Button to permanently delete completed shopping items
+  ///
+  /// In en, this message translates to:
+  /// **'Clear completed'**
+  String get shoppingListClearCompletedBtn;
+
+  /// Title for the completed shopping items confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Clear completed items?'**
+  String get shoppingListClearCompletedTitle;
+
+  /// Body for the completed shopping items confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Completed items will be permanently deleted.'**
+  String get shoppingListClearCompletedBody;
 }
 
 class _AppLocalizationsDelegate

@@ -197,4 +197,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String shoppingListCompletedSectionTitle(int count) {
     return 'Completati ($count)';
   }
+
+  @override
+  String get shoppingListClearCompletedBtn => 'Cancella completati';
+
+  @override
+  String get shoppingListClearCompletedTitle =>
+      'Cancellare gli elementi completati?';
+
+  @override
+  String get shoppingListClearCompletedBody =>
+      'Gli elementi completati verranno eliminati definitivamente.';
 }

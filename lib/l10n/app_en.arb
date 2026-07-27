@@ -263,5 +263,17 @@
                 "example": "3"
             }
         }
+    },
+    "shoppingListClearCompletedBtn": "Clear completed",
+    "@shoppingListClearCompletedBtn": {
+        "description": "Button to permanently delete completed shopping items"
+    },
+    "shoppingListClearCompletedTitle": "Clear completed items?",
+    "@shoppingListClearCompletedTitle": {
+        "description": "Title for the completed shopping items confirmation dialog"
+    },
+    "shoppingListClearCompletedBody": "Completed items will be permanently deleted.",
+    "@shoppingListClearCompletedBody": {
+        "description": "Body for the completed shopping items confirmation dialog"
     }
 }

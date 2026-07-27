@@ -13,6 +13,8 @@ class ShoppingListDone extends StatefulWidget {
 }
 
 class _ShoppingListDoneState extends State<ShoppingListDone> {
+  bool _isClearing = false;
+
   Future<void> _onItemComplete(ShoppingItemViewModel vm, String id) async {
     final success = await vm.toggleCompleted(id);
     if (!mounted) return;
@@ -27,33 +29,99 @@ class _ShoppingListDoneState extends State<ShoppingListDone> {
     }
   }
 
+  Future<void> _clearCompleted(ShoppingItemViewModel vm) async {
+    if (_isClearing) return;
+
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text(l10n?.shoppingListClearCompletedTitle ?? ''),
+            content: Text(l10n?.shoppingListClearCompletedBody ?? ''),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(l10n?.cancelBtnLabel ?? ''),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text(l10n?.deleteBtnLabel ?? ''),
+              ),
+            ],
+          ),
+    );
+    if (!mounted || confirmed != true) return;
+
+    setState(() => _isClearing = true);
+    var success = true;
+    final completedIds = vm.itemListDone.map((item) => item.id).toList();
+    for (final id in completedIds) {
+      if (!await vm.removeById(id)) {
+        success = false;
+        break;
+      }
+    }
+
+    if (!mounted) return;
+    setState(() => _isClearing = false);
+    if (!success) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n?.persistenceSaveError ?? '')));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ShoppingItemViewModel>(
       builder: (context, vm, child) {
-        return ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: vm.itemListDone.length,
-          itemBuilder: (context, index) {
-            final item = vm.itemListDone[index];
-            return ListTile(
-              leading: IconButton(
-                icon: const Icon(Icons.check_box),
-                onPressed: () async {
-                  await _onItemComplete(vm, item.id);
-                  HapticFeedback.vibrate();
-                },
-              ),
-              title: Text(
-                item.name,
-                style: const TextStyle(
-                  decoration: TextDecoration.lineThrough,
-                  color: Colors.grey,
+        return Column(
+          children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: TextButton.icon(
+                  onPressed: _isClearing ? null : () => _clearCompleted(vm),
+                  icon: const Icon(Icons.delete_sweep),
+                  label: Text(
+                    AppLocalizations.of(
+                          context,
+                        )?.shoppingListClearCompletedBtn ??
+                        '',
+                  ),
                 ),
               ),
-            );
-          },
+            ),
+            ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: vm.itemListDone.length,
+              itemBuilder: (context, index) {
+                final item = vm.itemListDone[index];
+                return ListTile(
+                  leading: IconButton(
+                    icon: const Icon(Icons.check_box),
+                    onPressed:
+                        _isClearing
+                            ? null
+                            : () async {
+                              await _onItemComplete(vm, item.id);
+                              HapticFeedback.vibrate();
+                            },
+                  ),
+                  title: Text(
+                    item.name,
+                    style: const TextStyle(
+                      decoration: TextDecoration.lineThrough,
+                      color: Colors.grey,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
         );
       },
     );
