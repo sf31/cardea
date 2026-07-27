@@ -47,7 +47,5 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
     <string>Scan Barcode/QRCode</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>Required by library accessing the camera. Audio not recorded.</string>
 </dict>
 </plist>

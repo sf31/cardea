@@ -110,7 +110,7 @@ Status values: `planned`, `in progress`, `blocked`, `completed`, `skipped`.
    - Validation: formatting, analysis, all 12 tests, and whitespace checks
      passed.
 
-11. [ ] **Remove dead code, dependencies, and stale documentation** — `planned`
+11. [x] **Remove dead code, dependencies, and stale documentation** — `completed`
     - Remove the unused `SettingsViewModel` and its provider registration.
     - Remove unused helpers, commented-out code, and stale review notes.
     - Verify and remove unused direct dependencies such as `camera`, `path`,
@@ -118,6 +118,11 @@ Status values: `planned`, `in progress`, `blocked`, `completed`, `skipped`.
     - Reassess the iOS microphone usage description after dependency cleanup.
     - Keep the README, database schema, and this plan consistent with the
       implemented behavior.
+    - Removed the unused settings viewmodel, export model, result helper,
+      commented repository code, and unused direct dependencies; refreshed the
+      lockfile and removed the obsolete iOS microphone permission.
+    - Validation: dependency resolution, formatting, analysis, all 12 tests,
+      and whitespace checks passed.
 
 12. [ ] **Run final release validation** — `planned`
     - Run `flutter analyze` and the complete Flutter test suite.

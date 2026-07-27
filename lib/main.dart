@@ -1,5 +1,4 @@
 import 'package:cardea/ui/home/home_page.dart';
-import 'package:cardea/ui/settings/settings.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,9 +30,6 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create:
               (_) => ShoppingItemViewModel(repository: shoppingItemRepository),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => SettingsViewModel(sharedPrefs: sharedPrefsService),
         ),
       ],
       child: MyApp(),

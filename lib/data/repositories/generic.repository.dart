@@ -16,7 +16,6 @@ abstract class GenericRepository<T extends BaseModel> {
 
   Future<List<T>> getAll() async {
     final List<Map<String, dynamic>> maps = await db.query(tableName);
-    // return maps.map(m => fromMap(m)).toList();
     return List.generate(maps.length, (i) {
       return fromMap(maps[i]);
     });
