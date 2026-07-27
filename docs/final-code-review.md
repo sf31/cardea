@@ -86,6 +86,11 @@ Status values: `planned`, `in progress`, `blocked`, `completed`, `skipped`.
    - Add a small app/provider smoke test.
    - Add a minimal CI workflow that runs analysis and tests; include a clean
      Android debug build if its runtime is reasonable.
+   - Completed in this pass: malformed backup records now produce
+     `FormatException`, with coverage for invalid section metadata and data;
+     GitHub Actions now runs `flutter analyze` and `flutter test`.
+   - Repository/database integration and provider smoke coverage remain for a
+     follow-up because they require a platform-backed SQLite test setup.
 
 9. [ ] **Add shopping-list cleanup** — `planned`
    - Give users a simple way to permanently remove completed items.

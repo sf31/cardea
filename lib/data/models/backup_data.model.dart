@@ -105,7 +105,11 @@ class BackupData {
       if (rawCard is! Map) {
         throw const FormatException('Loyalty card data is invalid.');
       }
-      return LoyaltyCard.fromMap(Map<String, dynamic>.from(rawCard));
+      try {
+        return LoyaltyCard.fromMap(Map<String, dynamic>.from(rawCard));
+      } catch (_) {
+        throw const FormatException('Loyalty card data is invalid.');
+      }
     }).toList();
   }
 
@@ -119,7 +123,11 @@ class BackupData {
       if (rawItem is! Map) {
         throw const FormatException('Shopping item data is invalid.');
       }
-      return ShoppingItem.fromMap(Map<String, dynamic>.from(rawItem));
+      try {
+        return ShoppingItem.fromMap(Map<String, dynamic>.from(rawItem));
+      } catch (_) {
+        throw const FormatException('Shopping item data is invalid.');
+      }
     }).toList();
   }
 }

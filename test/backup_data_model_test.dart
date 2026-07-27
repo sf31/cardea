@@ -52,4 +52,31 @@ void main() {
       throwsFormatException,
     );
   });
+
+  test('mismatched section metadata is rejected', () {
+    expect(
+      () => BackupData.fromJson(
+        jsonEncode({
+          'formatVersion': 1,
+          'includedSections': ['loyaltyCards'],
+          'loyaltyCards': [],
+          'shoppingItems': [],
+        }),
+      ),
+      throwsFormatException,
+    );
+  });
+
+  test('malformed section data is rejected', () {
+    expect(
+      () => BackupData.fromJson(
+        jsonEncode({
+          'formatVersion': 1,
+          'includedSections': ['shoppingItems'],
+          'shoppingItems': [{}],
+        }),
+      ),
+      throwsFormatException,
+    );
+  });
 }
