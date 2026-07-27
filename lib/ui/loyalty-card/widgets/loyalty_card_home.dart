@@ -26,41 +26,27 @@ class _LoyaltyCardHomeState extends State<LoyaltyCardHome> {
     super.dispose();
   }
 
-  void _sortBy(BuildContext context) async {
+  Future<void> _sortBy(BuildContext context) async {
     final vm = Provider.of<LoyaltyCardViewModel>(context, listen: false);
     final selectedOption = await showDialog<SortOption>(
       context: context,
       builder:
           (BuildContext context) => LoyaltyCardSort(currentSortBy: vm.sortBy),
     );
-
-    // final selectedOption = await showDialog<String>(
-    //   context: context,
-    //   builder: (BuildContext context) {
-    //     return SimpleDialog(
-    //       title: Text(AppLocalizations.of(context)?.loyaltyCardSortBy ?? ''),
-    //       children:
-    //           options.map((option) {
-    //             return SimpleDialogOption(
-    //               onPressed: () {
-    //                 Navigator.pop(context, option);
-    //               },
-    //               child: Row(
-    //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //                 children: [
-    //                   Text(option),
-    //                   if (sortBy == option)
-    //                     const Icon(Icons.check, color: Colors.green),
-    //                 ],
-    //               ),
-    //             );
-    //           }).toList(),
-    //     );
-    //   },
-    // );
+    if (!context.mounted) return;
 
     if (selectedOption != null) {
-      vm.setSortBy(selectedOption);
+      final success = await vm.setSortBy(selectedOption);
+      if (!context.mounted) return;
+      if (!success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)?.persistenceSaveError ?? '',
+            ),
+          ),
+        );
+      }
     }
   }
 
@@ -71,9 +57,12 @@ class _LoyaltyCardHomeState extends State<LoyaltyCardHome> {
       appBar: AppBar(
         title: Text(l10n?.loyaltyCardSectionTitle ?? ''),
         actions: [
-          IconButton(
-            onPressed: () => _sortBy(context),
-            icon: Icon(Icons.filter_list),
+          Consumer<LoyaltyCardViewModel>(
+            builder:
+                (context, vm, child) => IconButton(
+                  onPressed: vm.isReady ? () => _sortBy(context) : null,
+                  icon: const Icon(Icons.filter_list),
+                ),
           ),
           IconButton(
             onPressed: () {
@@ -87,7 +76,40 @@ class _LoyaltyCardHomeState extends State<LoyaltyCardHome> {
       ),
       body: Consumer<LoyaltyCardViewModel>(
         builder: (context, vm, child) {
-          if (vm.cardList.isEmpty) return LoyaltyCardEmpty();
+          if (vm.isLoading) {
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 16,
+                children: [
+                  const CircularProgressIndicator(),
+                  Text(l10n?.dataLoadingLabel ?? ''),
+                ],
+              ),
+            );
+          }
+          if (vm.loadFailed) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 16,
+                  children: [
+                    Text(
+                      l10n?.dataLoadError ?? '',
+                      textAlign: TextAlign.center,
+                    ),
+                    FilledButton(
+                      onPressed: vm.loadCards,
+                      child: Text(l10n?.retryBtnLabel ?? ''),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+          if (vm.cardList.isEmpty) return const LoyaltyCardEmpty();
 
           var noResultsWidget = Padding(
             padding: EdgeInsets.all(20.0),

@@ -32,6 +32,22 @@
     "@copiedToClipboardLabel": {
         "description": "Label for copied to clipboard confirmation"
     },
+    "retryBtnLabel": "Retry",
+    "@retryBtnLabel": {
+        "description": "Label for retry buttons"
+    },
+    "dataLoadingLabel": "Loading data...",
+    "@dataLoadingLabel": {
+        "description": "Message displayed while local data is loading"
+    },
+    "dataLoadError": "Unable to load your data. Please try again.",
+    "@dataLoadError": {
+        "description": "Error displayed when local data cannot be loaded"
+    },
+    "persistenceSaveError": "Unable to save changes. Please try again.",
+    "@persistenceSaveError": {
+        "description": "Error displayed when a local data change cannot be saved"
+    },
 
 
 
@@ -144,6 +160,14 @@
     "loyaltyCardManagerMissingName": "Please provide a name for the card.",
     "@loyaltyCardManagerMissingName": {
         "description": "Error message when the card name is missing"
+    },
+    "loyaltyCardDeleteConfirmTitle": "Delete this card?",
+    "@loyaltyCardDeleteConfirmTitle": {
+        "description": "Title for the loyalty card deletion confirmation"
+    },
+    "loyaltyCardDeleteConfirmBody": "This card will be permanently deleted.",
+    "@loyaltyCardDeleteConfirmBody": {
+        "description": "Body text for the loyalty card deletion confirmation"
     },
 
 

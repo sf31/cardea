@@ -33,6 +33,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get copiedToClipboardLabel => 'Copied to clipboard';
 
   @override
+  String get retryBtnLabel => 'Retry';
+
+  @override
+  String get dataLoadingLabel => 'Loading data...';
+
+  @override
+  String get dataLoadError => 'Unable to load your data. Please try again.';
+
+  @override
+  String get persistenceSaveError =>
+      'Unable to save changes. Please try again.';
+
+  @override
   String get loyaltyCardsLabel => 'Loyalty Cards';
 
   @override
@@ -109,6 +122,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get loyaltyCardManagerMissingName =>
       'Please provide a name for the card.';
+
+  @override
+  String get loyaltyCardDeleteConfirmTitle => 'Delete this card?';
+
+  @override
+  String get loyaltyCardDeleteConfirmBody =>
+      'This card will be permanently deleted.';
 
   @override
   String get settingsSectionTitle => 'Settings';

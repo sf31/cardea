@@ -10,7 +10,9 @@ class LoyaltyCardViewModel with ChangeNotifier {
   List<LoyaltyCard> _cardList = [];
   SortOption sortBy = SortOption.alphabetical;
   String? filterString;
-  String? errorMessage;
+  bool isLoading = true;
+  bool hasLoaded = false;
+  bool loadFailed = false;
 
   static Iterable<LoyaltyCard> filterCards(
     Iterable<LoyaltyCard> cards,
@@ -29,6 +31,8 @@ class LoyaltyCardViewModel with ChangeNotifier {
   UnmodifiableListView<LoyaltyCard> get cardList =>
       UnmodifiableListView(_cardList);
 
+  bool get isReady => hasLoaded && !isLoading;
+
   UnmodifiableListView<LoyaltyCard>? get filteredCardList {
     final filter = filterString;
     if (filter == null || filter.isEmpty) return null;
@@ -36,14 +40,30 @@ class LoyaltyCardViewModel with ChangeNotifier {
     return UnmodifiableListView(filterCards(_cardList, filter));
   }
 
-  Future<void> loadCards() async {
-    _cardList = await repository.getAll();
-    sortBy = await repository.getSortBy();
-    _sortCards();
+  Future<bool> loadCards() async {
+    isLoading = true;
+    loadFailed = false;
     notifyListeners();
+
+    try {
+      _cardList = await repository.getAll();
+      sortBy = await repository.getSortBy();
+      _sortCards();
+      hasLoaded = true;
+      return true;
+    } catch (_) {
+      hasLoaded = false;
+      loadFailed = true;
+      return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<bool> upsert(LoyaltyCard card) async {
+    if (!isReady) return false;
+
     int currentIndex = _cardList.indexWhere((c) => c.id == card.id);
     try {
       if (currentIndex != -1) {
@@ -53,39 +73,44 @@ class LoyaltyCardViewModel with ChangeNotifier {
         await repository.create(card);
         _cardList.add(card);
       }
-      errorMessage = null;
       _sortCards();
       notifyListeners();
       return true;
     } catch (_) {
-      errorMessage = 'Unable to save changes.';
-      notifyListeners();
       return false;
     }
   }
 
   Future<bool> removeById(String id) async {
+    if (!isReady) return false;
+
     try {
       await repository.delete(id);
       _cardList.removeWhere((card) => card.id == id);
-      errorMessage = null;
       notifyListeners();
       return true;
     } catch (_) {
-      errorMessage = 'Unable to save changes.';
-      notifyListeners();
       return false;
     }
   }
 
-  void setSortBy(SortOption newSortBy) async {
-    await repository.setSortBy(newSortBy);
-    sortBy = newSortBy;
-    _sortCards();
-    notifyListeners();
+  Future<bool> setSortBy(SortOption newSortBy) async {
+    if (!isReady) return false;
+
+    try {
+      await repository.setSortBy(newSortBy);
+      sortBy = newSortBy;
+      _sortCards();
+      notifyListeners();
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 
   Future<bool> incrementUsageCount(LoyaltyCard card) async {
+    if (!isReady) return false;
+
     int index = _cardList.indexWhere((c) => c.id == card.id);
     if (index != -1) {
       final updatedCard = LoyaltyCard(
@@ -100,23 +125,13 @@ class LoyaltyCardViewModel with ChangeNotifier {
       try {
         await repository.update(updatedCard);
         _cardList[index] = updatedCard;
-        errorMessage = null;
         notifyListeners();
         return true;
       } catch (_) {
-        errorMessage = 'Unable to save changes.';
-        notifyListeners();
         return false;
       }
     }
     return false;
-  }
-
-  void clearError() {
-    if (errorMessage != null) {
-      errorMessage = null;
-      notifyListeners();
-    }
   }
 
   Future<void> setAll(List<LoyaltyCard> cards) async {

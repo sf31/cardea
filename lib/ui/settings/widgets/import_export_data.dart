@@ -29,24 +29,26 @@ class _ImportExportDataState extends State<ImportExportData> {
   bool? importSuccess = false;
   String? importErrorMessage;
 
-  Future saveJsonToFile(BuildContext context) async {
+  bool get _isBusy => isExporting || isImporting;
+
+  Future<void> saveJsonToFile() async {
     final l10n = AppLocalizations.of(context);
+    final loyaltyCardVm = Provider.of<LoyaltyCardViewModel>(
+      context,
+      listen: false,
+    );
+    final shoppingItemVm = Provider.of<ShoppingItemViewModel>(
+      context,
+      listen: false,
+    );
+    if (_isBusy || !loyaltyCardVm.isReady || !shoppingItemVm.isReady) return;
+
     try {
       setState(() {
         exportErrorMessage = null;
         exportSuccess = false;
         isExporting = true;
       });
-
-      final loyaltyCardVm = Provider.of<LoyaltyCardViewModel>(
-        context,
-        listen: false,
-      );
-
-      final shoppingItemVm = Provider.of<ShoppingItemViewModel>(
-        context,
-        listen: false,
-      );
 
       final loyaltyCardList = loyaltyCardVm.cardList;
       final shoppingList = shoppingItemVm.allItems;
@@ -66,7 +68,8 @@ class _ImportExportDataState extends State<ImportExportData> {
         allowedExtensions: ['json'],
         bytes: jsonBytes,
       );
-      await Future.delayed(const Duration(milliseconds: 500));
+      if (!mounted) return;
+
       if (savePath != null) {
         setState(() {
           isExporting = false;
@@ -79,7 +82,8 @@ class _ImportExportDataState extends State<ImportExportData> {
           exportErrorMessage = null;
         });
       }
-    } catch (e) {
+    } catch (_) {
+      if (!mounted) return;
       setState(() {
         exportErrorMessage = l10n?.settingsExportError ?? '';
         isExporting = false;
@@ -89,20 +93,31 @@ class _ImportExportDataState extends State<ImportExportData> {
   }
 
   Future<void> importFromJson() async {
+    final l10n = AppLocalizations.of(context);
+    final cardVm = Provider.of<LoyaltyCardViewModel>(context, listen: false);
+    final shoppingVm = Provider.of<ShoppingItemViewModel>(
+      context,
+      listen: false,
+    );
+    if (_isBusy || !cardVm.isReady || !shoppingVm.isReady) return;
+
     try {
-      final l10n = AppLocalizations.of(context);
-      final cardVm = Provider.of<LoyaltyCardViewModel>(context, listen: false);
-      final shoppingVm = Provider.of<ShoppingItemViewModel>(
-        context,
-        listen: false,
-      );
+      setState(() {
+        isImporting = true;
+        importErrorMessage = null;
+        importSuccess = false;
+      });
+
       final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['json'],
       );
       if (!mounted) return;
 
-      if (result == null || result.files.single.path == null) return;
+      if (result == null || result.files.single.path == null) {
+        setState(() => isImporting = false);
+        return;
+      }
 
       final confirmed = await showDialog<bool>(
         context: context,
@@ -123,19 +138,15 @@ class _ImportExportDataState extends State<ImportExportData> {
             ),
       );
       if (!mounted) return;
-      if (confirmed != true) return;
-
-      setState(() {
-        isImporting = true;
-        importErrorMessage = null;
-        importSuccess = false;
-      });
-
-      await Future.delayed(const Duration(milliseconds: 500));
+      if (confirmed != true) {
+        setState(() => isImporting = false);
+        return;
+      }
 
       final file = File(result.files.single.path!);
       final json = await file.readAsString();
       final backup = BackupData.fromJson(json);
+      if (!mounted) return;
 
       await DatabaseService().database.transaction((transaction) async {
         if (backup.loyaltyCards != null) {
@@ -152,10 +163,14 @@ class _ImportExportDataState extends State<ImportExportData> {
         }
       });
       if (backup.loyaltyCards != null) {
-        await cardVm.loadCards();
+        if (!await cardVm.loadCards()) {
+          throw StateError('Unable to reload loyalty cards after import.');
+        }
       }
       if (backup.shoppingItems != null) {
-        await shoppingVm.loadItems();
+        if (!await shoppingVm.loadItems()) {
+          throw StateError('Unable to reload shopping items after import.');
+        }
       }
       if (!mounted) return;
 
@@ -164,8 +179,8 @@ class _ImportExportDataState extends State<ImportExportData> {
         importSuccess = true;
         importErrorMessage = null;
       });
-    } catch (e) {
-      final l10n = AppLocalizations.of(context);
+    } catch (_) {
+      if (!mounted) return;
       setState(() {
         isImporting = false;
         importSuccess = false;
@@ -177,6 +192,12 @@ class _ImportExportDataState extends State<ImportExportData> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final cardVm = context.watch<LoyaltyCardViewModel>();
+    final shoppingVm = context.watch<ShoppingItemViewModel>();
+    final dataReady = cardVm.isReady && shoppingVm.isReady;
+    final loadFailed = cardVm.loadFailed || shoppingVm.loadFailed;
+    final canOperate = dataReady && !_isBusy;
+
     return DefaultTabController(
       length: 2,
       child: Column(
@@ -187,6 +208,16 @@ class _ImportExportDataState extends State<ImportExportData> {
               Tab(text: l10n?.settingsImportLabel ?? ''),
             ],
           ),
+          if (!dataReady)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              child: Text(
+                loadFailed
+                    ? l10n?.dataLoadError ?? ''
+                    : l10n?.dataLoadingLabel ?? '',
+                textAlign: TextAlign.center,
+              ),
+            ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -197,29 +228,32 @@ class _ImportExportDataState extends State<ImportExportData> {
                       CheckboxListTile(
                         value: exportCardList,
                         title: Text(l10n?.loyaltyCardsLabel ?? ''),
-                        onChanged: (value) {
-                          setState(() {
-                            exportCardList = !exportCardList;
-                          });
-                        },
+                        onChanged:
+                            canOperate
+                                ? (value) {
+                                  setState(() {
+                                    exportCardList = value ?? false;
+                                  });
+                                }
+                                : null,
                       ),
                       CheckboxListTile(
                         value: exportShoppingList,
                         title: Text(l10n?.shoppingListLabel ?? ''),
-                        onChanged: (value) {
-                          setState(() {
-                            exportShoppingList = !exportShoppingList;
-                          });
-                        },
+                        onChanged:
+                            canOperate
+                                ? (value) {
+                                  setState(() {
+                                    exportShoppingList = value ?? false;
+                                  });
+                                }
+                                : null,
                       ),
                       Column(
                         spacing: 20,
                         children: [
                           ElevatedButton(
-                            onPressed:
-                                isExporting
-                                    ? null
-                                    : () => saveJsonToFile(context),
+                            onPressed: canOperate ? saveJsonToFile : null,
                             child:
                                 isExporting
                                     ? Text(l10n?.settingsExportInProgress ?? '')
@@ -244,7 +278,7 @@ class _ImportExportDataState extends State<ImportExportData> {
                     spacing: 20,
                     children: [
                       ElevatedButton(
-                        onPressed: isImporting ? null : importFromJson,
+                        onPressed: canOperate ? importFromJson : null,
                         child:
                             isImporting
                                 ? Text(l10n?.settingsImportInProgress ?? '')

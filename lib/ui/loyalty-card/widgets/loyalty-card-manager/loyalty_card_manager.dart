@@ -29,6 +29,10 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
 
   Color pickerColor = Color(0xff2de700);
   Color currentColor = Color(0xff2de700);
+  bool _isSaving = false;
+  bool _isDeleting = false;
+
+  bool get _isBusy => _isSaving || _isDeleting;
 
   @override
   void initState() {
@@ -45,17 +49,21 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
     super.dispose();
   }
 
-  void _showPersistenceError(String? message) {
+  void _showPersistenceError() {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message ?? 'Unable to save changes.')),
+      SnackBar(
+        content: Text(AppLocalizations.of(context)?.persistenceSaveError ?? ''),
+      ),
     );
   }
 
   Future<void> _onSave() async {
+    if (_isBusy) return;
     if (_formKey.currentState!.validate()) {
       final name = _nameController.text;
       final barcode = _barcodeController.text;
       final vm = Provider.of<LoyaltyCardViewModel>(context, listen: false);
+      setState(() => _isSaving = true);
 
       final success = await vm.upsert(
         LoyaltyCard(
@@ -69,7 +77,8 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
       );
       if (!mounted) return;
       if (!success) {
-        _showPersistenceError(vm.errorMessage);
+        setState(() => _isSaving = false);
+        _showPersistenceError();
         return;
       }
       Navigator.of(context).pop();
@@ -77,11 +86,35 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
   }
 
   Future<void> _onDelete() async {
+    if (_isBusy) return;
+    final localizations = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text(localizations?.loyaltyCardDeleteConfirmTitle ?? ''),
+            content: Text(localizations?.loyaltyCardDeleteConfirmBody ?? ''),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(localizations?.cancelBtnLabel ?? ''),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text(localizations?.deleteBtnLabel ?? ''),
+              ),
+            ],
+          ),
+    );
+    if (!mounted || confirmed != true) return;
+
     final vm = Provider.of<LoyaltyCardViewModel>(context, listen: false);
+    setState(() => _isDeleting = true);
     final success = await vm.removeById(widget.card.id);
     if (!mounted) return;
     if (!success) {
-      _showPersistenceError(vm.errorMessage);
+      setState(() => _isDeleting = false);
+      _showPersistenceError();
       return;
     }
     Navigator.of(context).pop();
@@ -103,17 +136,17 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
         widget.isNewCard
             ? [
               ElevatedButton(
-                onPressed: _onSave,
+                onPressed: _isBusy ? null : _onSave,
                 child: Text(confirmLabel ?? ''),
               ),
             ]
             : [
               TextButton(
-                onPressed: _onDelete,
+                onPressed: _isBusy ? null : _onDelete,
                 child: Text(localizations?.deleteBtnLabel ?? ''),
               ),
               ElevatedButton(
-                onPressed: _onSave,
+                onPressed: _isBusy ? null : _onSave,
                 child: Text(confirmLabel ?? ''),
               ),
             ];
@@ -122,32 +155,35 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
       appBar: AppBar(title: Text(title ?? '')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            spacing: 20,
-            children: [
-              SizedBox(
-                width: 100,
-                height: 100,
-                child: Icon(
-                  Icons.card_membership,
-                  size: 100,
-                  color: currentColor,
+        child: AbsorbPointer(
+          absorbing: _isBusy,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              spacing: 20,
+              children: [
+                SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: Icon(
+                    Icons.card_membership,
+                    size: 100,
+                    color: currentColor,
+                  ),
                 ),
-              ),
-              LoyaltyCardNameInput(nameController: _nameController),
-              LoyaltyCardBarcodeInput(barcodeController: _barcodeController),
-              LoyaltyCardColorPicker(
-                color: currentColor,
-                onColorSelected:
-                    (color) => setState(() => currentColor = color),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: actions,
-              ),
-            ],
+                LoyaltyCardNameInput(nameController: _nameController),
+                LoyaltyCardBarcodeInput(barcodeController: _barcodeController),
+                LoyaltyCardColorPicker(
+                  color: currentColor,
+                  onColorSelected:
+                      (color) => setState(() => currentColor = color),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: actions,
+                ),
+              ],
+            ),
           ),
         ),
       ),

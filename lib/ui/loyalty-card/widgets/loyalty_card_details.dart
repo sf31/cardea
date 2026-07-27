@@ -19,6 +19,7 @@ class _LoyaltyCardDetailsState extends State<LoyaltyCardDetails> {
 
   Future<void> _copyBarcode() async {
     await Clipboard.setData(ClipboardData(text: widget.card.barcode));
+    if (!mounted) return;
     setState(() => _copied = true);
     await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;

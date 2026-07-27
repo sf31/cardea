@@ -60,7 +60,7 @@ Status values: `planned`, `in progress`, `blocked`, `completed`, `skipped`.
      release-mode APKs built; the private release configuration produced a
      signed APK verified with Android's `apksigner`.
 
-7. [ ] **Stabilize asynchronous UI and persistence state** — `planned`
+7. [x] **Stabilize asynchronous UI and persistence state** — `completed`
    - Add `mounted` guards before UI updates or context use after async gaps.
    - Remove artificial delays that do not serve product behavior.
    - Expose initial loading and load-failure states instead of showing an
@@ -70,6 +70,13 @@ Status values: `planned`, `in progress`, `blocked`, `completed`, `skipped`.
      while the corresponding operation is running.
    - Confirm loyalty-card deletion and prevent rapid repeated submissions.
    - Replace hardcoded persistence messages with localized UI errors.
+   - Implemented explicit loading, ready, and failure states in both list
+     viewmodels, with retry UI and readiness-gated mutations and data transfer.
+   - Added in-flight action protection, loyalty-card deletion confirmation,
+     async lifecycle guards, and localized persistence errors in English and
+     Italian; removed the artificial import/export delays.
+   - Validation: localization generation and formatting completed; analysis,
+     all 9 tests, and whitespace checks passed.
 
 8. [ ] **Add focused tests and basic CI** — `planned`
    - Keep the existing backup, barcode, rendering, and filtering tests.

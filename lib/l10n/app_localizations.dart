@@ -146,6 +146,30 @@ abstract class AppLocalizations {
   /// **'Copied to clipboard'**
   String get copiedToClipboardLabel;
 
+  /// Label for retry buttons
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retryBtnLabel;
+
+  /// Message displayed while local data is loading
+  ///
+  /// In en, this message translates to:
+  /// **'Loading data...'**
+  String get dataLoadingLabel;
+
+  /// Error displayed when local data cannot be loaded
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load your data. Please try again.'**
+  String get dataLoadError;
+
+  /// Error displayed when a local data change cannot be saved
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to save changes. Please try again.'**
+  String get persistenceSaveError;
+
   /// Label for loyalty cards
   ///
   /// In en, this message translates to:
@@ -289,6 +313,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please provide a name for the card.'**
   String get loyaltyCardManagerMissingName;
+
+  /// Title for the loyalty card deletion confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this card?'**
+  String get loyaltyCardDeleteConfirmTitle;
+
+  /// Body text for the loyalty card deletion confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'This card will be permanently deleted.'**
+  String get loyaltyCardDeleteConfirmBody;
 
   /// Title for the settings section
   ///

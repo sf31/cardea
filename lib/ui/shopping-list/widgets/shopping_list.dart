@@ -26,9 +26,11 @@ class _ShoppingListState extends State<ShoppingList> {
     return Provider.of<ShoppingItemViewModel>(context, listen: false);
   }
 
-  void _showPersistenceError(String? message) {
+  void _showPersistenceError() {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message ?? 'Unable to save changes.')),
+      SnackBar(
+        content: Text(AppLocalizations.of(context)?.persistenceSaveError ?? ''),
+      ),
     );
   }
 
@@ -46,7 +48,7 @@ class _ShoppingListState extends State<ShoppingList> {
       }
       if (!mounted) return false;
       if (!success) {
-        _showPersistenceError(vm.errorMessage);
+        _showPersistenceError();
         return false;
       }
       if (itemToEdit != null) {
@@ -76,6 +78,7 @@ class _ShoppingListState extends State<ShoppingList> {
   void _scrollToBottom() {
     if (!_showNewItem) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       if (!_scrollController.hasClients) return;
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
@@ -88,6 +91,9 @@ class _ShoppingListState extends State<ShoppingList> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final isReady = context.select<ShoppingItemViewModel, bool>(
+      (vm) => vm.isReady,
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n?.shoppingListSectionTitle ?? ''),
@@ -104,6 +110,39 @@ class _ShoppingListState extends State<ShoppingList> {
       ),
       body: Consumer<ShoppingItemViewModel>(
         builder: (context, provider, child) {
+          if (provider.isLoading) {
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 16,
+                children: [
+                  const CircularProgressIndicator(),
+                  Text(l10n?.dataLoadingLabel ?? ''),
+                ],
+              ),
+            );
+          }
+          if (provider.loadFailed) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 16,
+                  children: [
+                    Text(
+                      l10n?.dataLoadError ?? '',
+                      textAlign: TextAlign.center,
+                    ),
+                    FilledButton(
+                      onPressed: provider.loadItems,
+                      child: Text(l10n?.retryBtnLabel ?? ''),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
           if (provider.itemList.isEmpty &&
               provider.itemListDone.isEmpty &&
               !_showNewItem) {
@@ -172,7 +211,7 @@ class _ShoppingListState extends State<ShoppingList> {
         },
       ),
       floatingActionButton:
-          _showNewItem
+          !isReady || _showNewItem
               ? SizedBox()
               : FloatingActionButton.extended(
                 onPressed: () => setState(() => _showNewItem = !_showNewItem),

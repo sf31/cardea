@@ -33,6 +33,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get copiedToClipboardLabel => 'Copiato negli appunti!';
 
   @override
+  String get retryBtnLabel => 'Riprova';
+
+  @override
+  String get dataLoadingLabel => 'Caricamento dati...';
+
+  @override
+  String get dataLoadError => 'Impossibile caricare i dati. Riprova.';
+
+  @override
+  String get persistenceSaveError =>
+      'Impossibile salvare le modifiche. Riprova.';
+
+  @override
   String get loyaltyCardsLabel => 'Carte Fedeltà';
 
   @override
@@ -109,6 +122,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get loyaltyCardManagerMissingName => 'Fornisci un nome per la carta';
+
+  @override
+  String get loyaltyCardDeleteConfirmTitle => 'Eliminare questa carta?';
+
+  @override
+  String get loyaltyCardDeleteConfirmBody =>
+      'La carta verrà eliminata definitivamente.';
 
   @override
   String get settingsSectionTitle => 'Impostazioni';

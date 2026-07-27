@@ -1,4 +1,5 @@
 import 'package:cardea/data/models/shopping_item.model.dart';
+import 'package:cardea/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -28,10 +29,14 @@ class _ShoppingListTodoState extends State<ShoppingListTodo> {
     final vm = _getViewModel();
     final success = await vm.toggleCompleted(item.id);
     if (!mounted) return;
-    if (!success && vm.errorMessage != null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(vm.errorMessage!)));
+    if (!success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)?.persistenceSaveError ?? '',
+          ),
+        ),
+      );
     }
   }
 

@@ -21,10 +21,16 @@ class InputShoppingItem extends StatefulWidget {
 class _InputShoppingItemState extends State<InputShoppingItem> {
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+  bool _isSubmitting = false;
 
   Future<void> _submit(bool dismiss) async {
+    if (_isSubmitting) return;
+    setState(() => _isSubmitting = true);
+
     final success = await widget.onNameConfirm(_controller.text, dismiss);
+    if (!mounted) return;
     if (success) _controller.clear();
+    setState(() => _isSubmitting = false);
   }
 
   @override
@@ -46,10 +52,11 @@ class _InputShoppingItemState extends State<InputShoppingItem> {
     return Padding(
       padding: EdgeInsets.all(0.0),
       child: TextField(
+        enabled: !_isSubmitting,
         onTapOutside: (evt) => widget.focusLostCallback(),
         focusNode: _focusNode,
         controller: _controller,
-        onSubmitted: (_) async => _submit(true),
+        onSubmitted: _isSubmitting ? null : (_) => _submit(true),
         style: themedInputTextStyle(context),
         decoration: themedInputDecoration(context).copyWith(
           hintText: AppLocalizations.of(context)?.shoppingListInputHint,
@@ -60,7 +67,7 @@ class _InputShoppingItemState extends State<InputShoppingItem> {
           ),
           suffixIcon: IconButton(
             icon: Icon(Icons.add_circle, color: Colors.green[600]),
-            onPressed: () async => _submit(false),
+            onPressed: _isSubmitting ? null : () => _submit(false),
           ),
         ),
       ),

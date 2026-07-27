@@ -7,6 +7,10 @@
     "addBtnLabel": "Aggiungi",
     "copyToClipboardBtnLabel": "Copia",
     "copiedToClipboardLabel": "Copiato negli appunti!",
+    "retryBtnLabel": "Riprova",
+    "dataLoadingLabel": "Caricamento dati...",
+    "dataLoadError": "Impossibile caricare i dati. Riprova.",
+    "persistenceSaveError": "Impossibile salvare le modifiche. Riprova.",
 
 
 
@@ -42,6 +46,8 @@
     "loyaltyCardManagerColorLabel": "Scegli un colore",
     "loyaltyCardManagerNameLabel": "Nome della carta",
     "loyaltyCardManagerMissingName": "Fornisci un nome per la carta",
+    "loyaltyCardDeleteConfirmTitle": "Eliminare questa carta?",
+    "loyaltyCardDeleteConfirmBody": "La carta verrà eliminata definitivamente.",
 
 
     "settingsSectionTitle": "Impostazioni",

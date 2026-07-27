@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 class ShoppingItemViewModel with ChangeNotifier {
   final ShoppingItemRepository repository;
   List<ShoppingItem> _itemList = [];
-  String? errorMessage;
+  bool isLoading = true;
+  bool hasLoaded = false;
+  bool loadFailed = false;
 
   ShoppingItemViewModel({required this.repository}) : super() {
     loadItems();
@@ -15,6 +17,8 @@ class ShoppingItemViewModel with ChangeNotifier {
 
   UnmodifiableListView<ShoppingItem> get allItems =>
       UnmodifiableListView(_itemList);
+
+  bool get isReady => hasLoaded && !isLoading;
 
   UnmodifiableListView<ShoppingItem> get itemList {
     final toDoItems =
@@ -28,12 +32,28 @@ class ShoppingItemViewModel with ChangeNotifier {
     return UnmodifiableListView(doneItems);
   }
 
-  Future<void> loadItems() async {
-    _itemList = await repository.getAll();
+  Future<bool> loadItems() async {
+    isLoading = true;
+    loadFailed = false;
     notifyListeners();
+
+    try {
+      _itemList = await repository.getAll();
+      hasLoaded = true;
+      return true;
+    } catch (_) {
+      hasLoaded = false;
+      loadFailed = true;
+      return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<bool> upsert(ShoppingItem item) async {
+    if (!isReady) return false;
+
     int currentIndex = _itemList.indexWhere((c) => c.id == item.id);
     try {
       if (currentIndex != -1) {
@@ -43,17 +63,16 @@ class ShoppingItemViewModel with ChangeNotifier {
         await repository.create(item);
         _itemList.add(item);
       }
-      errorMessage = null;
       notifyListeners();
       return true;
     } catch (_) {
-      errorMessage = 'Unable to save changes.';
-      notifyListeners();
       return false;
     }
   }
 
   Future<bool> toggleCompleted(String id) async {
+    if (!isReady) return false;
+
     int currentIndex = _itemList.indexWhere((c) => c.id == id);
     if (currentIndex != -1) {
       bool completed = _itemList[currentIndex].completedAt != null;
@@ -66,12 +85,9 @@ class ShoppingItemViewModel with ChangeNotifier {
       try {
         await repository.update(updatedItem);
         _itemList[currentIndex] = updatedItem;
-        errorMessage = null;
         notifyListeners();
         return true;
       } catch (_) {
-        errorMessage = 'Unable to save changes.';
-        notifyListeners();
         return false;
       }
     }
@@ -79,15 +95,14 @@ class ShoppingItemViewModel with ChangeNotifier {
   }
 
   Future<bool> removeById(String id) async {
+    if (!isReady) return false;
+
     try {
       await repository.delete(id);
       _itemList.removeWhere((card) => card.id == id);
-      errorMessage = null;
       notifyListeners();
       return true;
     } catch (_) {
-      errorMessage = 'Unable to save changes.';
-      notifyListeners();
       return false;
     }
   }
@@ -96,12 +111,5 @@ class ShoppingItemViewModel with ChangeNotifier {
     await repository.setAll(items);
     _itemList = items;
     notifyListeners();
-  }
-
-  void clearError() {
-    if (errorMessage != null) {
-      errorMessage = null;
-      notifyListeners();
-    }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cardea/data/models/loyalty_card.model.dart';
+import 'package:cardea/l10n/app_localizations.dart';
 import 'package:cardea/ui/loyalty-card/loyalty_card.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,10 +21,14 @@ class LoyaltyCardItem extends StatelessWidget {
         final vm = Provider.of<LoyaltyCardViewModel>(context, listen: false);
         final success = await vm.incrementUsageCount(card);
         if (!context.mounted) return;
-        if (!success && vm.errorMessage != null) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(vm.errorMessage!)));
+        if (!success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                AppLocalizations.of(context)?.persistenceSaveError ?? '',
+              ),
+            ),
+          );
         }
         showModalBottomSheet(
           showDragHandle: true,
