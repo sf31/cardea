@@ -25,11 +25,12 @@ class _InputShoppingItemState extends State<InputShoppingItem> {
 
   Future<void> _submit(bool dismiss) async {
     if (_isSubmitting) return;
+    final submittedText = _controller.text;
     setState(() => _isSubmitting = true);
 
-    final success = await widget.onNameConfirm(_controller.text, dismiss);
+    final success = await widget.onNameConfirm(submittedText, dismiss);
     if (!mounted) return;
-    if (success) _controller.clear();
+    if (success && _controller.text == submittedText) _controller.clear();
     setState(() => _isSubmitting = false);
   }
 
@@ -52,10 +53,13 @@ class _InputShoppingItemState extends State<InputShoppingItem> {
     return Padding(
       padding: EdgeInsets.all(0.0),
       child: TextField(
-        enabled: !_isSubmitting,
-        onTapOutside: (evt) => widget.focusLostCallback(),
+        onTapOutside: (evt) {
+          _focusNode.unfocus();
+          widget.focusLostCallback();
+        },
         focusNode: _focusNode,
         controller: _controller,
+        textInputAction: TextInputAction.done,
         onSubmitted: _isSubmitting ? null : (_) => _submit(true),
         style: themedInputTextStyle(context),
         decoration: themedInputDecoration(context).copyWith(
