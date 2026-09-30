@@ -112,10 +112,36 @@ class _ShoppingListState extends State<ShoppingList> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final isReady = context.select<ShoppingItemViewModel, bool>(
+      (vm) => vm.isReady,
+    );
+    final completedCount = context.select<ShoppingItemViewModel, int>(
+      (vm) => vm.itemListDone.length,
+    );
+    final completedLabel =
+        l10n?.shoppingListCompletedSectionTitle(completedCount) ?? '';
+    final compactActions =
+        MediaQuery.sizeOf(context).width < 400 ||
+        MediaQuery.textScalerOf(context).scale(14) > 18;
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n?.shoppingListSectionTitle ?? ''),
         actions: [
+          if (compactActions)
+            IconButton(
+              tooltip: completedLabel,
+              onPressed: isReady && completedCount > 0 ? _openCompleted : null,
+              icon: Badge.count(
+                count: completedCount,
+                isLabelVisible: completedCount > 0,
+                child: const Icon(Icons.check_circle_outline),
+              ),
+            )
+          else
+            TextButton(
+              onPressed: isReady && completedCount > 0 ? _openCompleted : null,
+              child: Text(completedLabel),
+            ),
           IconButton(
             onPressed: () {
               Navigator.of(
@@ -180,67 +206,48 @@ class _ShoppingListState extends State<ShoppingList> {
                         )
                         : SingleChildScrollView(
                           controller: _scrollController,
-                          padding: const EdgeInsets.only(bottom: 8),
+                          padding: EdgeInsets.only(
+                            bottom:
+                                _showNewItem
+                                    ? 8
+                                    : 56 + 2 * kFloatingActionButtonMargin,
+                          ),
                           child: ShoppingListTodo(
                             onItemEdit: onItemEdit,
                             showNewItem: _showNewItem,
                           ),
                         ),
               ),
-              const Divider(height: 1),
-              SafeArea(
-                top: false,
-                child:
-                    _showNewItem
-                        ? InputShoppingItem(
-                          onNameConfirm: onNameChanged,
-                          focusLostCallback:
-                              () => setState(() {
-                                _showNewItem = false;
-                                _itemToEdit = null;
-                              }),
-                          name: _itemToEdit?.name,
-                        )
-                        : Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: TextButton.icon(
-                                  onPressed:
-                                      provider.itemListDone.isEmpty
-                                          ? null
-                                          : _openCompleted,
-                                  icon: const Icon(Icons.check_circle_outline),
-                                  label: Text(
-                                    l10n?.shoppingListCompletedSectionTitle(
-                                          provider.itemListDone.length,
-                                        ) ??
-                                        '',
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: FilledButton.icon(
-                                  onPressed: () {
-                                    setState(() => _showNewItem = true);
-                                    _scrollToBottom();
-                                  },
-                                  icon: const Icon(Icons.add),
-                                  label: Text(
-                                    l10n?.shoppingListNewItemBtn ?? '',
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-              ),
+              if (_showNewItem) ...[
+                const Divider(height: 1),
+                SafeArea(
+                  top: false,
+                  child: InputShoppingItem(
+                    onNameConfirm: onNameChanged,
+                    focusLostCallback:
+                        () => setState(() {
+                          _showNewItem = false;
+                          _itemToEdit = null;
+                        }),
+                    name: _itemToEdit?.name,
+                  ),
+                ),
+              ],
             ],
           );
         },
       ),
+      floatingActionButton:
+          !isReady || _showNewItem
+              ? null
+              : FloatingActionButton.extended(
+                onPressed: () {
+                  setState(() => _showNewItem = true);
+                  _scrollToBottom();
+                },
+                icon: const Icon(Icons.add),
+                label: Text(l10n?.shoppingListNewItemBtn ?? ''),
+              ),
     );
   }
 }

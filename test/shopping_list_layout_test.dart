@@ -80,7 +80,14 @@ void main() {
     ]);
     final original = tester.getRect(find.text('Completed (1)'));
     expect(find.text('Bread'), findsNothing);
-    expect(find.byType(FloatingActionButton), findsNothing);
+    expect(find.byType(FloatingActionButton), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(AppBar),
+        matching: find.text('Completed (1)'),
+      ),
+      findsOneWidget,
+    );
     for (var i = 0; i < 30; i++) {
       await vm.upsert(ShoppingItem.fromName('Item $i'));
     }
@@ -92,6 +99,14 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(tester.getRect(find.text('Completed (1)')), original);
+    await tester.drag(
+      find.byType(SingleChildScrollView),
+      const Offset(0, -3000),
+    );
+    await tester.pumpAndSettle();
+    final lastRow = tester.getRect(find.widgetWithText(ListTile, 'Item 29'));
+    final fab = tester.getRect(find.byType(FloatingActionButton));
+    expect(lastRow.bottom, lessThanOrEqualTo(fab.top));
     await tester.tap(find.text('Completed (1)'));
     await tester.pumpAndSettle();
     expect(find.byType(BottomSheet), findsOneWidget);
@@ -125,6 +140,7 @@ void main() {
     await tester.tap(find.text('New Item'));
     await tester.pumpAndSettle();
     expect(tester.testTextInput.isVisible, isTrue);
+    expect(find.byType(FloatingActionButton), findsNothing);
     await tester.enterText(find.byType(TextField), 'Milk');
     await tester.tap(find.byIcon(Icons.add_circle));
     await tester.pumpAndSettle();
@@ -154,7 +170,7 @@ void main() {
       List.generate(40, (i) => completed('Done $i')),
       textScale: 1.5,
     );
-    await tester.tap(find.text('Completed (40)'));
+    await tester.tap(find.byTooltip('Completed (40)'));
     await tester.pumpAndSettle();
     final list = find.descendant(
       of: find.byType(BottomSheet),
