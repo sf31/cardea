@@ -208,4 +208,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get shoppingListClearCompletedBody =>
       'Gli elementi completati verranno eliminati definitivamente.';
+
+  @override
+  String get shoppingListAllDoneLabel => 'Hai completato la lista.';
+
+  @override
+  String get shoppingListNoCompletedLabel => 'Nessun articolo completato.';
 }

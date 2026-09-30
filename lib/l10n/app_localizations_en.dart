@@ -206,4 +206,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get shoppingListClearCompletedBody =>
       'Completed items will be permanently deleted.';
+
+  @override
+  String get shoppingListAllDoneLabel => 'Everything is checked off.';
+
+  @override
+  String get shoppingListNoCompletedLabel => 'No completed items.';
 }

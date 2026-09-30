@@ -75,5 +75,7 @@
     "shoppingListCompletedSectionTitle": "Completati ({count})",
     "shoppingListClearCompletedBtn": "Cancella completati",
     "shoppingListClearCompletedTitle": "Cancellare gli elementi completati?",
-    "shoppingListClearCompletedBody": "Gli elementi completati verranno eliminati definitivamente."
+    "shoppingListClearCompletedBody": "Gli elementi completati verranno eliminati definitivamente.",
+    "shoppingListAllDoneLabel": "Hai completato la lista.",
+    "shoppingListNoCompletedLabel": "Nessun articolo completato."
 }

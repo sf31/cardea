@@ -275,5 +275,7 @@
     "shoppingListClearCompletedBody": "Completed items will be permanently deleted.",
     "@shoppingListClearCompletedBody": {
         "description": "Body for the completed shopping items confirmation dialog"
-    }
+    },
+    "shoppingListAllDoneLabel": "Everything is checked off.",
+    "shoppingListNoCompletedLabel": "No completed items."
 }

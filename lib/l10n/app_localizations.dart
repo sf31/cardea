@@ -469,6 +469,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Completed items will be permanently deleted.'**
   String get shoppingListClearCompletedBody;
+
+  /// No description provided for @shoppingListAllDoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything is checked off.'**
+  String get shoppingListAllDoneLabel;
+
+  /// No description provided for @shoppingListNoCompletedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'No completed items.'**
+  String get shoppingListNoCompletedLabel;
 }
 
 class _AppLocalizationsDelegate

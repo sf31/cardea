@@ -18,7 +18,6 @@ class ShoppingList extends StatefulWidget {
 
 class _ShoppingListState extends State<ShoppingList> {
   bool _showNewItem = false;
-  bool _showCompletedItems = false;
   ShoppingItem? _itemToEdit;
   final ScrollController _scrollController = ScrollController();
 
@@ -59,7 +58,11 @@ class _ShoppingListState extends State<ShoppingList> {
       }
     }
 
-    if (dismiss) setState(() => _showNewItem = false);
+    if (dismiss) {
+      setState(() => _showNewItem = false);
+    } else {
+      _scrollToBottom();
+    }
     return true;
   }
 
@@ -88,12 +91,27 @@ class _ShoppingListState extends State<ShoppingList> {
     });
   }
 
+  void _openCompleted() {
+    final viewModel = _getViewModel();
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      showDragHandle: true,
+      builder:
+          (context) => ChangeNotifierProvider.value(
+            value: viewModel,
+            child: const FractionallySizedBox(
+              heightFactor: 0.7,
+              child: SafeArea(top: false, child: ShoppingListDone()),
+            ),
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final isReady = context.select<ShoppingItemViewModel, bool>(
-      (vm) => vm.isReady,
-    );
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n?.shoppingListSectionTitle ?? ''),
@@ -143,81 +161,86 @@ class _ShoppingListState extends State<ShoppingList> {
               ),
             );
           }
-          if (provider.itemList.isEmpty &&
-              provider.itemListDone.isEmpty &&
-              !_showNewItem) {
-            return Center(
-              child: Text(
-                l10n?.shoppingListEmptyLabel ?? '',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 16,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            );
-          }
-          _scrollToBottom();
           return Column(
             children: [
               Expanded(
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  padding: EdgeInsets.only(
-                    bottom: _showNewItem ? 0 : kFloatingActionButtonMargin + 56,
-                  ),
-                  child: Column(
-                    children: [
-                      ShoppingListTodo(
-                        onItemEdit: onItemEdit,
-                        showNewItem: _showNewItem,
-                      ),
-                      if (provider.itemListDone.isNotEmpty)
-                        Card(
-                          margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                          child: ExpansionTile(
-                            initiallyExpanded: _showCompletedItems,
-                            onExpansionChanged:
-                                (expanded) => setState(
-                                  () => _showCompletedItems = expanded,
-                                ),
-                            title: Text(
-                              l10n?.shoppingListCompletedSectionTitle(
-                                    provider.itemListDone.length,
-                                  ) ??
-                                  '',
+                child:
+                    provider.itemList.isEmpty
+                        ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(24),
+                            child: Text(
+                              provider.itemListDone.isEmpty
+                                  ? l10n?.shoppingListEmptyLabel ?? ''
+                                  : l10n?.shoppingListAllDoneLabel ?? '',
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.bodyLarge,
                             ),
-                            children: const [ShoppingListDone()],
+                          ),
+                        )
+                        : SingleChildScrollView(
+                          controller: _scrollController,
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: ShoppingListTodo(
+                            onItemEdit: onItemEdit,
+                            showNewItem: _showNewItem,
                           ),
                         ),
-                    ],
-                  ),
-                ),
               ),
-              if (_showNewItem)
-                InputShoppingItem(
-                  onNameConfirm: onNameChanged,
-                  focusLostCallback:
-                      () => setState(() {
-                        _showNewItem = false;
-                        _itemToEdit = null;
-                      }),
-                  name: _itemToEdit?.name,
-                )
-              else
-                SizedBox(),
+              const Divider(height: 1),
+              SafeArea(
+                top: false,
+                child:
+                    _showNewItem
+                        ? InputShoppingItem(
+                          onNameConfirm: onNameChanged,
+                          focusLostCallback:
+                              () => setState(() {
+                                _showNewItem = false;
+                                _itemToEdit = null;
+                              }),
+                          name: _itemToEdit?.name,
+                        )
+                        : Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextButton.icon(
+                                  onPressed:
+                                      provider.itemListDone.isEmpty
+                                          ? null
+                                          : _openCompleted,
+                                  icon: const Icon(Icons.check_circle_outline),
+                                  label: Text(
+                                    l10n?.shoppingListCompletedSectionTitle(
+                                          provider.itemListDone.length,
+                                        ) ??
+                                        '',
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: FilledButton.icon(
+                                  onPressed: () {
+                                    setState(() => _showNewItem = true);
+                                    _scrollToBottom();
+                                  },
+                                  icon: const Icon(Icons.add),
+                                  label: Text(
+                                    l10n?.shoppingListNewItemBtn ?? '',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+              ),
             ],
           );
         },
       ),
-      floatingActionButton:
-          !isReady || _showNewItem
-              ? SizedBox()
-              : FloatingActionButton.extended(
-                onPressed: () => setState(() => _showNewItem = !_showNewItem),
-                label: Text(l10n?.shoppingListNewItemBtn ?? ''),
-                icon: const Icon(Icons.add),
-              ),
     );
   }
 }
