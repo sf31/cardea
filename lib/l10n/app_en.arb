@@ -117,16 +117,6 @@
     "@loyaltyCardSortByUsage": {
         "description": "Label for sort by usage option"
     },
-    "loyaltyCardCount": "{count, plural, =1{1 card} other{{count} cards}}",
-    "@loyaltyCardCount": {
-        "description": "Number of saved loyalty cards shown above the card grid",
-        "placeholders": {
-            "count": {
-                "type": "int",
-                "example": "8"
-            }
-        }
-    },
     "loyaltyCardSearchLabel": "Find a Card",
     "@loyaltyCardSearchLabel": {
         "description": "Label for the search bar to find a loyalty card"

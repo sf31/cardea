@@ -99,92 +99,79 @@ class LoyaltyCardFace extends StatelessWidget {
     final trimmed = name.trim();
     final initial =
         trimmed.isEmpty ? '' : trimmed.characters.first.toUpperCase();
+    final radius = BorderRadius.circular(12);
     return Material(
       color: color,
       elevation: 1,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: radius,
       clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        onLongPress: onLongPress,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CircleAvatar(
-                    radius: 14,
-                    backgroundColor: foreground.withValues(alpha: 0.2),
-                    foregroundColor: foreground,
-                    child: Text(
-                      initial,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  _BarcodeGlyph(color: foreground.withValues(alpha: 0.8)),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 4,
-                children: [
-                  Text(
-                    name,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+      // A soft light-to-colour sheen and a faint edge, like a physical card.
+      child: Ink(
+        decoration: BoxDecoration(
+          borderRadius: radius,
+          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color.lerp(color, Colors.white, 0.28)!, color],
+            stops: const [0, 0.55],
+          ),
+        ),
+        child: InkWell(
+          onTap: onTap,
+          onLongPress: onLongPress,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CircleAvatar(
+                  radius: 17,
+                  backgroundColor: foreground.withValues(alpha: 0.2),
+                  foregroundColor: foreground,
+                  child: Text(
+                    initial,
+                    style: const TextStyle(
                       fontSize: 19,
-                      height: 1.2,
                       fontWeight: FontWeight.bold,
-                      color: foreground,
                     ),
                   ),
-                  if (number case final number? when number.isNotEmpty)
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 4,
+                  children: [
                     Text(
-                      number,
-                      maxLines: 1,
+                      name,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontFamily: 'monospace',
-                        fontSize: 13,
-                        letterSpacing: 1,
-                        color: foreground.withValues(alpha: 0.85),
+                        fontSize: 20,
+                        height: 1.2,
+                        fontWeight: FontWeight.w600,
+                        color: foreground,
                       ),
                     ),
-                ],
-              ),
-            ],
+                    if (number case final number? when number.isNotEmpty)
+                      Text(
+                        number,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontFamily: 'monospace',
+                          fontSize: 13,
+                          letterSpacing: 1,
+                          color: foreground.withValues(alpha: 0.85),
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
-    );
-  }
-}
-
-/// Decorative barcode hint drawn as a few vertical bars.
-class _BarcodeGlyph extends StatelessWidget {
-  final Color color;
-
-  const _BarcodeGlyph({required this.color});
-
-  static const _barWidths = [2.0, 1.0, 2.0, 3.0, 1.0, 2.0, 1.0, 2.0];
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      spacing: 1.5,
-      children: [
-        for (final width in _barWidths)
-          ColoredBox(color: color, child: SizedBox(width: width, height: 18)),
-      ],
     );
   }
 }

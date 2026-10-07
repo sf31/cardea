@@ -60,17 +60,18 @@ Future<MemoryLoyaltyCardRepository> showWallet(
 }
 
 void main() {
-  testWidgets('shows the card count and keeps settings in the app bar', (
+  testWidgets('app bar holds sort and settings; search is a button', (
     tester,
   ) async {
     await showWallet(tester, [card('Bookshop'), card('Gym')]);
 
-    expect(find.text('2 cards'), findsOneWidget);
+    Finder inAppBar(Finder finder) =>
+        find.descendant(of: find.byType(AppBar), matching: finder);
+    expect(inAppBar(find.byTooltip('Sort by')), findsOneWidget);
+    expect(inAppBar(find.byIcon(Icons.settings)), findsOneWidget);
+    expect(find.byType(SearchBar), findsNothing);
     expect(
-      find.descendant(
-        of: find.byType(AppBar),
-        matching: find.byIcon(Icons.settings),
-      ),
+      find.widgetWithIcon(FloatingActionButton, Icons.search),
       findsOneWidget,
     );
     expect(find.text('New Card'), findsOneWidget);
@@ -88,14 +89,54 @@ void main() {
     expect(left('Bookshop'), lessThan(left('Gym')));
     expect(top('Bookshop'), top('Gym'));
 
-    await tester.tap(find.text('Name'));
+    await tester.tap(find.byTooltip('Sort by'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Most used'));
     await tester.pumpAndSettle();
 
     expect(repository.sortBy, SortOption.mostUsed);
     expect(left('Gym'), lessThan(left('Bookshop')));
-    expect(find.text('Most used'), findsOneWidget);
+  });
+
+  testWidgets('search button opens a bottom field that filters and closes', (
+    tester,
+  ) async {
+    await showWallet(tester, [card('Bookshop'), card('Gym')]);
+
+    await tester.tap(find.byType(FloatingActionButton));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(SearchBar), findsOneWidget);
+    expect(find.byType(FloatingActionButton), findsNothing);
+    final searchTop = tester.getTopLeft(find.byType(SearchBar)).dy;
+    expect(searchTop, greaterThan(tester.getTopLeft(find.text('Gym')).dy));
+
+    await tester.enterText(find.byType(SearchBar), 'gy');
+    await tester.pump();
+    expect(find.text('Gym'), findsOneWidget);
+    expect(find.text('Bookshop'), findsNothing);
+
+    await tester.tap(find.byTooltip('Close'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(SearchBar), findsNothing);
+    expect(find.text('Bookshop'), findsOneWidget);
+    expect(find.byType(FloatingActionButton), findsOneWidget);
+  });
+
+  testWidgets('back closes the search and clears the filter', (tester) async {
+    await showWallet(tester, [card('Bookshop'), card('Gym')]);
+
+    await tester.tap(find.byType(FloatingActionButton));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(SearchBar), 'gy');
+    await tester.pump();
+
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+
+    expect(find.byType(SearchBar), findsNothing);
+    expect(find.text('Bookshop'), findsOneWidget);
   });
 
   testWidgets('tapping a card opens its barcode sheet with an Edit action', (

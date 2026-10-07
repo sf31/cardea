@@ -36,16 +36,9 @@ class LoyaltyCardSort extends StatelessWidget {
           ),
       ],
       builder:
-          (context, controller, child) => ActionChip(
+          (context, controller, child) => IconButton(
             tooltip: l10n?.loyaltyCardSortBy,
-            avatar: const Icon(Icons.sort),
-            label: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(labelFor(currentSortBy, l10n)),
-                const Icon(Icons.arrow_drop_down, size: 18),
-              ],
-            ),
+            icon: const Icon(Icons.sort),
             onPressed:
                 () =>
                     controller.isOpen ? controller.close() : controller.open(),

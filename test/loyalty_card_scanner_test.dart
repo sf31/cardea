@@ -6,9 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mobile_scanner/mobile_scanner.dart' show BarcodeFormat;
 
 void main() {
-  testWidgets('typing the number opens an empty Code 128 card', (
-    tester,
-  ) async {
+  testWidgets('typing the number opens an empty Code 128 card', (tester) async {
     await tester.pumpWidget(
       const MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
