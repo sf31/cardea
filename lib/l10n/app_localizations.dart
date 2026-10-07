@@ -314,6 +314,30 @@ abstract class AppLocalizations {
   /// **'Card Name'**
   String get loyaltyCardManagerNameLabel;
 
+  /// Label for the card number input field in the loyalty card manager
+  ///
+  /// In en, this message translates to:
+  /// **'Card number'**
+  String get loyaltyCardManagerBarcodeLabel;
+
+  /// Error message when the card number is missing
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the card number.'**
+  String get loyaltyCardManagerMissingBarcode;
+
+  /// Error message when the card number cannot be encoded with the selected barcode type
+  ///
+  /// In en, this message translates to:
+  /// **'This number is not valid for {format}.'**
+  String loyaltyCardManagerInvalidBarcode(String format);
+
+  /// Label for the barcode type field in the loyalty card manager
+  ///
+  /// In en, this message translates to:
+  /// **'Barcode type'**
+  String get loyaltyCardManagerFormatLabel;
+
   /// Error message when the card name is missing
   ///
   /// In en, this message translates to:

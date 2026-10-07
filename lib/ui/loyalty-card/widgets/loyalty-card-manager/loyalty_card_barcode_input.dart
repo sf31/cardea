@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 class LoyaltyCardBarcodeInput extends StatelessWidget {
   final TextEditingController barcodeController;
+  final FormFieldValidator<String> validator;
 
-  const LoyaltyCardBarcodeInput({super.key, required this.barcodeController});
+  /// Shown inside the field, on the right: the barcode type.
+  final Widget? suffix;
+
+  const LoyaltyCardBarcodeInput({
+    super.key,
+    required this.barcodeController,
+    required this.validator,
+    this.suffix,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -12,15 +23,13 @@ class LoyaltyCardBarcodeInput extends StatelessWidget {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       controller: barcodeController,
-      decoration: const InputDecoration(
-        labelText: 'Barcode',
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue),
-        ),
+      decoration: InputDecoration(
+        labelText:
+            AppLocalizations.of(context)?.loyaltyCardManagerBarcodeLabel ?? '',
+        border: const OutlineInputBorder(),
+        suffixIcon: suffix,
       ),
+      validator: validator,
     );
   }
 }

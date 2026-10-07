@@ -131,6 +131,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loyaltyCardManagerNameLabel => 'Card Name';
 
   @override
+  String get loyaltyCardManagerBarcodeLabel => 'Card number';
+
+  @override
+  String get loyaltyCardManagerMissingBarcode =>
+      'Please enter the card number.';
+
+  @override
+  String loyaltyCardManagerInvalidBarcode(String format) {
+    return 'This number is not valid for $format.';
+  }
+
+  @override
+  String get loyaltyCardManagerFormatLabel => 'Barcode type';
+
+  @override
   String get loyaltyCardManagerMissingName =>
       'Please provide a name for the card.';
 

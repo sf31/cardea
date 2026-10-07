@@ -2,8 +2,11 @@ import 'package:cardea/data/models/loyalty_card.model.dart';
 import 'package:cardea/l10n/app_localizations.dart';
 import 'package:cardea/ui/loyalty-card/loyalty_card.viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_scanner/mobile_scanner.dart' show BarcodeFormat;
 import 'package:provider/provider.dart';
 
+import '../../barcode_format.dart';
+import '../loyalty_card_item.dart';
 import 'loyalty_card_barcode_input.dart';
 import 'loyalty_card_color_picker.dart';
 import 'loyalty_card_name_input.dart';
@@ -27,8 +30,8 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
   final _nameController = TextEditingController();
   final _barcodeController = TextEditingController();
 
-  Color pickerColor = Color(0xff2de700);
-  Color currentColor = Color(0xff2de700);
+  late Color currentColor = widget.card.color;
+  late BarcodeFormat _barcodeFormat = widget.card.barcodeFormat;
   bool _isSaving = false;
   bool _isDeleting = false;
 
@@ -37,9 +40,11 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
   @override
   void initState() {
     super.initState();
-    currentColor = widget.card.color;
     _nameController.text = widget.card.name;
     _barcodeController.text = widget.card.barcode;
+    // Keep the preview in sync with the typed name and number.
+    _nameController.addListener(() => setState(() {}));
+    _barcodeController.addListener(() => setState(() {}));
   }
 
   @override
@@ -57,6 +62,27 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
     );
   }
 
+  String? _validateBarcode(String? value) {
+    final l10n = AppLocalizations.of(context);
+    if (value == null || value.isEmpty) {
+      return l10n?.loyaltyCardManagerMissingBarcode ?? '';
+    }
+    // Only check what the user changed: an untouched scanned or saved value
+    // is kept as-is, and the barcode sheet already falls back to plain text.
+    if (value == widget.card.barcode &&
+        _barcodeFormat == widget.card.barcodeFormat) {
+      return null;
+    }
+    final barcode = barcodeFor(_barcodeFormat);
+    if (barcode != null && !barcode.isValid(value)) {
+      return l10n?.loyaltyCardManagerInvalidBarcode(
+            barcodeFormatName(_barcodeFormat) ?? '',
+          ) ??
+          '';
+    }
+    return null;
+  }
+
   Future<void> _onSave() async {
     if (_isBusy) return;
     if (_formKey.currentState!.validate()) {
@@ -70,7 +96,7 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
           id: widget.card.id,
           name: name,
           barcode: barcode,
-          barcodeFormat: widget.card.barcodeFormat,
+          barcodeFormat: _barcodeFormat,
           color: currentColor,
           usageCount: widget.card.usageCount,
         ),
@@ -120,6 +146,45 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
     Navigator.of(context).pop();
   }
 
+  /// The barcode type, shown inside the number field. Most people never
+  /// need to change it, so it stays low-key.
+  Widget _formatSuffix(AppLocalizations? localizations) {
+    final label = localizations?.loyaltyCardManagerFormatLabel ?? '';
+    final style = Theme.of(context).textTheme.bodySmall?.copyWith(
+      color: Theme.of(context).colorScheme.onSurfaceVariant,
+    );
+    return MenuAnchor(
+      menuChildren: [
+        for (final format in selectableBarcodeFormats)
+          MenuItemButton(
+            onPressed: () => setState(() => _barcodeFormat = format),
+            trailingIcon:
+                format == _barcodeFormat ? const Icon(Icons.check) : null,
+            child: Text(barcodeFormatName(format) ?? ''),
+          ),
+      ],
+      builder:
+          (context, controller, child) => Tooltip(
+            message: label,
+            child: TextButton.icon(
+              style: TextButton.styleFrom(
+                visualDensity: VisualDensity.compact,
+                foregroundColor: style?.color,
+                textStyle: style,
+              ),
+              onPressed:
+                  () =>
+                      controller.isOpen
+                          ? controller.close()
+                          : controller.open(),
+              iconAlignment: IconAlignment.end,
+              icon: const Icon(Icons.arrow_drop_down, size: 18),
+              label: Text(barcodeFormatName(_barcodeFormat) ?? label),
+            ),
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
@@ -131,56 +196,75 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
         widget.isNewCard
             ? localizations?.addBtnLabel
             : localizations?.saveBtnLabel;
-
-    final actions =
-        widget.isNewCard
-            ? [
-              ElevatedButton(
-                onPressed: _isBusy ? null : _onSave,
-                child: Text(confirmLabel ?? ''),
-              ),
-            ]
-            : [
-              TextButton(
-                onPressed: _isBusy ? null : _onDelete,
-                child: Text(localizations?.deleteBtnLabel ?? ''),
-              ),
-              ElevatedButton(
-                onPressed: _isBusy ? null : _onSave,
-                child: Text(confirmLabel ?? ''),
-              ),
-            ];
+    final name = _nameController.text.trim();
 
     return Scaffold(
       appBar: AppBar(title: Text(title ?? '')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: AbsorbPointer(
-          absorbing: _isBusy,
-          child: Form(
-            key: _formKey,
+      body: AbsorbPointer(
+        absorbing: _isBusy,
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
             child: Column(
-              spacing: 20,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: Icon(
-                    Icons.card_membership,
-                    size: 100,
-                    color: currentColor,
+                Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 300),
+                    child: AspectRatio(
+                      aspectRatio: 1.586,
+                      child: LoyaltyCardFace(
+                        name:
+                            name.isEmpty
+                                ? localizations?.loyaltyCardManagerNameLabel ??
+                                    ''
+                                : name,
+                        color: currentColor,
+                        number: _barcodeController.text,
+                      ),
+                    ),
                   ),
                 ),
+                const SizedBox(height: 24),
                 LoyaltyCardNameInput(nameController: _nameController),
-                LoyaltyCardBarcodeInput(barcodeController: _barcodeController),
+                const SizedBox(height: 20),
+                LoyaltyCardBarcodeInput(
+                  barcodeController: _barcodeController,
+                  validator: _validateBarcode,
+                  suffix: _formatSuffix(localizations),
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  localizations?.loyaltyCardManagerColorLabel ?? '',
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                const SizedBox(height: 12),
                 LoyaltyCardColorPicker(
                   color: currentColor,
+                  initialColor: widget.card.color,
                   onColorSelected:
                       (color) => setState(() => currentColor = color),
                 ),
+                const SizedBox(height: 32),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: actions,
+                  spacing: 12,
+                  children: [
+                    if (!widget.isNewCard)
+                      TextButton.icon(
+                        style: TextButton.styleFrom(
+                          foregroundColor: Theme.of(context).colorScheme.error,
+                        ),
+                        onPressed: _isBusy ? null : _onDelete,
+                        icon: const Icon(Icons.delete_outline),
+                        label: Text(localizations?.deleteBtnLabel ?? ''),
+                      ),
+                    const Spacer(),
+                    FilledButton(
+                      onPressed: _isBusy ? null : _onSave,
+                      child: Text(confirmLabel ?? ''),
+                    ),
+                  ],
                 ),
               ],
             ),

@@ -65,17 +65,48 @@ class LoyaltyCardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final foreground = foregroundColorFor(card.color);
-    final name = card.name.trim();
-    final initial = name.isEmpty ? '' : name.characters.first.toUpperCase();
-    return Material(
+    return LoyaltyCardFace(
+      name: card.name,
       color: card.color,
+      onTap: () => _showDetails(context),
+      onLongPress: () => openEditor(context, card),
+    );
+  }
+}
+
+/// The card-shaped tile used in the wallet grid and the editor preview.
+class LoyaltyCardFace extends StatelessWidget {
+  final String name;
+  final Color color;
+
+  /// Card number shown under the name; the wallet grid leaves it out.
+  final String? number;
+  final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
+
+  const LoyaltyCardFace({
+    super.key,
+    required this.name,
+    required this.color,
+    this.number,
+    this.onTap,
+    this.onLongPress,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final foreground = LoyaltyCardItem.foregroundColorFor(color);
+    final trimmed = name.trim();
+    final initial =
+        trimmed.isEmpty ? '' : trimmed.characters.first.toUpperCase();
+    return Material(
+      color: color,
       elevation: 1,
       borderRadius: BorderRadius.circular(12),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: () => _showDetails(context),
-        onLongPress: () => openEditor(context, card),
+        onTap: onTap,
+        onLongPress: onLongPress,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           child: Column(
@@ -100,16 +131,34 @@ class LoyaltyCardItem extends StatelessWidget {
                   _BarcodeGlyph(color: foreground.withValues(alpha: 0.8)),
                 ],
               ),
-              Text(
-                card.name,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 19,
-                  height: 1.2,
-                  fontWeight: FontWeight.bold,
-                  color: foreground,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 4,
+                children: [
+                  Text(
+                    name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 19,
+                      height: 1.2,
+                      fontWeight: FontWeight.bold,
+                      color: foreground,
+                    ),
+                  ),
+                  if (number case final number? when number.isNotEmpty)
+                    Text(
+                      number,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontFamily: 'monospace',
+                        fontSize: 13,
+                        letterSpacing: 1,
+                        color: foreground.withValues(alpha: 0.85),
+                      ),
+                    ),
+                ],
               ),
             ],
           ),

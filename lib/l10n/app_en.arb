@@ -167,6 +167,28 @@
     "@loyaltyCardManagerNameLabel": {
         "description": "Label for the card name input field in the loyalty card manager"
     },
+    "loyaltyCardManagerBarcodeLabel": "Card number",
+    "@loyaltyCardManagerBarcodeLabel": {
+        "description": "Label for the card number input field in the loyalty card manager"
+    },
+    "loyaltyCardManagerMissingBarcode": "Please enter the card number.",
+    "@loyaltyCardManagerMissingBarcode": {
+        "description": "Error message when the card number is missing"
+    },
+    "loyaltyCardManagerInvalidBarcode": "This number is not valid for {format}.",
+    "@loyaltyCardManagerInvalidBarcode": {
+        "description": "Error message when the card number cannot be encoded with the selected barcode type",
+        "placeholders": {
+            "format": {
+                "type": "String",
+                "example": "EAN-13"
+            }
+        }
+    },
+    "loyaltyCardManagerFormatLabel": "Barcode type",
+    "@loyaltyCardManagerFormatLabel": {
+        "description": "Label for the barcode type field in the loyalty card manager"
+    },
     "loyaltyCardManagerMissingName": "Please provide a name for the card.",
     "@loyaltyCardManagerMissingName": {
         "description": "Error message when the card name is missing"

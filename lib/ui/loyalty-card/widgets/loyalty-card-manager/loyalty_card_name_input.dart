@@ -20,12 +20,7 @@ class LoyaltyCardNameInput extends StatelessWidget {
           controller: nameController,
           decoration: InputDecoration(
             labelText: l10n?.loyaltyCardManagerNameLabel ?? '',
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.blue),
-            ),
+            border: const OutlineInputBorder(),
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
