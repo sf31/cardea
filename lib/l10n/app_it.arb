@@ -40,8 +40,10 @@
     "loyaltyCardEmptySearchResult": "Nessun risultato trovato per {searchTerm}.",
 
 
-    "loyaltyCardManagerScanLabel": "Scansiona la tua carta",
-    "loyaltyCardManagerScanManually": "Inserisci il codice manualmente",
+    "loyaltyCardManagerScanLabel": "Inquadra il codice a barre della tua carta",
+    "loyaltyCardManagerScanManually": "Digita il numero della carta",
+    "loyaltyCardManagerScanManuallyHint": "Niente codice a barre o non si legge?",
+    "loyaltyCardManagerFlashlight": "Torcia",
     "loyaltyCardManagerTitleNew": "Aggiungi nuova carta",
     "loyaltyCardManagerTitleEdit": "Modifica carta",
     "loyaltyCardManagerColorLabel": "Scegli un colore",

@@ -281,14 +281,26 @@ abstract class AppLocalizations {
   /// Label for the scan card button in the loyalty card manager
   ///
   /// In en, this message translates to:
-  /// **'Scan your card'**
+  /// **'Point the camera at the barcode on your card'**
   String get loyaltyCardManagerScanLabel;
 
   /// Label for the manual code entry option in the loyalty card manager
   ///
   /// In en, this message translates to:
-  /// **'Enter code manually'**
+  /// **'Type the card number'**
   String get loyaltyCardManagerScanManually;
+
+  /// Prompt above the button that opens manual card number entry from the scanner
+  ///
+  /// In en, this message translates to:
+  /// **'No barcode, or it won\'t scan?'**
+  String get loyaltyCardManagerScanManuallyHint;
+
+  /// Tooltip for the scanner flashlight toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Flashlight'**
+  String get loyaltyCardManagerFlashlight;
 
   /// Title for the loyalty card manager when adding a new card
   ///

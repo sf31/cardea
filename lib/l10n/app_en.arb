@@ -143,13 +143,21 @@
     },
 
 
-    "loyaltyCardManagerScanLabel": "Scan your card",
+    "loyaltyCardManagerScanLabel": "Point the camera at the barcode on your card",
     "@loyaltyCardManagerScanLabel": {
         "description": "Label for the scan card button in the loyalty card manager"
     },
-    "loyaltyCardManagerScanManually": "Enter code manually",
+    "loyaltyCardManagerScanManually": "Type the card number",
     "@loyaltyCardManagerScanManually": {
         "description": "Label for the manual code entry option in the loyalty card manager"
+    },
+    "loyaltyCardManagerScanManuallyHint": "No barcode, or it won't scan?",
+    "@loyaltyCardManagerScanManuallyHint": {
+        "description": "Prompt above the button that opens manual card number entry from the scanner"
+    },
+    "loyaltyCardManagerFlashlight": "Flashlight",
+    "@loyaltyCardManagerFlashlight": {
+        "description": "Tooltip for the scanner flashlight toggle"
     },
     "loyaltyCardManagerTitleNew": "Add New Card",
     "@loyaltyCardManagerTitleNew": {

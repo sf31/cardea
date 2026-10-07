@@ -113,11 +113,18 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get loyaltyCardManagerScanLabel => 'Scansiona la tua carta';
+  String get loyaltyCardManagerScanLabel =>
+      'Inquadra il codice a barre della tua carta';
 
   @override
-  String get loyaltyCardManagerScanManually =>
-      'Inserisci il codice manualmente';
+  String get loyaltyCardManagerScanManually => 'Digita il numero della carta';
+
+  @override
+  String get loyaltyCardManagerScanManuallyHint =>
+      'Niente codice a barre o non si legge?';
+
+  @override
+  String get loyaltyCardManagerFlashlight => 'Torcia';
 
   @override
   String get loyaltyCardManagerTitleNew => 'Aggiungi nuova carta';

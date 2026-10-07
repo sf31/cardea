@@ -62,59 +62,117 @@ class _LoyaltyCardScannerState extends State<LoyaltyCardScanner> {
     );
   }
 
+  /// The camera area: only barcodes inside the frame are read.
+  Widget _camera(AppLocalizations? l10n) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final size = constraints.biggest;
+        final width = (size.width - 48).clamp(0.0, 340.0);
+        // Same proportions as a payment card.
+        final scanWindow = Rect.fromCenter(
+          center: size.center(Offset.zero),
+          width: width,
+          height: width / 1.586,
+        );
+        return Stack(
+          children: [
+            MobileScanner(
+              controller: _controller,
+              scanWindow: scanWindow,
+              onDetect: _handleBarcode,
+            ),
+            IgnorePointer(
+              child: ScanWindowOverlay(
+                controller: _controller,
+                scanWindow: scanWindow,
+                borderColor: Colors.white,
+                borderWidth: 3,
+                borderRadius: BorderRadius.circular(16),
+                color: Colors.black54,
+              ),
+            ),
+            Positioned(
+              left: 24,
+              right: 24,
+              top: scanWindow.bottom + 24,
+              child: Text(
+                l10n?.loyaltyCardManagerScanLabel ?? '',
+                textAlign: TextAlign.center,
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _flashlightButton(AppLocalizations? l10n) {
+    return ValueListenableBuilder(
+      valueListenable: _controller,
+      builder: (context, state, child) {
+        if (!state.isInitialized ||
+            !state.isRunning ||
+            state.torchState == TorchState.unavailable) {
+          return const SizedBox.shrink();
+        }
+        final isOn = state.torchState == TorchState.on;
+        return IconButton(
+          tooltip: l10n?.loyaltyCardManagerFlashlight,
+          isSelected: isOn,
+          onPressed: _controller.toggleTorch,
+          icon: Icon(isOn ? Icons.flash_on : Icons.flash_off),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          AppLocalizations.of(context)?.loyaltyCardManagerTitleNew ?? '',
-        ),
-      ),
       backgroundColor: Colors.black,
-      body: Stack(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        leading: const CloseButton(),
+        title: Text(l10n?.loyaltyCardManagerTitleNew ?? ''),
+        actions: [_flashlightButton(l10n)],
+      ),
+      body: Column(
         children: [
-          MobileScanner(
-            onDetect: (BarcodeCapture barcodes) {
-              _handleBarcode(barcodes);
-            },
-            controller: _controller,
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              alignment: Alignment.bottomCenter,
-              height: 200,
-              color: const Color.fromRGBO(0, 0, 0, 0.6),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          Expanded(child: _camera(l10n)),
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: colorScheme.surface,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(28),
+              ),
+            ),
+            padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+            child: SafeArea(
+              top: false,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 12,
                 children: [
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          AppLocalizations.of(
-                                context,
-                              )?.loyaltyCardManagerScanLabel ??
-                              '',
-                          overflow: TextOverflow.fade,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 25.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        FilledButton(
-                          onPressed: _manualAdd,
-                          child: Text(
-                            AppLocalizations.of(
-                                  context,
-                                )?.loyaltyCardManagerScanManually ??
-                                '',
-                          ),
-                        ),
-                      ],
+                  Text(
+                    l10n?.loyaltyCardManagerScanManuallyHint ?? '',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: _manualAdd,
+                      icon: const Icon(Icons.keyboard),
+                      label: Text(l10n?.loyaltyCardManagerScanManually ?? ''),
                     ),
                   ),
                 ],

@@ -113,10 +113,18 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get loyaltyCardManagerScanLabel => 'Scan your card';
+  String get loyaltyCardManagerScanLabel =>
+      'Point the camera at the barcode on your card';
 
   @override
-  String get loyaltyCardManagerScanManually => 'Enter code manually';
+  String get loyaltyCardManagerScanManually => 'Type the card number';
+
+  @override
+  String get loyaltyCardManagerScanManuallyHint =>
+      'No barcode, or it won\'t scan?';
+
+  @override
+  String get loyaltyCardManagerFlashlight => 'Flashlight';
 
   @override
   String get loyaltyCardManagerTitleNew => 'Add New Card';
