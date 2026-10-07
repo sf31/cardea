@@ -91,7 +91,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loyaltyCardSortByName => 'Name';
 
   @override
-  String get loyaltyCardSortByUsage => 'Usage';
+  String get loyaltyCardSortByUsage => 'Most used';
+
+  @override
+  String loyaltyCardCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cards',
+      one: '1 card',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get loyaltyCardSearchLabel => 'Find a Card';

@@ -1,5 +1,4 @@
 import 'package:cardea/l10n/app_localizations.dart';
-import 'package:cardea/utils/theme.utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,46 +30,32 @@ class _LoyaltyCardFindState extends State<LoyaltyCardFind> {
     super.dispose();
   }
 
+  void _clear() {
+    _viewModel.onFilter(null);
+    _filterController.clear();
+    widget.findFocusNode.unfocus();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsGeometry.all(10),
-      child: TextFormField(
-        style: themedInputTextStyle(context),
-        onChanged: (e) => _viewModel.onFilter(e),
-        autofocus: false,
-        focusNode: widget.findFocusNode,
-        onTapOutside: (evt) => widget.findFocusNode.unfocus(),
-        // onTapOutside: (evt) => FocusManager.instance.primaryFocus?.unfocus(),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+      child: SearchBar(
         controller: _filterController,
-        decoration: themedInputDecoration(context).copyWith(
-          hintStyle: TextStyle(color: Colors.grey[500]),
-          hintText: AppLocalizations.of(context)?.loyaltyCardSearchLabel ?? '',
-          prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(25),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(25),
-          ),
-          suffixIcon:
-              _filterController.text.isNotEmpty
-                  ? InkWell(
-                    onTap: () {
-                      final vm = Provider.of<LoyaltyCardViewModel>(
-                        context,
-                        listen: false,
-                      );
-                      vm.onFilter(null);
-                      _filterController.text = '';
-                      FocusManager.instance.primaryFocus?.unfocus();
-                    },
-                    child: Icon(Icons.close, color: Colors.grey[500]),
-                  )
-                  : null,
-        ),
+        focusNode: widget.findFocusNode,
+        onChanged: _viewModel.onFilter,
+        onTapOutside: (_) => widget.findFocusNode.unfocus(),
+        elevation: const WidgetStatePropertyAll(0),
+        hintText: AppLocalizations.of(context)?.loyaltyCardSearchLabel ?? '',
+        leading: const Icon(Icons.search),
+        trailing: [
+          if (_filterController.text.isNotEmpty)
+            IconButton(
+              tooltip: MaterialLocalizations.of(context).clearButtonTooltip,
+              onPressed: _clear,
+              icon: const Icon(Icons.close),
+            ),
+        ],
       ),
     );
   }

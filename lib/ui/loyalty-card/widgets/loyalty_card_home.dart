@@ -26,27 +26,18 @@ class _LoyaltyCardHomeState extends State<LoyaltyCardHome> {
     super.dispose();
   }
 
-  Future<void> _sortBy(BuildContext context) async {
+  Future<void> _sortBy(BuildContext context, SortOption option) async {
     final vm = Provider.of<LoyaltyCardViewModel>(context, listen: false);
-    final selectedOption = await showDialog<SortOption>(
-      context: context,
-      builder:
-          (BuildContext context) => LoyaltyCardSort(currentSortBy: vm.sortBy),
-    );
+    final success = await vm.setSortBy(option);
     if (!context.mounted) return;
-
-    if (selectedOption != null) {
-      final success = await vm.setSortBy(selectedOption);
-      if (!context.mounted) return;
-      if (!success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(context)?.persistenceSaveError ?? '',
-            ),
+    if (!success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)?.persistenceSaveError ?? '',
           ),
-        );
-      }
+        ),
+      );
     }
   }
 
@@ -57,14 +48,8 @@ class _LoyaltyCardHomeState extends State<LoyaltyCardHome> {
       appBar: AppBar(
         title: Text(l10n?.loyaltyCardSectionTitle ?? ''),
         actions: [
-          Consumer<LoyaltyCardViewModel>(
-            builder:
-                (context, vm, child) => IconButton(
-                  onPressed: vm.isReady ? () => _sortBy(context) : null,
-                  icon: const Icon(Icons.filter_list),
-                ),
-          ),
           IconButton(
+            tooltip: l10n?.settingsSectionTitle,
             onPressed: () {
               Navigator.of(
                 context,
@@ -115,13 +100,34 @@ class _LoyaltyCardHomeState extends State<LoyaltyCardHome> {
             padding: EdgeInsets.all(20.0),
             child: Text(
               l10n?.loyaltyCardEmptySearchResult(vm.filterString ?? '') ?? '',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
           );
 
           return Column(
             children: [
               LoyaltyCardFind(findFocusNode: findFocusNode),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        l10n?.loyaltyCardCount(vm.cardList.length) ?? '',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                    LoyaltyCardSort(
+                      currentSortBy: vm.sortBy,
+                      onSelected: (option) => _sortBy(context, option),
+                    ),
+                  ],
+                ),
+              ),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(

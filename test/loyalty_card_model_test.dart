@@ -64,7 +64,11 @@ void main() {
       usageCount: 0,
     );
 
-    await tester.pumpWidget(MaterialApp(home: LoyaltyCardDetails(card: card)));
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(body: LoyaltyCardDetails(card: card, onEdit: () {})),
+      ),
+    );
 
     expect(find.byType(BarcodeWidget), findsOneWidget);
   });

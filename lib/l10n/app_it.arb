@@ -34,7 +34,8 @@
     "loyaltyCardEmptyBtn": "Tocca il pulsante + qui sotto per aggiungere la tua prima carta.",
     "loyaltyCardSortBy": "Ordina per",
     "loyaltyCardSortByName": "Nome",
-    "loyaltyCardSortByUsage": "Utilizzo",
+    "loyaltyCardSortByUsage": "Più usate",
+    "loyaltyCardCount": "{count, plural, =1{1 carta} other{{count} carte}}",
     "loyaltyCardSearchLabel": "Cerca",
     "loyaltyCardEmptySearchResult": "Nessun risultato trovato per {searchTerm}.",
 

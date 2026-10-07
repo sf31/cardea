@@ -13,10 +13,11 @@ class LoyaltyCardGrid extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       crossAxisCount: 2,
-      childAspectRatio: 2,
-      padding: const EdgeInsets.all(10),
-      crossAxisSpacing: 10,
-      mainAxisSpacing: 10,
+      // Standard payment card proportions (85.6 × 54 mm).
+      childAspectRatio: 1.586,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      crossAxisSpacing: 12,
+      mainAxisSpacing: 12,
       children: [...cardList.map((card) => LoyaltyCardItem(card: card))],
     );
   }

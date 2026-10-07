@@ -8,7 +8,7 @@ class LoyaltyCardAddBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 50, bottom: 20),
+      padding: EdgeInsets.symmetric(vertical: 24),
       child: FilledButton.icon(
         icon: Icon(Icons.add),
         onPressed:

@@ -7,8 +7,13 @@ import 'package:mobile_scanner/mobile_scanner.dart' show BarcodeFormat;
 
 class LoyaltyCardDetails extends StatefulWidget {
   final LoyaltyCard card;
+  final VoidCallback onEdit;
 
-  const LoyaltyCardDetails({super.key, required this.card});
+  const LoyaltyCardDetails({
+    super.key,
+    required this.card,
+    required this.onEdit,
+  });
 
   @override
   State<LoyaltyCardDetails> createState() => _LoyaltyCardDetailsState();
@@ -74,50 +79,75 @@ class _LoyaltyCardDetailsState extends State<LoyaltyCardDetails> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Text(
-            widget.card.name,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 30, color: Colors.black),
-          ),
-        ),
-        if (_barcodeForFormat() case final barcode?)
-          BarcodeWidget(
-            barcode: barcode,
-            data: widget.card.barcode,
-            padding: const EdgeInsets.all(35),
-            drawText: false,
-            errorBuilder: (context, error) => _barcodeFallback(),
-          )
-        else
-          _barcodeFallback(),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            spacing: 20,
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            spacing: 8,
             children: [
-              Text(
-                widget.card.barcode,
-                style: TextStyle(fontSize: 20, color: Colors.black),
-              ),
-              _copied
-                  ? TextButton(
-                    onPressed: () {},
-                    child: Text(l10n?.copiedToClipboardLabel ?? ''),
-                  )
-                  : TextButton(
-                    onPressed: _copyBarcode,
-                    child: Text(l10n?.copyToClipboardBtnLabel ?? ''),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Text(
+                    widget.card.name,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
+                ),
+              ),
+              FilledButton.tonalIcon(
+                onPressed: widget.onEdit,
+                icon: const Icon(Icons.edit),
+                label: Text(l10n?.editBtnLabel ?? ''),
+              ),
             ],
           ),
-        ),
-      ],
+          const SizedBox(height: 16),
+          // Always black on white so scanners can read it in dark mode too.
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            padding: const EdgeInsets.only(bottom: 20),
+            child: Column(
+              children: [
+                if (_barcodeForFormat() case final barcode?)
+                  BarcodeWidget(
+                    barcode: barcode,
+                    data: widget.card.barcode,
+                    padding: const EdgeInsets.all(35),
+                    drawText: false,
+                    errorBuilder: (context, error) => _barcodeFallback(),
+                  )
+                else
+                  _barcodeFallback(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    widget.card.barcode,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 20, color: Colors.black),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
+          TextButton.icon(
+            onPressed: _copyBarcode,
+            icon: Icon(_copied ? Icons.check : Icons.copy),
+            label: Text(
+              _copied
+                  ? l10n?.copiedToClipboardLabel ?? ''
+                  : l10n?.copyToClipboardBtnLabel ?? '',
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

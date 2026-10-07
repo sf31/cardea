@@ -8,6 +8,10 @@ class LoyaltyCardEmpty extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final style = Theme.of(context).textTheme.bodyLarge?.copyWith(
+      color: Theme.of(context).colorScheme.onSurfaceVariant,
+      fontStyle: FontStyle.italic,
+    );
     return Center(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 30),
@@ -18,20 +22,12 @@ class LoyaltyCardEmpty extends StatelessWidget {
           children: [
             Text(
               AppLocalizations.of(context)?.loyaltyCardEmptyLabel ?? '',
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 16,
-                fontStyle: FontStyle.italic,
-              ),
+              style: style,
             ),
             Text(
               AppLocalizations.of(context)?.loyaltyCardEmptyBtn ?? '',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 16,
-                fontStyle: FontStyle.italic,
-              ),
+              style: style,
             ),
             LoyaltyCardAddBtn(),
           ],

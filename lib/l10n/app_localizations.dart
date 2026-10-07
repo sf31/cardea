@@ -257,8 +257,14 @@ abstract class AppLocalizations {
   /// Label for sort by usage option
   ///
   /// In en, this message translates to:
-  /// **'Usage'**
+  /// **'Most used'**
   String get loyaltyCardSortByUsage;
+
+  /// Number of saved loyalty cards shown above the card grid
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 card} other{{count} cards}}'**
+  String loyaltyCardCount(int count);
 
   /// Label for the search bar to find a loyalty card
   ///
