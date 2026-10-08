@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cardea/ui/shared/feedback.dart';
 
 import '../../../data/models/backup_data.model.dart';
 import '../../../data/services/database.service.dart';
@@ -22,17 +23,16 @@ class _ImportExportDataState extends State<ImportExportData> {
   bool exportCardList = true;
   bool exportShoppingList = true;
   bool isExporting = false;
-  bool? exportSuccess = false;
-  String? exportErrorMessage;
+  bool exportSuccess = false;
+  bool exportFailed = false;
 
   bool isImporting = false;
-  bool? importSuccess = false;
-  String? importErrorMessage;
+  bool importSuccess = false;
+  bool importFailed = false;
 
   bool get _isBusy => isExporting || isImporting;
 
   Future<void> saveJsonToFile() async {
-    final l10n = AppLocalizations.of(context);
     final loyaltyCardVm = Provider.of<LoyaltyCardViewModel>(
       context,
       listen: false,
@@ -45,7 +45,7 @@ class _ImportExportDataState extends State<ImportExportData> {
 
     try {
       setState(() {
-        exportErrorMessage = null;
+        exportFailed = false;
         exportSuccess = false;
         isExporting = true;
       });
@@ -70,22 +70,15 @@ class _ImportExportDataState extends State<ImportExportData> {
       );
       if (!mounted) return;
 
-      if (savePath != null) {
-        setState(() {
-          isExporting = false;
-          exportSuccess = true;
-        });
-      } else {
-        setState(() {
-          isExporting = false;
-          exportSuccess = false;
-          exportErrorMessage = null;
-        });
-      }
+      // A null path means the user cancelled the save dialog.
+      setState(() {
+        isExporting = false;
+        exportSuccess = savePath != null;
+      });
     } catch (_) {
       if (!mounted) return;
       setState(() {
-        exportErrorMessage = l10n?.settingsExportError ?? '';
+        exportFailed = true;
         isExporting = false;
         exportSuccess = false;
       });
@@ -104,7 +97,7 @@ class _ImportExportDataState extends State<ImportExportData> {
     try {
       setState(() {
         isImporting = true;
-        importErrorMessage = null;
+        importFailed = false;
         importSuccess = false;
       });
 
@@ -119,26 +112,14 @@ class _ImportExportDataState extends State<ImportExportData> {
         return;
       }
 
-      final confirmed = await showDialog<bool>(
-        context: context,
-        builder:
-            (context) => AlertDialog(
-              title: Text(l10n?.settingsImportConfirmTitle ?? ''),
-              content: Text(l10n?.settingsImportConfirmBody ?? ''),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  child: Text(l10n?.cancelBtnLabel ?? ''),
-                ),
-                FilledButton(
-                  onPressed: () => Navigator.of(context).pop(true),
-                  child: Text(l10n?.settingsImportConfirmAction ?? ''),
-                ),
-              ],
-            ),
+      final confirmed = await confirmAction(
+        context,
+        title: l10n?.settingsImportConfirmTitle ?? '',
+        body: l10n?.settingsImportConfirmBody ?? '',
+        confirmLabel: l10n?.settingsImportConfirmAction ?? '',
       );
       if (!mounted) return;
-      if (confirmed != true) {
+      if (!confirmed) {
         setState(() => isImporting = false);
         return;
       }
@@ -177,14 +158,13 @@ class _ImportExportDataState extends State<ImportExportData> {
       setState(() {
         isImporting = false;
         importSuccess = true;
-        importErrorMessage = null;
       });
     } catch (_) {
       if (!mounted) return;
       setState(() {
         isImporting = false;
         importSuccess = false;
-        importErrorMessage = l10n?.settingsImportError ?? '';
+        importFailed = true;
       });
     }
   }
@@ -197,6 +177,7 @@ class _ImportExportDataState extends State<ImportExportData> {
     final dataReady = cardVm.isReady && shoppingVm.isReady;
     final loadFailed = cardVm.loadFailed || shoppingVm.loadFailed;
     final canOperate = dataReady && !_isBusy;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return DefaultTabController(
       length: 2,
@@ -252,23 +233,23 @@ class _ImportExportDataState extends State<ImportExportData> {
                       Column(
                         spacing: 20,
                         children: [
-                          ElevatedButton(
+                          FilledButton(
                             onPressed: canOperate ? saveJsonToFile : null,
                             child:
                                 isExporting
                                     ? Text(l10n?.settingsExportInProgress ?? '')
                                     : Text(l10n?.settingsExportBtn ?? ''),
                           ),
-                          if (exportSuccess == true)
+                          if (exportSuccess)
                             Text(
                               textAlign: TextAlign.center,
                               l10n?.settingsExportSuccess ?? '',
-                              style: TextStyle(color: Colors.green),
+                              style: TextStyle(color: colorScheme.primary),
                             ),
-                          if (exportErrorMessage != null)
+                          if (exportFailed)
                             Text(
-                              exportErrorMessage ?? '',
-                              style: TextStyle(color: Colors.red),
+                              l10n?.settingsExportError ?? '',
+                              style: TextStyle(color: colorScheme.error),
                             ),
                         ],
                       ),
@@ -277,22 +258,22 @@ class _ImportExportDataState extends State<ImportExportData> {
                   Column(
                     spacing: 20,
                     children: [
-                      ElevatedButton(
+                      FilledButton(
                         onPressed: canOperate ? importFromJson : null,
                         child:
                             isImporting
                                 ? Text(l10n?.settingsImportInProgress ?? '')
                                 : Text(l10n?.settingsImportBtn ?? ''),
                       ),
-                      if (importErrorMessage != null)
+                      if (importFailed)
                         Text(
-                          importErrorMessage ?? '',
-                          style: const TextStyle(color: Colors.red),
+                          l10n?.settingsImportError ?? '',
+                          style: TextStyle(color: colorScheme.error),
                         ),
-                      if (importSuccess == true)
+                      if (importSuccess)
                         Text(
                           l10n?.settingsImportSuccess ?? '',
-                          style: TextStyle(color: Colors.green),
+                          style: TextStyle(color: colorScheme.primary),
                         ),
                     ],
                   ),

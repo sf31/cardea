@@ -1,7 +1,6 @@
+import 'package:cardea/data/models/sort_option.model.dart';
 import 'package:cardea/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-
-enum SortOption { alphabetical, mostUsed }
 
 class LoyaltyCardSort extends StatelessWidget {
   final SortOption currentSortBy;

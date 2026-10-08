@@ -4,6 +4,8 @@ import 'package:cardea/ui/shopping-list/widgets/shopping_list_done.dart';
 import 'package:cardea/ui/shopping-list/widgets/shopping_list_todo.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cardea/ui/shared/feedback.dart';
+import 'package:cardea/ui/shared/load_status.dart';
 
 import '../../settings/widgets/settings.dart';
 import '../shopping_item.viewmodel.dart';
@@ -25,14 +27,6 @@ class _ShoppingListState extends State<ShoppingList> {
     return Provider.of<ShoppingItemViewModel>(context, listen: false);
   }
 
-  void _showPersistenceError() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(AppLocalizations.of(context)?.persistenceSaveError ?? ''),
-      ),
-    );
-  }
-
   Future<bool> onNameChanged(String name, bool dismiss) async {
     final itemToEdit = _itemToEdit;
     bool success = true;
@@ -47,7 +41,7 @@ class _ShoppingListState extends State<ShoppingList> {
       }
       if (!mounted) return false;
       if (!success) {
-        _showPersistenceError();
+        showPersistenceError(context);
         return false;
       }
       if (itemToEdit != null) {
@@ -154,37 +148,10 @@ class _ShoppingListState extends State<ShoppingList> {
       ),
       body: Consumer<ShoppingItemViewModel>(
         builder: (context, provider, child) {
-          if (provider.isLoading) {
-            return Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                spacing: 16,
-                children: [
-                  const CircularProgressIndicator(),
-                  Text(l10n?.dataLoadingLabel ?? ''),
-                ],
-              ),
-            );
-          }
-          if (provider.loadFailed) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  spacing: 16,
-                  children: [
-                    Text(
-                      l10n?.dataLoadError ?? '',
-                      textAlign: TextAlign.center,
-                    ),
-                    FilledButton(
-                      onPressed: provider.loadItems,
-                      child: Text(l10n?.retryBtnLabel ?? ''),
-                    ),
-                  ],
-                ),
-              ),
+          if (provider.isLoading || provider.loadFailed) {
+            return LoadStatus(
+              failed: provider.loadFailed,
+              onRetry: provider.loadItems,
             );
           }
           return Column(

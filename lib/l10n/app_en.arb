@@ -1,9 +1,5 @@
 {
 
-    "confirmBtnLabel": "Confirm",
-    "@confirmBtnLabel": {
-        "description": "Label for confirm button"
-    },
     "cancelBtnLabel": "Cancel",
     "@cancelBtnLabel": {
         "description": "Label for cancel button"

@@ -23,12 +23,6 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setTheme(ThemeMode mode) {
-    _themeMode = mode;
-    _prefsService.setThemeMode(_getThemeStr(mode));
-    notifyListeners();
-  }
-
   ThemeMode _getTheme(String? mode) {
     switch (mode) {
       case 'dark':
@@ -37,17 +31,6 @@ class ThemeProvider extends ChangeNotifier {
         return ThemeMode.light;
       default:
         return ThemeMode.system;
-    }
-  }
-
-  String _getThemeStr(ThemeMode mode) {
-    switch (mode) {
-      case ThemeMode.dark:
-        return 'dark';
-      case ThemeMode.light:
-        return 'light';
-      default:
-        return 'system';
     }
   }
 }

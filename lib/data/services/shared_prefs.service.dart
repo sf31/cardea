@@ -1,4 +1,4 @@
-import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_sort.dart';
+import 'package:cardea/data/models/sort_option.model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesService {

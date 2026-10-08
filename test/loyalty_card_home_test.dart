@@ -5,7 +5,7 @@ import 'package:cardea/ui/loyalty-card/loyalty_card.viewmodel.dart';
 import 'package:cardea/ui/loyalty-card/widgets/loyalty-card-manager/loyalty_card_manager.dart';
 import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_details.dart';
 import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_home.dart';
-import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_sort.dart';
+import 'package:cardea/data/models/sort_option.model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';

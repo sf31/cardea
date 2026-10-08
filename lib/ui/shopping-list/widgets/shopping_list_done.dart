@@ -2,6 +2,7 @@ import 'package:cardea/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:cardea/ui/shared/feedback.dart';
 
 import '../shopping_item.viewmodel.dart';
 
@@ -19,13 +20,7 @@ class _ShoppingListDoneState extends State<ShoppingListDone> {
     final success = await vm.toggleCompleted(id);
     if (!mounted) return;
     if (!success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)?.persistenceSaveError ?? '',
-          ),
-        ),
-      );
+      showPersistenceError(context);
     }
   }
 
@@ -33,25 +28,13 @@ class _ShoppingListDoneState extends State<ShoppingListDone> {
     if (_isClearing) return;
 
     final l10n = AppLocalizations.of(context);
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text(l10n?.shoppingListClearCompletedTitle ?? ''),
-            content: Text(l10n?.shoppingListClearCompletedBody ?? ''),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text(l10n?.cancelBtnLabel ?? ''),
-              ),
-              FilledButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: Text(l10n?.deleteBtnLabel ?? ''),
-              ),
-            ],
-          ),
+    final confirmed = await confirmAction(
+      context,
+      title: l10n?.shoppingListClearCompletedTitle ?? '',
+      body: l10n?.shoppingListClearCompletedBody ?? '',
+      confirmLabel: l10n?.deleteBtnLabel ?? '',
     );
-    if (!mounted || confirmed != true) return;
+    if (!mounted || !confirmed) return;
 
     setState(() => _isClearing = true);
     var success = true;
@@ -66,9 +49,7 @@ class _ShoppingListDoneState extends State<ShoppingListDone> {
     if (!mounted) return;
     setState(() => _isClearing = false);
     if (!success) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n?.persistenceSaveError ?? '')));
+      showPersistenceError(context);
     }
   }
 

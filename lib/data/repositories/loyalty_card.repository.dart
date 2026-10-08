@@ -1,5 +1,5 @@
 import 'package:cardea/data/repositories/generic.repository.dart';
-import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_sort.dart';
+import 'package:cardea/data/models/sort_option.model.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../models/loyalty_card.model.dart';
@@ -14,11 +14,6 @@ class LoyaltyCardRepository extends GenericRepository<LoyaltyCard> {
   @override
   LoyaltyCard fromMap(Map<String, dynamic> map) {
     return LoyaltyCard.fromMap(map);
-  }
-
-  @override
-  String getId(LoyaltyCard card) {
-    return card.id;
   }
 
   @override

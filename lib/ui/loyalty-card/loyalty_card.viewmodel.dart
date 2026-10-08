@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:cardea/data/models/loyalty_card.model.dart';
 import 'package:cardea/data/repositories/loyalty_card.repository.dart';
-import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_sort.dart';
+import 'package:cardea/data/models/sort_option.model.dart';
 import 'package:flutter/material.dart';
 
 class LoyaltyCardViewModel with ChangeNotifier {

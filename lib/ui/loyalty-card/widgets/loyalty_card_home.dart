@@ -1,3 +1,4 @@
+import 'package:cardea/data/models/sort_option.model.dart';
 import 'package:cardea/l10n/app_localizations.dart';
 import 'package:cardea/ui/loyalty-card/loyalty_card.viewmodel.dart';
 import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_add_btn.dart';
@@ -6,6 +7,8 @@ import 'package:cardea/ui/loyalty-card/widgets/loyalty_card_find.dart';
 import 'package:cardea/ui/settings/widgets/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cardea/ui/shared/feedback.dart';
+import 'package:cardea/ui/shared/load_status.dart';
 
 import 'loyalty_card_list.dart';
 import 'loyalty_card_sort.dart';
@@ -29,13 +32,7 @@ class _LoyaltyCardHomeState extends State<LoyaltyCardHome> {
     final success = await vm.setSortBy(option);
     if (!context.mounted) return;
     if (!success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)?.persistenceSaveError ?? '',
-          ),
-        ),
-      );
+      showPersistenceError(context);
     }
   }
 
@@ -79,38 +76,8 @@ class _LoyaltyCardHomeState extends State<LoyaltyCardHome> {
         ),
         body: Consumer<LoyaltyCardViewModel>(
           builder: (context, vm, child) {
-            if (vm.isLoading) {
-              return Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  spacing: 16,
-                  children: [
-                    const CircularProgressIndicator(),
-                    Text(l10n?.dataLoadingLabel ?? ''),
-                  ],
-                ),
-              );
-            }
-            if (vm.loadFailed) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    spacing: 16,
-                    children: [
-                      Text(
-                        l10n?.dataLoadError ?? '',
-                        textAlign: TextAlign.center,
-                      ),
-                      FilledButton(
-                        onPressed: vm.loadCards,
-                        child: Text(l10n?.retryBtnLabel ?? ''),
-                      ),
-                    ],
-                  ),
-                ),
-              );
+            if (vm.isLoading || vm.loadFailed) {
+              return LoadStatus(failed: vm.loadFailed, onRetry: vm.loadCards);
             }
             if (vm.cardList.isEmpty) return const LoyaltyCardEmpty();
 

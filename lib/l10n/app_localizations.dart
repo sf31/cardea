@@ -98,12 +98,6 @@ abstract class AppLocalizations {
     Locale('it'),
   ];
 
-  /// Label for confirm button
-  ///
-  /// In en, this message translates to:
-  /// **'Confirm'**
-  String get confirmBtnLabel;
-
   /// Label for cancel button
   ///
   /// In en, this message translates to:

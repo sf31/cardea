@@ -12,11 +12,6 @@ class ShoppingItemRepository extends GenericRepository<ShoppingItem> {
   }
 
   @override
-  String getId(ShoppingItem item) {
-    return item.id;
-  }
-
-  @override
   Map<String, Object?> toMap(ShoppingItem item) {
     return item.toMap();
   }

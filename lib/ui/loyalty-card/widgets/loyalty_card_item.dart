@@ -1,9 +1,9 @@
 import 'package:cardea/data/models/loyalty_card.model.dart';
-import 'package:cardea/l10n/app_localizations.dart';
 import 'package:cardea/ui/loyalty-card/loyalty_card.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:cardea/ui/shared/feedback.dart';
 
 import 'loyalty-card-manager/loyalty_card_manager.dart';
 import 'loyalty_card_details.dart';
@@ -34,13 +34,7 @@ class LoyaltyCardItem extends StatelessWidget {
     final success = await vm.incrementUsageCount(card);
     if (!context.mounted) return;
     if (!success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)?.persistenceSaveError ?? '',
-          ),
-        ),
-      );
+      showPersistenceError(context);
     }
     showModalBottomSheet(
       context: context,
@@ -111,8 +105,8 @@ class LoyaltyCardFace extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color.lerp(color, Colors.white, 0.28)!, color],
-            stops: const [0, 0.55],
+            colors: [Color.lerp(color, Colors.white, 0.38)!, color],
+            stops: const [0, 0.6],
           ),
         ),
         child: InkWell(
@@ -123,36 +117,31 @@ class LoyaltyCardFace extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
+              spacing: 4,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 4,
-                  children: [
-                    Text(
-                      name,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 21,
-                        height: 1.2,
-                        fontWeight: FontWeight.w600,
-                        color: foreground,
-                      ),
-                    ),
-                    if (number case final number? when number.isNotEmpty)
-                      Text(
-                        number,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontFamily: 'monospace',
-                          fontSize: 13,
-                          letterSpacing: 1,
-                          color: foreground.withValues(alpha: 0.85),
-                        ),
-                      ),
-                  ],
+                Text(
+                  name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 21,
+                    height: 1.2,
+                    fontWeight: FontWeight.w600,
+                    color: foreground,
+                  ),
                 ),
+                if (number case final number? when number.isNotEmpty)
+                  Text(
+                    number,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontFamily: 'monospace',
+                      fontSize: 13,
+                      letterSpacing: 1,
+                      color: foreground.withValues(alpha: 0.85),
+                    ),
+                  ),
               ],
             ),
           ),

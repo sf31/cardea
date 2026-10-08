@@ -9,9 +9,6 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get confirmBtnLabel => 'Confirm';
-
-  @override
   String get cancelBtnLabel => 'Cancel';
 
   @override

@@ -12,8 +12,6 @@ abstract class GenericRepository<T extends BaseModel> {
 
   Map<String, Object?> toMap(T entity);
 
-  String getId(T item);
-
   Future<List<T>> getAll() async {
     final List<Map<String, dynamic>> maps = await db.query(tableName);
     return List.generate(maps.length, (i) {
@@ -33,18 +31,6 @@ abstract class GenericRepository<T extends BaseModel> {
     }
   }
 
-  Future<T?> getById(String id) async {
-    final List<Map<String, dynamic>> maps = await db.query(
-      tableName,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-    if (maps.isNotEmpty) {
-      return fromMap(maps.first);
-    }
-    return null;
-  }
-
   Future<void> create(T entity) async {
     await db.insert(
       tableName,
@@ -58,16 +44,12 @@ abstract class GenericRepository<T extends BaseModel> {
       tableName,
       toMap(_getEntityWithUpdatedAt(entity)),
       where: 'id = ?',
-      whereArgs: [getId(entity)],
+      whereArgs: [entity.id],
     );
   }
 
   Future<void> delete(String id) async {
     await db.delete(tableName, where: 'id = ?', whereArgs: [id]);
-  }
-
-  Future<void> clear() async {
-    await db.delete(tableName);
   }
 
   T _getEntityWithUpdatedAt(T entity) {

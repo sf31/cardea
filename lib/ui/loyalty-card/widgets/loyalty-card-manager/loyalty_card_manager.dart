@@ -4,6 +4,7 @@ import 'package:cardea/ui/loyalty-card/loyalty_card.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart' show BarcodeFormat;
 import 'package:provider/provider.dart';
+import 'package:cardea/ui/shared/feedback.dart';
 
 import '../../barcode_format.dart';
 import '../loyalty_card_item.dart';
@@ -54,14 +55,6 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
     super.dispose();
   }
 
-  void _showPersistenceError() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(AppLocalizations.of(context)?.persistenceSaveError ?? ''),
-      ),
-    );
-  }
-
   String? _validateBarcode(String? value) {
     final l10n = AppLocalizations.of(context);
     if (value == null || value.isEmpty) {
@@ -104,7 +97,7 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
       if (!mounted) return;
       if (!success) {
         setState(() => _isSaving = false);
-        _showPersistenceError();
+        showPersistenceError(context);
         return;
       }
       Navigator.of(context).pop();
@@ -114,25 +107,13 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
   Future<void> _onDelete() async {
     if (_isBusy) return;
     final localizations = AppLocalizations.of(context);
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text(localizations?.loyaltyCardDeleteConfirmTitle ?? ''),
-            content: Text(localizations?.loyaltyCardDeleteConfirmBody ?? ''),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text(localizations?.cancelBtnLabel ?? ''),
-              ),
-              FilledButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: Text(localizations?.deleteBtnLabel ?? ''),
-              ),
-            ],
-          ),
+    final confirmed = await confirmAction(
+      context,
+      title: localizations?.loyaltyCardDeleteConfirmTitle ?? '',
+      body: localizations?.loyaltyCardDeleteConfirmBody ?? '',
+      confirmLabel: localizations?.deleteBtnLabel ?? '',
     );
-    if (!mounted || confirmed != true) return;
+    if (!mounted || !confirmed) return;
 
     final vm = Provider.of<LoyaltyCardViewModel>(context, listen: false);
     setState(() => _isDeleting = true);
@@ -140,7 +121,7 @@ class _LoyaltyCardManagerState extends State<LoyaltyCardManager> {
     if (!mounted) return;
     if (!success) {
       setState(() => _isDeleting = false);
-      _showPersistenceError();
+      showPersistenceError(context);
       return;
     }
     Navigator.of(context).pop();
