@@ -57,6 +57,8 @@ class _ShoppingListDoneState extends State<ShoppingListDone> {
   Widget build(BuildContext context) {
     return Consumer<ShoppingItemViewModel>(
       builder: (context, vm, child) {
+        // Filter once per build, not once per row.
+        final done = vm.itemListDone;
         return Column(
           children: [
             Padding(
@@ -67,9 +69,7 @@ class _ShoppingListDoneState extends State<ShoppingListDone> {
                     child: Text(
                       AppLocalizations.of(
                             context,
-                          )?.shoppingListCompletedSectionTitle(
-                            vm.itemListDone.length,
-                          ) ??
+                          )?.shoppingListCompletedSectionTitle(done.length) ??
                           '',
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
@@ -89,7 +89,7 @@ class _ShoppingListDoneState extends State<ShoppingListDone> {
                 padding: const EdgeInsets.only(right: 8),
                 child: TextButton.icon(
                   onPressed:
-                      _isClearing || vm.itemListDone.isEmpty
+                      _isClearing || done.isEmpty
                           ? null
                           : () => _clearCompleted(vm),
                   icon: const Icon(Icons.delete_sweep),
@@ -105,7 +105,7 @@ class _ShoppingListDoneState extends State<ShoppingListDone> {
             const Divider(height: 1),
             Expanded(
               child:
-                  vm.itemListDone.isEmpty
+                  done.isEmpty
                       ? Center(
                         child: Text(
                           AppLocalizations.of(
@@ -115,9 +115,9 @@ class _ShoppingListDoneState extends State<ShoppingListDone> {
                         ),
                       )
                       : ListView.builder(
-                        itemCount: vm.itemListDone.length,
+                        itemCount: done.length,
                         itemBuilder: (context, index) {
-                          final item = vm.itemListDone[index];
+                          final item = done[index];
                           return ListTile(
                             leading: IconButton(
                               icon: const Icon(Icons.check_box),

@@ -38,12 +38,14 @@ class _ShoppingListTodoState extends State<ShoppingListTodo> {
   Widget build(BuildContext context) {
     return Consumer<ShoppingItemViewModel>(
       builder: (context, vm, child) {
+        // Filter once per build, not once per row.
+        final items = vm.itemList;
         return ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: vm.itemList.length,
+          itemCount: items.length,
           itemBuilder: (context, index) {
-            final item = vm.itemList[index];
+            final item = items[index];
             return ListTile(
               leading: IconButton(
                 icon: const Icon(Icons.check_box_outline_blank),

@@ -80,6 +80,7 @@ class _LoyaltyCardHomeState extends State<LoyaltyCardHome> {
               return LoadStatus(failed: vm.loadFailed, onRetry: vm.loadCards);
             }
             if (vm.cardList.isEmpty) return const LoyaltyCardEmpty();
+            final filtered = vm.filteredCardList;
 
             var noResultsWidget = Padding(
               padding: EdgeInsets.all(20.0),
@@ -99,11 +100,10 @@ class _LoyaltyCardHomeState extends State<LoyaltyCardHome> {
                     padding: EdgeInsets.only(bottom: _searching ? 0 : 72),
                     child: Column(
                       children: [
-                        vm.filteredCardList != null &&
-                                vm.filteredCardList!.isEmpty
+                        filtered != null && filtered.isEmpty
                             ? noResultsWidget
                             : LoyaltyCardGrid(
-                              cardList: vm.filteredCardList ?? vm.cardList,
+                              cardList: filtered ?? vm.cardList,
                             ),
                         LoyaltyCardAddBtn(),
                       ],
