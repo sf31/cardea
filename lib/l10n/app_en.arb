@@ -113,6 +113,10 @@
     "@loyaltyCardSortByUsage": {
         "description": "Label for sort by usage option"
     },
+    "loyaltyCardSearchBtn": "Search",
+    "@loyaltyCardSearchBtn": {
+        "description": "Label of the button that opens the loyalty card search"
+    },
     "loyaltyCardSearchLabel": "Find a Card",
     "@loyaltyCardSearchLabel": {
         "description": "Label for the search bar to find a loyalty card"

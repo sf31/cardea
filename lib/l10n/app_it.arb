@@ -34,6 +34,7 @@
     "loyaltyCardSortBy": "Ordina per",
     "loyaltyCardSortByName": "Nome",
     "loyaltyCardSortByUsage": "Più usate",
+    "loyaltyCardSearchBtn": "Cerca",
     "loyaltyCardSearchLabel": "Cerca",
     "loyaltyCardEmptySearchResult": "Nessun risultato trovato per {searchTerm}.",
 

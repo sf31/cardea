@@ -208,6 +208,9 @@ class _ShoppingListState extends State<ShoppingList> {
           !isReady || _showNewItem
               ? null
               : FloatingActionButton.extended(
+                // Same colours as the wallet's search button.
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 onPressed: () {
                   setState(() => _showNewItem = true);
                   _scrollToBottom();

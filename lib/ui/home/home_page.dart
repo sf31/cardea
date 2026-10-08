@@ -57,6 +57,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       body: <Widget>[LoyaltyCardHome(), ShoppingList()][currentPageIndex],
       bottomNavigationBar: NavigationBar(
@@ -66,14 +68,34 @@ class _MyHomePageState extends State<MyHomePage> {
           });
         },
         selectedIndex: currentPageIndex,
+        // A stronger pill and a bold label make the current tab obvious.
+        indicatorColor: colorScheme.primaryContainer,
+        labelTextStyle: WidgetStateProperty.resolveWith(
+          (states) =>
+              states.contains(WidgetState.selected)
+                  ? textTheme.labelMedium?.copyWith(
+                    color: colorScheme.onSurface,
+                    fontWeight: FontWeight.bold,
+                  )
+                  : textTheme.labelMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+        ),
         destinations: <Widget>[
           NavigationDestination(
-            selectedIcon: Icon(Icons.wallet),
-            icon: Icon(Icons.wallet),
+            selectedIcon: Icon(
+              Icons.wallet,
+              color: colorScheme.onPrimaryContainer,
+            ),
+            icon: Icon(Icons.wallet_outlined),
             label: l10n?.bottomNavLoyaltyCards ?? '',
           ),
           NavigationDestination(
-            icon: Icon(Icons.shopping_basket),
+            selectedIcon: Icon(
+              Icons.shopping_basket,
+              color: colorScheme.onPrimaryContainer,
+            ),
+            icon: Icon(Icons.shopping_basket_outlined),
             label: l10n?.bottomNavShoppingList ?? '',
           ),
         ],

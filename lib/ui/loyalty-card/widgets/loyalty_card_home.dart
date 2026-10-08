@@ -123,10 +123,14 @@ class _LoyaltyCardHomeState extends State<LoyaltyCardHome> {
         ),
         floatingActionButton:
             canSearch && !_searching
-                ? FloatingActionButton(
-                  tooltip: l10n?.loyaltyCardSearchLabel,
+                ? FloatingActionButton.extended(
+                  // Primary instead of the default container colour, which
+                  // blends into the dark theme.
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   onPressed: () => setState(() => _searching = true),
-                  child: const Icon(Icons.search),
+                  icon: const Icon(Icons.search),
+                  label: Text(l10n?.loyaltyCardSearchBtn ?? ''),
                 )
                 : null,
       ),

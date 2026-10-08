@@ -254,6 +254,12 @@ abstract class AppLocalizations {
   /// **'Most used'**
   String get loyaltyCardSortByUsage;
 
+  /// Label of the button that opens the loyalty card search
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get loyaltyCardSearchBtn;
+
   /// Label for the search bar to find a loyalty card
   ///
   /// In en, this message translates to:

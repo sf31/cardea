@@ -91,6 +91,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loyaltyCardSortByUsage => 'Most used';
 
   @override
+  String get loyaltyCardSearchBtn => 'Search';
+
+  @override
   String get loyaltyCardSearchLabel => 'Find a Card';
 
   @override

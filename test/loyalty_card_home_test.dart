@@ -74,6 +74,7 @@ void main() {
       find.widgetWithIcon(FloatingActionButton, Icons.search),
       findsOneWidget,
     );
+    expect(find.widgetWithText(FloatingActionButton, 'Search'), findsOneWidget);
     expect(find.text('New Card'), findsOneWidget);
   });
 
