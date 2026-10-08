@@ -44,8 +44,9 @@ class LoyaltyCardItem extends StatelessWidget {
     }
     showModalBottomSheet(
       context: context,
-      showDragHandle: true,
       isScrollControlled: true,
+      // Clip the coloured header to the sheet's rounded corners.
+      clipBehavior: Clip.antiAlias,
       useSafeArea: true,
       builder:
           (sheetContext) => LoyaltyCardDetails(
@@ -96,9 +97,6 @@ class LoyaltyCardFace extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final foreground = LoyaltyCardItem.foregroundColorFor(color);
-    final trimmed = name.trim();
-    final initial =
-        trimmed.isEmpty ? '' : trimmed.characters.first.toUpperCase();
     final radius = BorderRadius.circular(12);
     return Material(
       color: color,
@@ -124,20 +122,8 @@ class LoyaltyCardFace extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                CircleAvatar(
-                  radius: 17,
-                  backgroundColor: foreground.withValues(alpha: 0.2),
-                  foregroundColor: foreground,
-                  child: Text(
-                    initial,
-                    style: const TextStyle(
-                      fontSize: 19,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 4,
@@ -147,7 +133,7 @@ class LoyaltyCardFace extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 21,
                         height: 1.2,
                         fontWeight: FontWeight.w600,
                         color: foreground,

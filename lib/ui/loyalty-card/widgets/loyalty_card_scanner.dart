@@ -51,7 +51,7 @@ class _LoyaltyCardScannerState extends State<LoyaltyCardScanner> {
       name: '',
       barcode: barcode,
       barcodeFormat: barcodeFormat,
-      color: Colors.blue,
+      color: Colors.blue.shade700,
       usageCount: 0,
     );
 

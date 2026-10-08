@@ -97,7 +97,7 @@ void main() {
     final swatch = find.byWidgetPredicate(
       (widget) =>
           widget is Container &&
-          (widget.decoration as BoxDecoration?)?.color == Colors.teal,
+          (widget.decoration as BoxDecoration?)?.color == Colors.teal.shade700,
     );
     await tester.ensureVisible(swatch);
     await tester.pumpAndSettle();
@@ -106,12 +106,15 @@ void main() {
 
     final face = tester.widget<LoyaltyCardFace>(find.byType(LoyaltyCardFace));
     expect(face.name, 'Gym');
-    expect(face.color, Colors.teal);
+    expect(face.color, Colors.teal.shade700);
     expect(face.number, '12345');
 
     await save(tester, 'Add');
     expect(repository.cards.single.name, 'Gym');
-    expect(repository.cards.single.color.toARGB32(), Colors.teal.toARGB32());
+    expect(
+      repository.cards.single.color.toARGB32(),
+      Colors.teal.shade700.toARGB32(),
+    );
   });
 
   testWidgets('picks the type and checks the number against it', (

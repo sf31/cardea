@@ -151,6 +151,15 @@ void main() {
 
     expect(find.byType(LoyaltyCardDetails), findsOneWidget);
     expect(repository.cards.single.usageCount, 3);
+    expect(
+      find.descendant(
+        of: find.byType(LoyaltyCardDetails),
+        matching: find.byWidgetPredicate(
+          (widget) => widget is Container && widget.color == Colors.blue,
+        ),
+      ),
+      findsOneWidget,
+    );
 
     await tester.tap(find.text('Edit'));
     await tester.pumpAndSettle();

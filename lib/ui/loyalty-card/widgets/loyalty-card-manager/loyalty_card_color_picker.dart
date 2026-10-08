@@ -3,28 +3,28 @@ import 'package:flutter/material.dart';
 import '../loyalty_card_item.dart';
 
 class LoyaltyCardColorPicker extends StatelessWidget {
-  /// The palette offered by the previous picker, so existing cards keep
-  /// matching a swatch.
-  static const List<Color> palette = [
-    Colors.red,
-    Colors.pink,
-    Colors.purple,
-    Colors.deepPurple,
-    Colors.indigo,
-    Colors.blue,
-    Colors.lightBlue,
-    Colors.cyan,
-    Colors.teal,
-    Colors.green,
-    Colors.lightGreen,
-    Colors.lime,
-    Colors.yellow,
-    Colors.amber,
-    Colors.orange,
-    Colors.deepOrange,
-    Colors.brown,
-    Colors.grey,
-    Colors.blueGrey,
+  /// Deep Material shades: richer on a card and readable with white text.
+  /// Cards saved with another colour keep it as an extra swatch.
+  static final List<Color> palette = [
+    Colors.red.shade700,
+    Colors.pink.shade700,
+    Colors.purple.shade700,
+    Colors.deepPurple.shade700,
+    Colors.indigo.shade700,
+    Colors.blue.shade700,
+    Colors.lightBlue.shade700,
+    Colors.cyan.shade700,
+    Colors.teal.shade700,
+    Colors.green.shade700,
+    Colors.lightGreen.shade700,
+    Colors.lime.shade700,
+    Colors.yellow.shade700,
+    Colors.amber.shade700,
+    Colors.orange.shade700,
+    Colors.deepOrange.shade700,
+    Colors.brown.shade700,
+    Colors.grey.shade700,
+    Colors.blueGrey.shade700,
     Colors.black,
   ];
 
